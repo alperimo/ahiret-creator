@@ -1,0 +1,25 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>components/CustomBorder.qml</file>
+        <file>components/CustomButtonImage.qml</file>
+        <file>components/CustomButtonRectangle.qml</file>
+        <file>images/ediphocam.jpg</file>
+        <file>images/left_menu_button2.png</file>
+        <file>images/left_menu_button3.png</file>
+        <file>images/left_menu_button4.png</file>
+        <file>images/left_menu_button1.png</file>
+        <file>images/left_menu_button5.png</file>
+        <file>images/left_menu_button6.png</file>
+        <file>images/left_menu_button7.png</file>
+        <file>images/left_menu_button8.png</file>
+        <file>images/left_menu_button9.png</file>
+        <file>images/left_menu_button10.png</file>
+        <file>images/left_menu_button11.png</file>
+        <file>images/left_menu_button_bottom1.png</file>
+        <file>images/left_menu_button_bottom2.png</file>
+        <file>images/left_menu_button1.svg</file>
+        <file>shaders/fragmentShader.txt</file>
+        <file>shaders/vertexShader.txt</file>
+    </qresource>
+</RCC>
