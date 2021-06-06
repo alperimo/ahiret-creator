@@ -11,6 +11,7 @@ Rectangle{
     property string textName: qsTr("")
 
     property bool checkable: false
+    property bool bg_color_hide: false
 
     property alias rectText: text_name.text
     property alias textR: text_name
@@ -24,9 +25,7 @@ Rectangle{
     property alias mouseAreas: mouseArea
 
     state: ""
-    color: normalColor
-
-    //rotation: button_rect.rotation
+    color: (!bg_color_hide) ? normalColor : "transparent"
 
     Text{
         id: text_name
@@ -43,8 +42,12 @@ Rectangle{
                 target: button_rect
                 flag: true
                 explicit: true
-                color: clickedColor
+                color: (!bg_color_hide) ? clickedColor : color
                 //rotation: button_rect.rotation + 90
+            }
+            PropertyChanges {
+                target: text_name
+                color: button_rect.textHoverColor
             }
         },
 
@@ -53,7 +56,7 @@ Rectangle{
             PropertyChanges {
                 target: button_rect
                 //rotation: button_rect.rotation
-                color: hoveredColor
+                color: (!bg_color_hide) ? hoveredColor : button_rect.color
                 //opacity: (hoveredOpacity !== -1.0) ? hoveredOpacity : button_rect.opacity
             }
             PropertyChanges {

@@ -21,5 +21,18 @@
         <file>images/left_menu_button1.svg</file>
         <file>shaders/fragmentShader.txt</file>
         <file>shaders/vertexShader.txt</file>
+        <file>images/right_menu_button1.png</file>
+        <file>images/right_menu_button2.png</file>
+        <file>images/right_menu_button3.png</file>
+        <file>images/right_menu_button4.png</file>
+        <file>images/right_menu_button5.png</file>
+        <file>images/right_menu_button6.png</file>
+        <file>images/right_menu_button7.png</file>
+        <file>images/right_menu_button8.png</file>
+        <file>images/right_menu_button9.png</file>
+        <file>images/right_menu_button10.png</file>
+        <file>images/right_menu_button11.png</file>
+        <file>components/CustomButtonImageRect.qml</file>
+        <file>components/RightMenus_1.qml</file>
     </qresource>
 </RCC>

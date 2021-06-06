@@ -14,6 +14,7 @@ INCLUDEPATH += C:\Qt\5.15.2\mingw81_64\include\
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+        camera.cpp \
         main.cpp \
         openglitem.cpp \
         shader.cpp \
@@ -46,6 +47,7 @@ DISTFILES += \
     shaders/vertexShader.txt
 
 HEADERS += \
+    camera.h \
     openglitem.h \
     shader.h \
     squircle.h

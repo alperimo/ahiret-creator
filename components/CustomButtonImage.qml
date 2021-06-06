@@ -15,6 +15,8 @@ Item {
 
     property real hueValue: 0.0
 
+    property alias btnImage: image
+
     PropertyChanges {
         target: colorize
         opacity: 0.0
@@ -25,6 +27,8 @@ Item {
         id: image
         anchors.fill: parent
         source: defaultImage
+
+        //opacity: 0.0
 
         //States
         states: [
@@ -168,6 +172,7 @@ Item {
 
 
 
+
     Colorize{
         id: colorize
         property variant colors: getColorized(153, 46, 48.6)
@@ -183,6 +188,8 @@ Item {
     function getColorized(hue, saturation, lightness){
         return [hue/360, saturation/100, (lightness/50)-1];
     }
+
+
 }
 
 
