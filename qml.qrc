@@ -34,5 +34,6 @@
         <file>images/right_menu_button11.png</file>
         <file>components/CustomButtonImageRect.qml</file>
         <file>components/RightMenus_1.qml</file>
+        <file>components/RightMenus_1_animation_with_width.qml</file>
     </qresource>
 </RCC>

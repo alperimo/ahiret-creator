@@ -11,6 +11,7 @@ Rectangle{
     property string textName: qsTr("")
 
     property bool checkable: false
+    property bool checkable_fixed: false // bir kez tıklanır, clicked olarak kalır. (tekrar tıklanınca default moda gecmez!)
     property bool bg_color_hide: false
 
     property alias rectText: text_name.text
@@ -20,12 +21,29 @@ Rectangle{
     property color textNormalColor: "white"
     property color textHoverColor: "white"
 
+    property alias borders: borders
+    property color borderNormalColor: "transparent"
+    property color borderHoveredColor: "transparent"
+
     property real hoveredOpacity: -1.0 // rectangle icin (-1.0 ise hoveredOpacity yoktur)
 
     property alias mouseAreas: mouseArea
+    property bool mouseAreaForText: false // mouse area'yı sadece text için gecerli kılar. (arka plansız textButton olusturmak icin)
 
     state: ""
     color: (!bg_color_hide) ? normalColor : "transparent"
+
+    CustomBorder
+    {
+        id: borders
+        borderColor: borderNormalColor
+        //commonBorderWidth: 1
+        commonBorder: false
+        lBorderwidth: 0
+        rBorderwidth: 0
+        tBorderwidth: 0
+        bBorderwidth: 0
+    }
 
     Text{
         id: text_name
@@ -49,6 +67,10 @@ Rectangle{
                 target: text_name
                 color: button_rect.textHoverColor
             }
+            PropertyChanges{
+                target: borders
+                borderColor: button_rect.borderHoveredColor
+            }
         },
 
         State {
@@ -62,7 +84,10 @@ Rectangle{
             PropertyChanges {
                 target: text_name
                 color: button_rect.textHoverColor
-
+            }
+            PropertyChanges{
+                target: borders
+                borderColor: button_rect.borderHoveredColor
             }
         },
 
@@ -109,7 +134,7 @@ Rectangle{
                 }
             }
 
-            onRunningChanged: if(!running && !checkable && button_rect.state != "") button_rect.state = ""
+            onRunningChanged: if(!running && (!checkable && !checkable_fixed) && button_rect.state != "") button_rect.state = ""
         },
 
         Transition {
@@ -133,7 +158,7 @@ Rectangle{
                 duration: 100
             }
 
-            onRunningChanged: if(!running && !checkable && button_rect.state != "HOVERED") button_rect.state = "HOVERED"
+            onRunningChanged: if(!running && (!checkable && !checkable_fixed) && button_rect.state != "HOVERED") button_rect.state = "HOVERED"
         }
 
     ]
@@ -141,7 +166,7 @@ Rectangle{
 
     MouseArea{
         id: mouseArea
-        anchors.fill: parent
+        anchors.fill: (!mouseAreaForText) ? parent : text_name
         acceptedButtons: Qt.LeftButton
         propagateComposedEvents: true
 
@@ -152,7 +177,8 @@ Rectangle{
             if (button_rect.state != "CLICKED")
                 button_rect.state = "CLICKED"
             else{
-               button_rect.state = ""
+                button_rect.state = (!parent.checkable_fixed) ? "" : button_rect.state
+
             }
 
             console.log("button_rect clicked " + button_rect.state)
@@ -197,6 +223,5 @@ Rectangle{
         drag.minimumY: 0
         drag.maximumY: window.height - button_rect.height*/
     }
-
 
 }

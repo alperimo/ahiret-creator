@@ -16,6 +16,7 @@ INCLUDEPATH += C:\Qt\5.15.2\mingw81_64\include\
 SOURCES += \
         camera.cpp \
         main.cpp \
+        mytreemodel.cpp \
         openglitem.cpp \
         shader.cpp \
         squircle.cpp
@@ -48,6 +49,7 @@ DISTFILES += \
 
 HEADERS += \
     camera.h \
+    mytreemodel.h \
     openglitem.h \
     shader.h \
     squircle.h

@@ -11,6 +11,7 @@ Item {
     property url clickedImage: ""
 
     property bool checkable: false
+    property bool checkable_fixed: false // bir kez tıklanır, clicked olarak kalır. (tekrar tıklanınca default moda gecmez!)
     property bool colorizedImage: false
 
     property real hueValue: 0.0
@@ -90,7 +91,7 @@ Item {
                     }
                 }
 
-                onRunningChanged: if(!running && !checkable && image.state != "") image.state = ""
+                onRunningChanged: if(!running && (!checkable && !checkable_fixed) && image.state != "") image.state = ""
             },
 
             Transition {
@@ -118,7 +119,7 @@ Item {
                     duration: 100
                 }
 
-                onRunningChanged: if(!running && !checkable && image.state != "HOVERED") image.state = "HOVERED"
+                onRunningChanged: if(!running && (!checkable && !checkable_fixed) && image.state != "HOVERED") image.state = "HOVERED"
             }
 
         ]
@@ -136,7 +137,7 @@ Item {
                 if (image.state != "CLICKED")
                     image.state = "CLICKED"
                 else
-                    image.state = ""
+                    image.state = (!parent.checkable_fixed) ? "" : image.state
 
                 console.log("button_rect clicked " + image.state)
 

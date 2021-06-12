@@ -15,7 +15,7 @@ ApplicationWindow {
     visible: true
     //title: qsTr("Ahiret Creator")
 
-    color: "pink"//"#151616"
+    color: "#151616"
 
     property int bw: 5
 
@@ -183,8 +183,8 @@ ApplicationWindow {
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.top: parent.top
                 anchors.topMargin: 11
-                CustomButtonImage{id: left_menu_button1; width: 18; height: 18; checkable: true; rotation: 90; defaultImage: "images/left_menu_button1.png"; hoveredImage: "images/left_menu_button1.png"; clickedImage: "images/left_menu_button1.png"; colorizedImage: true}
-                CustomButtonImage{id: left_menu_button2; width: 18; height: 18; checkable: true; defaultImage: "images/left_menu_button2.png"; hoveredImage: "images/left_menu_button2.png"; clickedImage: "images/left_menu_button2.png"; colorizedImage: true}
+                CustomButtonImage{id: left_menu_button1; width: 21; height: 21; checkable: true; rotation: 90; defaultImage: "images/left_menu_button1.png"; hoveredImage: "images/left_menu_button1.png"; clickedImage: "images/left_menu_button1.png"; colorizedImage: true}
+                CustomButtonImage{id: left_menu_button2; width: 18; height: 18; checkable: true; Layout.topMargin: -3; defaultImage: "images/left_menu_button2.png"; hoveredImage: "images/left_menu_button2.png"; clickedImage: "images/left_menu_button2.png"; colorizedImage: true}
                 CustomButtonImage{id: left_menu_button3; width: 18; height: 18; checkable: true; defaultImage: "images/left_menu_button3.png"; hoveredImage: "images/left_menu_button3.png"; clickedImage: "images/left_menu_button3.png"; colorizedImage: true}
                 CustomButtonImage{id: left_menu_button4; width: 18; height: 18; checkable: true; defaultImage: "images/left_menu_button4.png"; hoveredImage: "images/left_menu_button4.png"; clickedImage: "images/left_menu_button4.png"; colorizedImage: true}
                 CustomButtonImage{id: left_menu_button5; width: 18; height: 18; checkable: true; defaultImage: "images/left_menu_button5.png"; hoveredImage: "images/left_menu_button5.png"; clickedImage: "images/left_menu_button5.png"; colorizedImage: true}
@@ -212,17 +212,24 @@ ApplicationWindow {
                 anchors.bottomMargin: 15
                 CustomButtonImage{id: left_menu_button_bottom1; width: parent.buttonsWidth; height: parent.buttonsHeight; checkable: true; defaultImage: "images/left_menu_button_bottom1.png"; hoveredImage: "images/left_menu_button_bottom1.png"; clickedImage: "images/left_menu_button_bottom1.png"; colorizedImage: true}
                 CustomButtonImage{id: left_menu_button_bottom2; width: parent.buttonsWidth; height: parent.buttonsHeight; checkable: true; defaultImage: "images/left_menu_button_bottom2.png"; hoveredImage: "images/left_menu_button_bottom2.png"; clickedImage: "images/left_menu_button_bottom2.png"; colorizedImage: true}
-
             }
-
         }
 
+        property var rightMenusArray: []
         Rectangle{
+
+            // RIGHT_MENU PROPERTIES
+            property int rightMenuStatus : 1 // 11 menuden hangisinin secili oldugunu belirtir.
+            property var rightMenuButtonsArray: []
+
+            property real buttonsWidth: right_menu.width;
+            property real buttonsHeight: 47
+
             id: right_menu
             width: 54
             anchors.top: top_menu_bottom_line.bottom
-            anchors.right: right_menu1.left//parent.right
-            anchors.rightMargin: 3
+            anchors.right: (rectangle.rightMenusArray.length == 0) ? right_menu1.left : rectangle.rightMenusArray[rightMenuStatus-1].left//right_menu1.left//parent.right
+            anchors.rightMargin: 1
             height: window.height - top_menu.height
 
             color: "#151516"
@@ -236,12 +243,10 @@ ApplicationWindow {
                 borderColor: "#2d2e2e"
             }
 
-            // RIGHT_MENU PROPERTIES
-            property int rightMenuStatus : 1 // 11 menuden hangisinin secili oldugunu belirtir.
-            property var rightMenuButtonsArray: []
-
-            property real buttonsWidth: right_menu.width;
-            property real buttonsHeight: 47
+            Component.onCompleted: {
+                console.log("length: " + rectangle.rightMenusArray.length)
+                console.log("state: " + rectangle.rightMenusArray[rightMenuStatus-1].state)
+            }
 
             ColumnLayout{
                 spacing: 10
@@ -249,7 +254,7 @@ ApplicationWindow {
 
                 property color normalColor: "#151616"
                 property color hoveredColor: "#232424"
-                property color clickedColor: "#232424"
+                property color clickedColor: "#232424" // #212222
 
                 property real imageWidth: 28
                 property real imageHeight: 28
@@ -273,7 +278,7 @@ ApplicationWindow {
                 }*/
 
                 CustomButtonRectangle{id: hideshow_button; width: right_menu.width; height: scene_menu.height; normalColor: parent.normalColor;
-                    hoveredColor: parent.hoveredColor; clickedColor: "#212222"; textR.text: "<"; textNormalColor:"#8b8d90";
+                    hoveredColor: parent.hoveredColor; clickedColor: parent.clickedColor; textR.text: "<"; textNormalColor:"#8b8d90";
                     textHoverColor: "#8b8d90"; font.pointSize: 18;
 
                     mouseAreas.onClicked: {
@@ -423,7 +428,7 @@ ApplicationWindow {
                 status = "open"
             }else{
                 hideshow_button.textR.text = "<"
-                status = ""
+                status = "hide"
             }
 
             hideshow_button.state="" // butona basinca hala clicked state'sinde kalmasını engellemek icin...
@@ -458,14 +463,15 @@ ApplicationWindow {
 
         RightMenus_1{
             id: right_menu1
-            height: rectangle.height - (top_menu_bottom_line.height - top_menu.height)
+            windowWidth: rectangle.width
+            width: realWidth
+            height: rectangle.height - (top_menu_bottom_line.height + top_menu.height)
             color: "#151616"
             anchors.top: right_menu.top
-            anchors.right: rectangle.right
+            //anchors.right: rectangle.right
 
         }
 
-        property var rightMenusArray: []
         Component.onCompleted: {
             for (var i = 1; i < 2; i++) {
                 var c = Qt.createQmlObject("import QtQuick 2.0; QtObject { function f() { return right_menu" + i + " } }", this, "none")
@@ -479,7 +485,6 @@ ApplicationWindow {
 
 
         // END_RIGHT_MENUS
-
 
         Rectangle{
             id: scene_menu
@@ -595,10 +600,10 @@ ApplicationWindow {
 
             }*/
 
-            Text{id: text_t; x: 15; y: 50; color: "white"; text: scene3D.activeFocus ? "I have active focus!" : "I do not have active focus"}
+            //Text{id: text_t; x: 15; y: 50; color: "white"; text: scene3D.activeFocus ? "I have active focus!" : "I do not have active focus"}
         }
 
-        TextInput{text:"Focus"; x: 300 + 293; y: 15; width: 100; height: 20; color: "white"; activeFocusOnPress: true}
+        //TextInput{text:"Focus"; x: 300 + 293; y: 15; width: 100; height: 20; color: "white"; activeFocusOnPress: true}
     }
 
     onActiveFocusItemChanged: print("activeFocusItem", activeFocusItem)

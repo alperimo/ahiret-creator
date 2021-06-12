@@ -253,7 +253,4 @@ Item {
         return [hue/360, saturation/100, (lightness/50)-1];
     }
 
-
 }
-
-

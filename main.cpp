@@ -6,6 +6,7 @@
 #include "squircle.h"
 
 #include "openglitem.h"
+#include "mytreemodel.h"
 
 #include <iostream>
 
@@ -20,6 +21,7 @@ int main(int argc, char *argv[])
     std::cout << "int main()" << std::endl;
 
     qmlRegisterType<CustomItem>("OpenGLUnderQML", 1, 0, "CustomItem");
+    qmlRegisterType<MyTreeModel>("MyTreeModel", 1, 0, "MyTreeModel");
 
     /*
     qmlRegisterType<Squircle>("OpenGLUnderQML", 1, 0, "Squircle");
