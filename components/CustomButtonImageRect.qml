@@ -24,6 +24,7 @@ Item {
 
     property alias btnImage: image
     property alias mouseAreas: mouseArea
+    property alias colorize: colorize
 
     Rectangle{
         id: background_rect
@@ -54,7 +55,6 @@ Item {
                 image.state = "HOVERED"
                 console.log("onEntered")
             }
-
         }
 
         onExited: {

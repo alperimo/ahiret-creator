@@ -48,6 +48,7 @@ Rectangle{
     Text{
         id: text_name
         anchors.centerIn: parent
+        anchors.horizontalCenter: parent.horizontalCenter
         text: textName
         color: textNormalColor
     }

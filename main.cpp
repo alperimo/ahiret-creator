@@ -3,10 +3,13 @@
 
 #include <QtQuick/QQuickView>
 
+#include <QFontInfo>
+
 #include "squircle.h"
 
 #include "openglitem.h"
 #include "mytreemodel.h"
+
 
 #include <iostream>
 

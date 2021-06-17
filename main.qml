@@ -13,7 +13,7 @@ ApplicationWindow {
     minimumWidth: 960
     minimumHeight: 710
     visible: true
-    //title: qsTr("Ahiret Creator")
+    title: qsTr("Ahiret Creator")
 
     color: "#151616"
 
@@ -87,6 +87,8 @@ ApplicationWindow {
                 anchors.centerIn: parent
             }*/
 
+
+
             Item{
                 width: parent.width
                 height: parent.height
@@ -142,6 +144,13 @@ ApplicationWindow {
                 CustomButtonRectangle{id: minimizeButton; width: 27; height: top_menu.height; normalColor: "#151616"; textR.text: "—"; textNormalColor:"#b3b3b3"; font.pointSize: 13; mouseAreas.onClicked: {minimizeButton.state = ""; window.showMinimized()}}
                 CustomButtonRectangle{id: maximizeButton; width: 27; height: top_menu.height; normalColor: "#151616"; textR.text: "+"; textNormalColor:"#b3b3b3"; font.pointSize: 13; mouseAreas.onClicked: {maximizeButton.state = ""; window.showMaximized()}}
                 CustomButtonRectangle{id: closeButton; width: 27; height: top_menu.height; normalColor: "#151616"; hoveredColor: "#E81123"; textR.text: "X"; textNormalColor:"#b3b3b3"; font.pointSize: 11; font.family: "Verdana"; mouseAreas.onClicked: window.close()}
+             }
+
+             CustomComboBox{
+                 width: 91
+                 height: 25
+                 x: 700
+                 y: 1
              }
         }
 
@@ -560,7 +569,7 @@ ApplicationWindow {
             id: scene3D
             anchors.left: left_menu.right
             anchors.leftMargin: 1
-            anchors.topMargin: 4
+            anchors.topMargin: 2
             anchors.top: scene_menu.bottom
             anchors.right: right_menu.left
             anchors.rightMargin: 1

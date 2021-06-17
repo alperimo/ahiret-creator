@@ -17,6 +17,8 @@ Item {
     property real hueValue: 0.0
 
     property alias btnImage: image
+    property alias mouseAreas: mouseArea
+    property alias colorize: colorize
 
     PropertyChanges {
         target: colorize
@@ -157,26 +159,16 @@ Item {
             }
         }
 
-        /*Text{
-            id: textN
-            anchors.centerIn: parent
-            color: "white"
-        }*/
-
     }
 
-    /*ColorOverlay {
-        anchors.fill: image
-        source: image
-        color: "transparent" //"#43b581"
-    }*/
-
-
-
-
     Colorize{
+
+        property real hue_: 153
+        property real saturation_: 46
+        property real lightness_: 48.6
+        property variant colors: getColorized(hue_, saturation_, lightness_)
+
         id: colorize
-        property variant colors: getColorized(153, 46, 48.6)
 
         anchors.fill: image
         source: image
@@ -189,7 +181,6 @@ Item {
     function getColorized(hue, saturation, lightness){
         return [hue/360, saturation/100, (lightness/50)-1];
     }
-
 
 }
 

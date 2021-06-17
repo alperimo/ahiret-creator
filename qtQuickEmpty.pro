@@ -40,6 +40,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 DISTFILES += \
     images/ediphocam.jpg \
+    images/left_arrow.png \
     images/left_menu_button2.png \
     images/left_menu_button2.svg \
     images/left_menu_button3.svg \
