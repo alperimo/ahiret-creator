@@ -6,6 +6,8 @@ import QtQuick.Layouts 1.15
 import OpenGLUnderQML 1.0
 import QtGraphicalEffects 1.15
 
+import OpenGLCamera 1.0
+
 ApplicationWindow {
     id: window
     width: 1440
@@ -75,7 +77,7 @@ ApplicationWindow {
             anchors.top: parent.top
             width: parent.width
 
-            height: 40
+            height: 29//40
             color: "#151616"
 
             /*Text{
@@ -106,7 +108,93 @@ ApplicationWindow {
                 }
             }
 
-            GridLayout{
+            CustomMenuBar{
+                id: top_menu_bar
+                x:0
+                anchors.top: parent.top
+
+                property color normalBG: "#151616" // rectangle icin.
+
+                height: top_menu.height
+
+                itemWidth: left_menu.width
+                itemHeight: top_menu.height
+
+                fontPixelSize: 13
+
+                bg.color: normalBG
+                hoveredBgColor: "#232424"
+
+                textColor: "#b3b3b3"
+                textHoverC: "#a0a0a0"
+
+                property color general_menuItemHoveredColor: "#353536"
+                property color general_menuItemTextColor: "#b3b3b3"
+                property color general_menuItemTextHoveredColor: "#a0a0a0"
+
+                CustomMenu{
+                    title: qsTr("File")
+
+                    /*menuItemHoveredColor: top_menu_bar.general_menuItemHoveredColor//"#5E5F60"
+                    menuItemTextColor: top_menu_bar.general_menuItemTextColor
+                    menuItemTextHoveredColor: top_menu_bar.general_menuItemTextHoveredColor*/
+
+                    Action {
+                        text: qsTr("Tool Bar"); checkable: true; shortcut: "CTRL+K"; onTriggered: console.log("Tool Bar Trigged!")
+                    }
+
+                    Action { text: qsTr("Side Bar"); checkable: true; enabled: false; checked: true }
+
+                    Action { text: qsTr("Status Bar"); checkable: true; checked: true }
+
+                    /*MenuSeparator {
+                        contentItem: Rectangle {
+                            implicitWidth: menuBar.menuItemWidth
+                            implicitHeight: 1
+                            color: menuBar.menuItemSeperatorColor
+                        }
+                    }*/
+
+                    CustomMenu{
+                        title: qsTr("Advanced")
+                        Action { text: "Find Next"; shortcut: "CTRL+E"}
+                        Action { text: "Find Previous"; shortcut: "CTRL+D" }
+                        Action { text: "Replace"; shortcut: "CTRL+İ" }
+                        Action { text: "Load"; shortcut: "CTRL+P" }
+                    }
+                }
+
+                CustomMenu{
+                    title: qsTr("Edit")
+                }
+
+                CustomMenu{
+                    title: qsTr("Object")
+                }
+
+                CustomMenu{
+                    title: qsTr("Plugins")
+                }
+
+                CustomMenu{
+                    title: qsTr("View")
+                }
+
+                CustomMenu{
+                    title: qsTr("Window")
+                }
+
+                CustomMenu{
+                    title: qsTr("Library")
+                }
+
+                CustomMenu{
+                    title: qsTr("Help")
+                }
+
+            }
+
+            /*GridLayout{
                 rows: 1
                 columns: 8
 
@@ -131,7 +219,7 @@ ApplicationWindow {
                 CustomButtonRectangle{id: top_menu_libraryButton; width: left_menu.width; height: top_menu.height; textR.text: "Library"; Layout.leftMargin: 10; textNormalColor: parent.textColor; textHoverColor: parent.textHoverC; font.family: parent.fontFamily; font.pointSize: parent.fontPointSize; normalColor: parent.normalBG; }
                 CustomButtonRectangle{id: top_menu_helpButton; width: left_menu.width; height: top_menu.height; textR.text: "Help"; textNormalColor: parent.textColor; textHoverColor: parent.textHoverC; font.family: parent.fontFamily; font.pointSize: parent.fontPointSize; normalColor: parent.normalBG; }
 
-             }
+             }*/
 
             //CustomButtonRectangle{id: minimizeButton1; anchors.right: parent.right; anchors.top: parent.top; width: 18; height: parent.height; normalColor: "red"; textR.text: "—"; textNormalColor:"#b3b3b3"; font.pointSize: 13}
 
@@ -149,8 +237,12 @@ ApplicationWindow {
              CustomComboBox{
                  width: 91
                  height: 25
-                 x: 700
-                 y: 1
+
+                 font.pixelSize: 11
+
+                 anchors.right: systemButtons.left
+                 anchors.rightMargin: 30
+                 anchors.verticalCenter: top_menu.verticalCenter
              }
         }
 
@@ -472,6 +564,7 @@ ApplicationWindow {
 
         RightMenus_1{
             id: right_menu1
+            property alias currentScene: scene3D
             windowWidth: rectangle.width
             width: realWidth
             height: rectangle.height - (top_menu_bottom_line.height + top_menu.height)
@@ -577,7 +670,27 @@ ApplicationWindow {
             height: parent.height - top_menu.height
             opacity: 1.0
 
+            //property Qml_camera test: 15
+
+            //cam.movementSpeed: 15
+
+            Component.onCompleted: {
+                console.log("laaaaaan: " + cam.movementSpeed)
+            }
+
+            //testx: 15
+
             focus: true
+
+            //signal activeFocusChangedxx2(msg: string)
+
+            onActiveFocusChanged: {
+                console.log("qml 3d focus changed _ = " + focus)
+                //scene3D.activeFocusChangedxxNo()
+                //scene3D.activeFocusChangedxx("Hello from QML")
+                scene3D.focusChangedSignal(focus)
+            }
+
             /*focus: true
 
             Keys.onPressed: {

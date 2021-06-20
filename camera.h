@@ -8,7 +8,6 @@
 
 const float YAW = -90.0f;
 const float PITCH = 0.0f;
-const float SPEED = 2.5f; // movement with keyboard
 const float SENSITIVITY = 0.5f;
 const float FOV = 45.0f; // field of view / ZOOM
 const float FOV_SPEED = 2.0f;
@@ -31,15 +30,19 @@ class Camera
     QVector3D cameraUp = QVector3D::crossProduct(cameraDirection, cameraRight);
     QVector3D worldUp;
 
-    public:
+    private:
         float yaw = -90.0f; // negatif z eksenine bakmasi icin.
         float pitch = 0.0f;
         float movementSpeed;
         float mouseSensitivity;
         float fov, fov_speed;
+        float nearDistance, farDistance;
+
+    public:
+
 
         Camera(QVector3D position = QVector3D(0.0f, 0.0f, 3.0f), QVector3D worldUp = QVector3D(0.0f, 1.0f, 0.0f), float yaw = YAW, float pitch = PITCH)
-            : cameraFront(QVector3D(0.0f, 0.0f, -1.0f)), movementSpeed(SPEED), mouseSensitivity(SENSITIVITY), fov(FOV), fov_speed(FOV_SPEED)
+            : cameraFront(QVector3D(0.0f, 0.0f, -1.0f)), movementSpeed(0), mouseSensitivity(SENSITIVITY), fov(FOV), fov_speed(FOV_SPEED)
         {
             cameraPos = position;
             this->worldUp = worldUp;
@@ -49,7 +52,7 @@ class Camera
         }
 
         Camera(float posX, float posY, float posZ, float worldUpX, float worldUpY, float worldUpZ, float yaw, float pitch)
-                : cameraFront(QVector3D(0.0f, 0.0f, -1.0f)), movementSpeed(SPEED), mouseSensitivity(SENSITIVITY), fov(FOV), fov_speed(FOV_SPEED)
+                : cameraFront(QVector3D(0.0f, 0.0f, -1.0f)), movementSpeed(0), mouseSensitivity(SENSITIVITY), fov(FOV), fov_speed(FOV_SPEED)
         {
             cameraPos = QVector3D(posX, posY, posZ);
             this->worldUp = QVector3D(worldUpX, worldUpY, worldUpZ);
@@ -68,6 +71,16 @@ class Camera
         QVector3D getCameraTarget() { return cameraTarget; };
         QVector3D getCameraDirection() { return cameraDirection; };
         QVector3D getCameraUp() { return cameraUp; };
+
+        void setMovementSpeed(float movSpeed);
+        void setRotationSpeed(float rotSpeed);
+        void setFov(float fov);
+        void setNearDistance(float nearDistance);
+        void setFarDistance(float farDistance);
+
+        float getFov(){return fov;}
+        float getNearDistance(){return nearDistance;}
+        float getFarDistance(){return farDistance;}
 
         QMatrix4x4 getCameraViewMatrix();
 };

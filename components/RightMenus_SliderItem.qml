@@ -5,7 +5,7 @@ import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
 
 Item{
-
+    id: main
     property alias text_property_name: text_property_name
     property alias text_property_value: text_property_value
 
@@ -13,6 +13,8 @@ Item{
     property int items_height: 25
 
     property alias slider: slider
+
+    property bool disabled: false
 
     property string unit: "" // m, cm, deg, mm
 
@@ -32,11 +34,37 @@ Item{
         color: "#8b8d90"
     }
 
-    Text{
+    /*Text{
         id: text_property_value
         anchors.right: parent.right; anchors.rightMargin: 14; anchors.top: parent.top
-        text: parseInt(slider.value); font.family: "Gilroy"; font.pixelSize: 12; font.weight: Font.Normal; font.styleName: Font.Normal
+        text: parseFloat(slider.value).toFixed(2); font.family: "Gilroy"; font.pixelSize: 12; font.weight: Font.Normal; font.styleName: Font.Normal
         color: "#ffffff"
+    }*/
+
+    TextInput{id: text_property_value
+        anchors.right: parent.right; anchors.rightMargin: 14; anchors.top: parent.top
+        text:parseFloat(slider.value).toFixed(2); font.family: "Gilroy"; font.pixelSize: 12; font.weight: Font.Normal; font.styleName: Font.Normal
+        color: "#ffffff"; activeFocusOnPress: true
+
+        Keys.onPressed: {
+            if(event.key == Qt.Key_Enter || event.key == Qt.Key_Return){
+                console.log("input enter basildiiiiiiiiiiiiiii.")
+                slider.value = parseFloat(text)
+            }
+
+        }
+
+        onActiveFocusChanged: {
+            if (!activeFocus)
+            {
+                console.log("focus input ------------------------------------------------------")
+                slider.value = parseFloat(text)
+            }else{
+                console.log("focus input +++++++++++++++++++++++++++++++++++++++++++++++++++++++")
+            }
+
+        }
+
     }
 
     Slider {
@@ -51,6 +79,8 @@ Item{
         anchors.right: parent.right
         anchors.top: text_property_name.bottom
         anchors.topMargin: 8
+
+        enabled: !main.disabled
 
         background: Rectangle {
             //x: slider.leftPadding
@@ -70,6 +100,9 @@ Item{
                 width: (slider.visualPosition) * parent.width
                 height: parent.height
                 color: "#8b8d90"
+
+                opacity: !main.disabled ? 1.0 : 0.3
+
                 radius: 2
             }
         }
@@ -81,6 +114,8 @@ Item{
             implicitHeight: 10
             radius: 13
             color: slider.pressed ? "#a3a3a3" : "#a3a3a3"
+
+            opacity: !main.disabled ? 1.0 : 0.3
             //border.color: "#bdbebf"
         }
     }

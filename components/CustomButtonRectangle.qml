@@ -30,6 +30,8 @@ Rectangle{
     property alias mouseAreas: mouseArea
     property bool mouseAreaForText: false // mouse area'yı sadece text için gecerli kılar. (arka plansız textButton olusturmak icin)
 
+    property bool clickedEnable: true
+
     state: ""
     color: (!bg_color_hide) ? normalColor : "transparent"
 
@@ -174,7 +176,6 @@ Rectangle{
         hoverEnabled: true
 
         onClicked: {
-
             if (button_rect.state != "CLICKED")
                 button_rect.state = "CLICKED"
             else{

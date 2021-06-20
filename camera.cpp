@@ -46,6 +46,7 @@ void Camera::processKeyboard(cameraMovement direction, float deltaTime){
         cameraPos += velocity * cameraRight;
 
     //qDebug() << "cameraPos: " << cameraPos;
+    qDebug() << "movementSpeed in renderer: " << movementSpeed;
 }
 
 void Camera::processMouseMovement(float xoffset, float yoffset, bool constrainPitch) {
@@ -75,4 +76,34 @@ void Camera::processMouseScroll(float yoffset) {
         fov = 1.0f;
     if (fov > 60.0f)
         fov = 60.0f;*/
+}
+
+void Camera::setMovementSpeed(float movSpeed){
+    qDebug() << "in camera mov speed icin cagri var";
+    movementSpeed = movSpeed;
+    qDebug() << "new movementSpeed: " << movementSpeed;
+}
+
+void Camera::setRotationSpeed(float rotSpeed){
+    qDebug() << "in camera rot speed icin cagri var";
+    mouseSensitivity = rotSpeed;
+    qDebug() << "new mouseSensitivity: " << mouseSensitivity;
+}
+
+void Camera::setFov(float fov){
+    qDebug() << "in camera fov icin cagri var";
+    this->fov = fov;
+    qDebug() << "new fov: " << fov;
+}
+
+void Camera::setNearDistance(float nearDistance){
+    qDebug() << "in camera nearDistance icin cagri var";
+    this->nearDistance = nearDistance;
+    qDebug() << "new nearDistance: " << nearDistance;
+}
+
+void Camera::setFarDistance(float farDistance){
+    qDebug() << "in camera farDistance icin cagri var";
+    this->farDistance = farDistance;
+    qDebug() << "new farDistance: " << farDistance;
 }

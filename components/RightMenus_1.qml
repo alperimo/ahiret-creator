@@ -12,6 +12,8 @@ Rectangle {
 
     property bool borderVisible: false
 
+    property alias main_rightmenu: rect
+
     id: rect
 
     x: windowWidth

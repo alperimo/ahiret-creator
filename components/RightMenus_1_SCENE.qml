@@ -42,7 +42,7 @@ Item{
 
             property alias settings_layout: scene_settings_layout //es muss verändert werden.
 
-            page_title.text: "SCENE_SETTING"
+            page_title.text: "SCENE SETTINGS"
 
             GridLayout{
                 id: scene_settings_layout
@@ -334,9 +334,18 @@ Item{
                     items_width: camera_settings_layout.items_width_
                     items_height: camera_settings_layout.items_height_
 
+                    slider.value: main_rightmenu.currentScene.cam.movementSpeed
+
+                    /*slider.onValueChanged: {
+                        console.log("movement value degisiyor.")
+                        console.log("movement value " + main_rightmenu.currentScene.cam.movementSpeed)
+                        main_rightmenu.currentScene.cam.movementSpeed = slider.value
+                    }*/
+
                     slider.onMoved: {
                         //tue etwas, wenn button geklickt wird
                         // deger: slider.value
+                        main_rightmenu.currentScene.cam.movementSpeed = slider.value
                     }
                 }
 
@@ -349,9 +358,12 @@ Item{
                     items_width: camera_settings_layout.items_width_
                     items_height: camera_settings_layout.items_height_
 
-                    slider.onMoved: {
+                    slider.value: main_rightmenu.currentScene.cam.rotationSpeed
+
+                    slider.onValueChanged: {
                         //tue etwas, wenn button geklickt wird
                         // deger: slider.value
+                        main_rightmenu.currentScene.cam.rotationSpeed = slider.value
                     }
                 }
 
@@ -364,9 +376,12 @@ Item{
                     items_width: camera_settings_layout.items_width_
                     items_height: camera_settings_layout.items_height_
 
-                    slider.onMoved: {
+                    slider.value: main_rightmenu.currentScene.cam.fov
+
+                    slider.onValueChanged: {
                         //tue etwas, wenn button geklickt wird
                         // deger: slider.value
+                        main_rightmenu.currentScene.cam.fov = slider.value
                     }
                 }
 
@@ -376,10 +391,13 @@ Item{
 
                     unit: "mm"
 
+                    disabled: true
+
                     items_width: camera_settings_layout.items_width_
                     items_height: camera_settings_layout.items_height_
 
-                    slider.onMoved: {
+
+                    slider.onValueChanged: {
                         //tue etwas, wenn button geklickt wird
                         // deger: slider.value
                     }
@@ -394,9 +412,12 @@ Item{
                     items_width: camera_settings_layout.items_width_
                     items_height: camera_settings_layout.items_height_
 
-                    slider.onMoved: {
+                    slider.value: main_rightmenu.currentScene.cam.nearDistance
+
+                    slider.onValueChanged: {
                         //tue etwas, wenn button geklickt wird
                         // deger: slider.value
+                        main_rightmenu.currentScene.cam.nearDistance = slider.value
                     }
                 }
 
@@ -409,9 +430,12 @@ Item{
                     items_width: camera_settings_layout.items_width_
                     items_height: camera_settings_layout.items_height_
 
-                    slider.onMoved: {
+                    slider.value: main_rightmenu.currentScene.cam.farDistance
+
+                    slider.onValueChanged: {
                         //tue etwas, wenn button geklickt wird
                         // deger: slider.value
+                        main_rightmenu.currentScene.cam.farDistance = slider.value
                     }
                 }
 

@@ -4,6 +4,9 @@ CONFIG += c++11
 QML_IMPORT_NAME = OpenGLUnderQML
 QML_IMPORT_MAJOR_VERSION = 1
 
+QML_IMPORT_NAME = OpenGLCamera
+QML_IMPORT_MAJOR_VERSION = 1
+
 LIBS   += -lopengl32
 LIBS   += -lglu32
 
@@ -18,6 +21,7 @@ SOURCES += \
         main.cpp \
         mytreemodel.cpp \
         openglitem.cpp \
+        qml_camera.cpp \
         shader.cpp \
         squircle.cpp
 
@@ -52,5 +56,6 @@ HEADERS += \
     camera.h \
     mytreemodel.h \
     openglitem.h \
+    qml_camera.h \
     shader.h \
     squircle.h

@@ -23,7 +23,8 @@
 #include <QSet>
 
 #include <camera.h>
-#include "shader.h"
+#include <shader.h>
+#include <qml_camera.h>
 
 class CustomItemRenderer : public QQuickFramebufferObject::Renderer
 {
@@ -45,7 +46,7 @@ private:
     QQuickWindow *m_Window = nullptr; //pointing to mainWindow(GUI)
 
     Shader *shader;
-    Camera camera;
+    Camera *camera;
 
     void drawObject();
 
@@ -64,21 +65,63 @@ private:
     float currentFrame = 0.0f;
 };
 
+//Q_DECLARE_METATYPE(Qml_camera*)
+//Q_DECLARE_OPAQUE_POINTER(Qml_camera*)
 
 class CustomItemBase : public QQuickFramebufferObject
 {
     Q_OBJECT
     Q_PROPERTY(QVector3D rotation READ rotation WRITE setRotation NOTIFY rotationChanged)
+    Q_PROPERTY(int testx READ testx WRITE setTestx NOTIFY testxChanged)
+    Q_PROPERTY(Qml_camera* cam READ cam CONSTANT)
+
+//properties für qml
+public:
+    Qml_camera *cam() const{
+        return m_qmlCamera;
+    }
+
+    void setTestx(const int &test){
+        if (test != m_testx){
+            qDebug() << "cpp testx degisti! old: " << m_testx << " new: " << test;
+            m_testx = test;
+            emit testxChanged();
+        }
+    }
+
+    int testx() const {
+        return m_testx;
+    }
+
+signals:
+    void testxChanged();
+
+private:
+    Qml_camera *m_qmlCamera;
+    int m_testx;
+
 public:
     QVector3D rotation() const { return m_rotation;}
     void setRotation(const QVector3D &v);
 
-    Camera getCamera() const { return camera; }
+    Camera* getCamera() { return &camera; }
 
     explicit CustomItemBase(QQuickItem *parent = nullptr) : QQuickFramebufferObject(parent) {
 
         setMirrorVertically(true); //qt default kordinat sistemini opengl'e göre düzenler(bu sayede y: 1.0 ekranın üstü olacak.)
         setAcceptedMouseButtons(Qt::AllButtons);
+
+        QObject::connect(this, SIGNAL(activeFocusChangedxxNo()), this, SLOT(activeFocusChangedxNo()));
+        QObject::connect(this, SIGNAL(activeFocusChangedxx(QString)), this, SLOT(activeFocusChangedx(QString)));
+        QObject::connect(this, SIGNAL(focusChangedSignal(bool)), this, SLOT(focusChangedSlot(bool)));
+
+        m_qmlCamera = new Qml_camera(this);
+
+        cam()->setMovementSpeed(5.0f);
+        cam()->setRotationSpeed(0.5f);
+        cam()->setFov(40.0f);
+        cam()->setNearDistance(0.01f);
+        cam()->setFarDistance(100.0f);
 
         //setAcceptTouchEvents(true);
         //setAcceptedMouseButtons(Qt::RightButton);
@@ -111,6 +154,19 @@ public:
     float currentFrame = 0.0f;
 
     Q_INVOKABLE void _keyPressEvent(); //virtual void keyPressEvent(QKeyEvent* event);
+
+signals:
+    void activeFocusChangedxx(const QString &msg);
+    void activeFocusChangedxxNo();
+    void focusChangedSignal(bool focus);
+
+public slots:
+    void activeFocusChangedx(const QString &msg);
+    void activeFocusChangedxNo(){
+        qDebug() << "cpp al olm mesaji";
+
+    }
+    void focusChangedSlot(bool focus);
 
 protected:
 

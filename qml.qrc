@@ -43,5 +43,8 @@
         <file>components/RightMenus_SliderItem.qml</file>
         <file>components/RightMenus_SwitchItem.qml</file>
         <file>components/CustomComboBox.qml</file>
+        <file>images/combobox_popup_button.png</file>
+        <file>components/CustomMenuBar.qml</file>
+        <file>components/CustomMenu.qml</file>
     </qresource>
 </RCC>

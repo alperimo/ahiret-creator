@@ -72,7 +72,10 @@ void CustomItemRenderer::synchronize(QQuickFramebufferObject *item) {
 
     camera = customItemBase->getCamera();
 
-    qDebug() << "CustomItemRenderer::synchronize() cameraPos " << camera.getCameraPos();
+    /*qDebug() << "CustomItemRenderer::synchronize() camera Movementspeed: " << camera->movementSpeed;
+    qDebug() << "CustomItemRenderer::synchronize() camera icerden: " << customItemBase->cam()->movementSpeed();*/
+
+    //qDebug() << "CustomItemRenderer::synchronize() cameraPos " << camera.getCameraPos();
 
     //if (customItemBase->getRightMouseEvent() != nullptr)
     //    customItemBase->mouseMoveEvent(customItemBase->getRightMouseEvent());
@@ -82,7 +85,8 @@ void CustomItemRenderer::synchronize(QQuickFramebufferObject *item) {
     ogl->glViewport(0, 0, w, h);
 
     m_projection.setToIdentity();
-    m_projection.perspective(45.0f, GLfloat(w) / GLfloat(h), 0.01f, 100.0f);
+    m_projection.perspective(camera->getFov(), GLfloat(w) / GLfloat(h), camera->getNearDistance(), camera->getFarDistance());
+    //m_projection.perspective(45.0f, GLfloat(w) / GLfloat(h), 0.01f, 100.0f);
 
     if (customItemBase->againUpdate())
         customItemBase->_keyPressEvent();
@@ -103,7 +107,7 @@ void CustomItemRenderer::drawObject(){
     //m_model.rotate(timer->elapsed() * 0.1, QVector3D(0.5, 1, 0));
     m_view.setToIdentity();
     //m_view.translate(0, 0, -3);
-    m_view = camera.getCameraViewMatrix();
+    m_view = camera->getCameraViewMatrix();
 
     //qDebug() << "m_view: " << m_view.column(3).x();
 
@@ -132,6 +136,7 @@ CustomItemRenderer::~CustomItemRenderer(){
         delete timer;
     }
 
+
     /*if (qTimer->isActive())
     {
         qTimer->stop();
@@ -142,6 +147,19 @@ CustomItemRenderer::~CustomItemRenderer(){
 // Item
 
 CustomItemBase::~CustomItemBase(){
+    keysPressed.clear();
+
+    delete m_qmlCamera;
+}
+
+void CustomItemBase::activeFocusChangedx(const QString &msg){
+    qDebug() << "cpp mesaj alinsin ulan artik!!!";
+    qDebug() << "cpp activeFocusChanged: " << msg;
+}
+
+void CustomItemBase::focusChangedSlot(bool focus){
+    qDebug() << "cpp aliyorum pasammmm focus: " << focus;
+
     keysPressed.clear();
 }
 
@@ -222,7 +240,7 @@ void CustomItemBase::_keyPressEvent(){ // sürekli update edilir
     if (keysPressed.contains(Qt::Key_D))
         camera.processKeyboard(RIGHT, deltaTime);
 
-   if (keysPressed.contains(Qt::Key_Right))
+   /*if (keysPressed.contains(Qt::Key_Right))
    {
         camera.yaw += 1.0f;
         camera.updateCameraVectors();
@@ -232,7 +250,7 @@ void CustomItemBase::_keyPressEvent(){ // sürekli update edilir
     {
         camera.yaw -= 1.0f;
         camera.updateCameraVectors();
-    }
+    }*/
 
     update();
 }
