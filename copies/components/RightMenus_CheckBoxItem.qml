@@ -3,8 +3,7 @@
 import QtQuick 2.15
 import QtQuick.Layouts 1.15
 
-Item
-{
+Item{
     property alias text_r: text_r
 
     property int items_width: 150
@@ -22,10 +21,6 @@ Item
 
     property alias checkboxButton: checkboxButton
 
-    property real checkboxButtonRightMargin: 0
-
-    property bool checked
-
     Layout.row: 0; Layout.column: 0; width: items_width; height: items_height
     Text{
         id: text_r
@@ -33,7 +28,7 @@ Item
         color: "#767676"
     }
     CustomButtonImageRect{
-        anchors.right: parent.right; anchors.rightMargin:  parent.checkboxButtonRightMargin
+        anchors.right: parent.right
         id: checkboxButton; width: parent.checkbox_width; height: parent.checkbox_height;
         btnImage.scale: 0.75; btnImage.anchors.centerIn: btnImage.parent; btnImage.anchors.fill: undefined;
         rectNormalColor: parent.checkbox_normalColor; rectHoveredColor: parent.checkbox_hoveredColor; rectClickedColor: parent.checkbox_clickedColor;
@@ -41,27 +36,7 @@ Item
         checkable: true;
 
         mouseAreas.onClicked: {
-            parent.checked = parent.checked ^ 1
+            //
         }
-
-        onStateChanged: {
-            if (btnImage.state == "CLICKED")
-            {
-                if (!parent.checked) parent.checked = true
-            }
-
-            if (btnImage.state == ""){
-                if (parent.checked) parent.checked = false
-            }
-        }
-    }
-
-    onCheckedChanged: {
-        if (checked)
-            checkboxButton.btnImage.state = "CLICKED"
-        else
-            checkboxButton.btnImage.state = ""
-
-        console.log("checked degisiyor: " + checked)
     }
 }

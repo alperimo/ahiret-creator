@@ -1,9 +1,12 @@
+#include <QApplication>
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 
 #include <QtQuick/QQuickView>
 
 #include <QFontInfo>
+
+#include <QIcon>
 
 #include "squircle.h"
 
@@ -21,7 +24,11 @@ int main(int argc, char *argv[])
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 #endif
 
-    QGuiApplication app(argc, argv);
+    //QGuiApplication app(argc, argv);
+
+    QApplication app(argc, argv);
+
+    app.setWindowIcon(QIcon("images/ahiret.ico"));
 
     std::cout << "int main()" << std::endl;
 
@@ -58,10 +65,7 @@ int main(int argc, char *argv[])
             QCoreApplication::exit(-1);
     }, Qt::QueuedConnection);
 
-    CustomItem customItem;
-
-
-
+    //CustomItem customItem;
 
     engine.load(url);
 

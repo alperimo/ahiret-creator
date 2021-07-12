@@ -22,15 +22,9 @@ Item {
     property color rectHoveredColor: "transparent"
     property color rectClickedColor: "transparent"
 
-    property alias btnRect: background_rect
     property alias btnImage: image
     property alias mouseAreas: mouseArea
     property alias colorize: colorize
-
-    // Duration of Animations
-    property real backgroundDuration: 100 // for background_rect
-    property real imageOpacityDuration: 100 // for opacity of image
-    property real imageColorDuration: 100 // for color of image
 
     Rectangle{
         id: background_rect
@@ -89,10 +83,7 @@ Item {
                 PropertyChanges {
                     target: colorize
                     opacity: (colorizedImage) ? 0.0 : colorize.opacity
-                }
-                PropertyChanges { // AHIRET BUG DETECTED!!! art arda buga girme sorunu. medet is WATCHING YOU!
-                    target: background_rect
-                    color: rectNormalColor
+
                 }
             },
 
@@ -129,7 +120,6 @@ Item {
                     target: background_rect
                     color: rectHoveredColor
                 }
-
             },
 
             State {
@@ -157,22 +147,22 @@ Item {
                     OpacityAnimator{
                         from: 0
                         to: 1
-                        duration: (colorizedImage) ? button.imageOpacityDuration : 0
+                        duration: (colorizedImage) ? 500 : 0
                     }
 
                     OpacityAnimator{
                         from: 1
                         to: 0
-                        duration: (colorizedImage) ? button.imageOpacityDuration : 0
+                        duration: (colorizedImage) ? 500 : 0
                     }
 
                     PropertyAnimation {
-                        duration: (!colorizedImage) ? button.imageColorDuration : 0
+                        duration: (!colorizedImage) ? 100 : 0
                     }
 
                     ColorAnimation {
                         target: background_rect
-                        duration: button.backgroundDuration
+                        duration: 100
                     }
                 }
 
@@ -187,17 +177,17 @@ Item {
                 ParallelAnimation{
 
                     OpacityAnimator{
-                        duration: (colorizedImage) ? button.imageOpacityDuration : 0
+                        duration: (colorizedImage) ? 500 : 0
                     }
 
                     PropertyAnimation {
-                        duration: (!colorizedImage) ? button.imageColorDuration : 0
+                        duration: (!colorizedImage) ? 100 : 0
                     }
 
 
                     ColorAnimation {
                         target: background_rect
-                        duration: button.backgroundDuration
+                        duration: 100
                     }
                 }
 
@@ -211,16 +201,16 @@ Item {
                 ParallelAnimation{
 
                     OpacityAnimator{
-                        duration: (colorizedImage) ? button.imageOpacityDuration : 0
+                        duration: (colorizedImage) ? 500 : 0
                     }
 
                     PropertyAnimation {
-                        duration: (!colorizedImage) ? button.imageColorDuration : 0
+                        duration: (!colorizedImage) ? 100 : 0
                     }
 
                     ColorAnimation {
                         target: background_rect
-                        duration: button.backgroundDuration
+                        duration: 100
                     }
 
                 }
@@ -244,6 +234,7 @@ Item {
         color: "transparent" //"#43b581"
     }*/
 
+
     Colorize{
 
         property real hue_: 153
@@ -260,6 +251,18 @@ Item {
         saturation: colors[1] //0.46
         lightness: colors[2] //48.6/50 - 1
     }
+
+    /*Colorize{
+        id: colorize
+        property variant colors: getColorized(153, 46, 48.6)
+
+        anchors.fill: image
+        source: image
+        opacity: 0.0
+        hue: colors[0] //153 / 360
+        saturation: colors[1] //0.46
+        lightness: colors[2] //48.6/50 - 1
+    }*/
 
 
     function getColorized(hue, saturation, lightness){

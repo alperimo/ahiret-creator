@@ -53,8 +53,6 @@ Item{
         text:parseFloat(slider.value).toFixed(2); font.family: "Gilroy"; font.pixelSize: 12; font.weight: Font.Normal; font.styleName: Font.Normal
         color: "#ffffff"; activeFocusOnPress: true
 
-        enabled: !main.disabled
-
         Keys.onPressed: {
             if(event.key == Qt.Key_Enter || event.key == Qt.Key_Return){
                 console.log("input enter basildiiiiiiiiiiiiiii.")

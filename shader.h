@@ -11,7 +11,7 @@
 class Shader
 {
 public:
-    Shader(QOpenGLFunctions *ogl);
+    Shader(QString vertexShader, QString fragmentShader, QOpenGLFunctions *ogl);
     ~Shader();
 
     void drawObject(QOpenGLFunctions *ogl);
@@ -20,6 +20,8 @@ public:
     QOpenGLVertexArrayObject* getVAO(){return &m_vao;}
     QOpenGLBuffer* getVBO(){return &m_vbo;}
     QOpenGLBuffer* getEBO(){return &m_ebo;}
+
+    void releaseShader();
 
 private:
     QOpenGLVertexArrayObject m_vao;

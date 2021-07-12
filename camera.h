@@ -22,7 +22,7 @@ enum cameraMovement {
 class Camera
 {
 
-    QVector3D cameraPos = QVector3D(0.0f, 0.0f, 3.0f);
+    QVector3D cameraPos = QVector3D(0.0f, 0.0f, 10.0f);
     QVector3D cameraFront = QVector3D(0.0f, 0.0f, -1.0f);
     QVector3D cameraTarget = QVector3D(0.0f, 0.0f, 0.0f); //origin
     QVector3D cameraDirection = (cameraPos - cameraTarget).normalized();
@@ -41,7 +41,7 @@ class Camera
     public:
 
 
-        Camera(QVector3D position = QVector3D(0.0f, 0.0f, 3.0f), QVector3D worldUp = QVector3D(0.0f, 1.0f, 0.0f), float yaw = YAW, float pitch = PITCH)
+        Camera(QVector3D position = QVector3D(0.0f, 0.0f, 10.0f), QVector3D worldUp = QVector3D(0.0f, 1.0f, 0.0f), float yaw = YAW, float pitch = PITCH)
             : cameraFront(QVector3D(0.0f, 0.0f, -1.0f)), movementSpeed(0), mouseSensitivity(SENSITIVITY), fov(FOV), fov_speed(FOV_SPEED)
         {
             cameraPos = position;

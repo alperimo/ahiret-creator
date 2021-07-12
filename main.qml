@@ -15,13 +15,15 @@ ApplicationWindow {
     minimumWidth: 960
     minimumHeight: 710
     visible: true
-    title: qsTr("Ahiret Creator")
+    //title: qsTr("Ahiret Creator")
 
     color: "#151616"
 
     property int bw: 5
 
     flags: Qt.Window | Qt.FramelessWindowHint//| Qt.CustomizeWindowHint
+
+    //flags: Qt.Window | Qt.CustomizeWindowHint
 
     property point startMousePos
     property point startWindowPos
@@ -49,6 +51,12 @@ ApplicationWindow {
                 left_menu_button1.state = "CLICKED"
             }
         }
+
+        onClicked: {
+            focus: true
+        }
+
+
     }
 
     DragHandler {
@@ -65,6 +73,7 @@ ApplicationWindow {
             if (p.y >= height - b) { e |= Qt.BottomEdge }
             window.startSystemResize(e);
         }
+
      }
 
     Rectangle{
@@ -72,6 +81,7 @@ ApplicationWindow {
         color: "#151616"
         anchors.fill: parent
         anchors.bottomMargin: 0
+
         Rectangle{
             id: top_menu
             anchors.top: parent.top
@@ -329,7 +339,9 @@ ApplicationWindow {
             id: right_menu
             width: 54
             anchors.top: top_menu_bottom_line.bottom
-            anchors.right: (rectangle.rightMenusArray.length == 0) ? right_menu1.left : rectangle.rightMenusArray[rightMenuStatus-1].left//right_menu1.left//parent.right
+            //anchors.right: (rectangle.rightMenusArray.length == 0) ? right_menu1.left : rectangle.rightMenusArray[rightMenuStatus-1].left
+            anchors.right: right_menu_main.left
+
             anchors.rightMargin: 1
             height: window.height - top_menu.height
 
@@ -395,15 +407,6 @@ ApplicationWindow {
                     mouseAreas.onClicked: {
                         rectangle.menuStateChanged(1)
                     }
-
-                    /*MouseArea{
-                        anchors.fill: parent
-                        onClicked: {
-                            rightselected.anchors.top = right_menu_button1.top
-                            rightselected.anchors.right = right_menu_button1.right
-                            rightselected_anim.running = true
-                        }
-                    }*/
                 }
 
                 CustomButtonImageRect{
@@ -510,15 +513,32 @@ ApplicationWindow {
                     }
 
                     right_menu.rightMenuButtonsArray[(right_menu.rightMenuStatus)-1].btnImage.state = "CLICKED"
+                    rectangle.rightMenusArray[(right_menu.rightMenuStatus)-1].state = "open"
+
+                    //rectangle.menuStateChanged(1)
 
                 }
             }
         }
 
+        property variant guncelMenus: [1,8]
+
         function rightMenuPanelChange(hideshow_button){ //0:hiding, 1:showing
+
             var status = "";
 
-            if (right_menu.rightMenuStatus != 1){
+            //if (right_menu.rightMenuStatus != 1){
+            //if (!(right_menu.rightMenuStatus in rectangle.guncelMenus))
+
+            var found = 0;
+            for (var i=0; i<rectangle.guncelMenus.length; i++){
+                console.log("for loop: menu" + rectangle.guncelMenus[i])
+                if (right_menu.rightMenuStatus == rectangle.guncelMenus[i])
+                    found = 1;
+            }
+
+            if (!found)
+            {
                 console.log("andere panelle sind gerade leider nicht aktiv.")
                 return
             }
@@ -537,13 +557,22 @@ ApplicationWindow {
             console.log("right menu wird " + status)
 
             var panel = rightMenusArray[right_menu.rightMenuStatus-1]
-            panel.state = status
+            console.log("right_menu.rightMenuStatus for array="+(right_menu.rightMenuStatus-1))
+            right_menu_main.state = status
 
         }
 
         function menuStateChanged(newMenuStatus){
-            var panel = rightMenusArray[0]
-            if (panel.state == "open" && newMenuStatus != 1)
+            var panel = rightMenusArray[newMenuStatus-1]
+
+            var found = 0;
+            for (var i=0; i<rectangle.guncelMenus.length; i++){
+                console.log("for loop: menu" + rectangle.guncelMenus[i])
+                if (newMenuStatus == rectangle.guncelMenus[i])
+                    found = 1;
+            }
+
+            if (right_menu_main.state == "open" && !found)
             {
                 console.log("andere panelle sind gerade leider nicht aktiv.")
                 var menu = right_menu.rightMenuButtonsArray[(newMenuStatus)-1].btnImage
@@ -556,27 +585,30 @@ ApplicationWindow {
                 var menuNew = right_menu.rightMenuButtonsArray[(newMenuStatus)-1].btnImage
                 menuOld.state = ""
                 menuNew.state = "CLICKED"
+
+                // farkli menu'ye gecis icin
+
+                rectangle.rightMenusArray[right_menu.rightMenuStatus-1].state = "hide"
+                rectangle.rightMenusArray[newMenuStatus-1].state = "open"
+
                 right_menu.rightMenuStatus = newMenuStatus
+                //right_menu.anchors.right = rectangle.rightMenusArray[newMenuStatus-1].left
+
+                console.log("right_menu.rightMenuStatus now = " + right_menu.rightMenuStatus)
             }
         }
 
         // START_RIGHT_MENUS
 
-        RightMenus_1{
-            id: right_menu1
-            property alias currentScene: scene3D
-            windowWidth: rectangle.width
-            width: realWidth
-            height: rectangle.height - (top_menu_bottom_line.height + top_menu.height)
-            color: "#151616"
-            anchors.top: right_menu.top
-            //anchors.right: rectangle.right
-
-        }
-
         Component.onCompleted: {
-            for (var i = 1; i < 2; i++) {
-                var c = Qt.createQmlObject("import QtQuick 2.0; QtObject { function f() { return right_menu" + i + " } }", this, "none")
+            for (var i = 1; i < 12; i++) {
+                var k=i
+                if (i == 1 || i == 8){
+
+                }else{
+                    k=1
+                }
+                var c = Qt.createQmlObject("import QtQuick 2.0; QtObject { function f() { return right_menu" + k + " } }", this, "none")
                 rightMenusArray.push(c.f())
                 c.destroy()
             }
@@ -585,6 +617,38 @@ ApplicationWindow {
             //console.log("right_menu1 width: " + rightMenusArray[0].realWidth)
         }
 
+        RightMenus{
+            id: right_menu_main
+
+            windowWidth: rectangle.width
+            width: realWidth
+            height: rectangle.height - (top_menu_bottom_line.height + top_menu.height)
+
+            anchors.top: right_menu.top
+            x: windowWidth
+            //anchors.left: rectangle.right
+
+            color: "#151616"
+
+            RightMenus_1{
+                id: right_menu1
+                property alias currentScene: scene3D
+                anchors.fill: parent
+                color: "#151616"
+                //anchors.top: right_menu.top
+                //anchors.right: rectangle.right
+            }
+
+            RightMenus_8{
+                id: right_menu8
+                property alias currentScene: scene3D
+                anchors.fill: parent
+                color: "#151616"
+                //anchors.top: right_menu.top
+                //anchors.right: rectangle.right
+            }
+
+        }
 
         // END_RIGHT_MENUS
 
@@ -658,6 +722,7 @@ ApplicationWindow {
             }
         }
 
+
         CustomItem {
             id: scene3D
             anchors.left: left_menu.right
@@ -724,6 +789,8 @@ ApplicationWindow {
 
             //Text{id: text_t; x: 15; y: 50; color: "white"; text: scene3D.activeFocus ? "I have active focus!" : "I do not have active focus"}
         }
+
+
 
         //TextInput{text:"Focus"; x: 300 + 293; y: 15; width: 100; height: 20; color: "white"; activeFocusOnPress: true}
     }

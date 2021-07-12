@@ -7,6 +7,8 @@
 #include <QQuickFramebufferObject>
 #include <QOpenGLFramebufferObjectFormat>
 #include <QOpenGLFunctions>
+#include <QOpenGLTexture>
+#include <QGLWidget>
 
 #include <QOpenGLVertexArrayObject>
 #include <QOpenGLBuffer>
@@ -24,7 +26,9 @@
 
 #include <camera.h>
 #include <shader.h>
+#include <light.h>
 #include <qml_camera.h>
+#include <qml_light.h>
 
 class CustomItemRenderer : public QQuickFramebufferObject::Renderer
 {
@@ -39,6 +43,10 @@ private:
 
     virtual void synchronize(QQuickFramebufferObject *item);
 
+private: //model infos
+    QOpenGLTexture *modelTextures[2] = {nullptr, nullptr}; // diffuseMap, specularMap
+    GLuint textureIDs[1]; // emissionMap
+
 private:
 
     QVector3D m_rotation;
@@ -46,7 +54,13 @@ private:
     QQuickWindow *m_Window = nullptr; //pointing to mainWindow(GUI)
 
     Shader *shader;
+    Shader *shaderLight;
     Camera *camera;
+    Light *light;
+
+    Qml_light *light_qml;
+
+    QVector3D lightPos;
 
     void drawObject();
 
@@ -74,11 +88,16 @@ class CustomItemBase : public QQuickFramebufferObject
     Q_PROPERTY(QVector3D rotation READ rotation WRITE setRotation NOTIFY rotationChanged)
     Q_PROPERTY(int testx READ testx WRITE setTestx NOTIFY testxChanged)
     Q_PROPERTY(Qml_camera* cam READ cam CONSTANT)
+    Q_PROPERTY(Qml_light* light READ light CONSTANT)
 
 //properties für qml
 public:
     Qml_camera *cam() const{
         return m_qmlCamera;
+    }
+
+    Qml_light *light() const{
+        return m_qmlLight;
     }
 
     void setTestx(const int &test){
@@ -98,6 +117,7 @@ signals:
 
 private:
     Qml_camera *m_qmlCamera;
+    Qml_light *m_qmlLight;
     int m_testx;
 
 public:
@@ -105,6 +125,7 @@ public:
     void setRotation(const QVector3D &v);
 
     Camera* getCamera() { return &camera; }
+    Light* getLight() {return &lightInfos; }
 
     explicit CustomItemBase(QQuickItem *parent = nullptr) : QQuickFramebufferObject(parent) {
 
@@ -116,12 +137,30 @@ public:
         QObject::connect(this, SIGNAL(focusChangedSignal(bool)), this, SLOT(focusChangedSlot(bool)));
 
         m_qmlCamera = new Qml_camera(this);
+        m_qmlLight = new Qml_light(this);
 
         cam()->setMovementSpeed(5.0f);
         cam()->setRotationSpeed(0.5f);
         cam()->setFov(40.0f);
         cam()->setNearDistance(0.01f);
         cam()->setFarDistance(100.0f);
+
+        //#FF33BD93
+
+        //QColor ambientColor;
+        //ambientColor.setHslF(0.45, 0.58, 0.47);
+
+        light()->setAmbient("#FFFFFFFF");//#FF33BD93 //light()->setAmbient(QColor(60, 179, 113));//light()->setAmbient(1.0f);
+        light()->setDiffuse("#FFFFFFFF");
+        light()->setSpecular("#FFFFFFFF");
+
+        light()->setPointLight(true);
+        light()->setLinear(0.09f);
+        light()->setQuadratic(0.032f);
+
+        light()->setSpotLight(false);
+        light()->setCutOff(12.5f);
+        light()->setOutCutOff(17.5f);
 
         //setAcceptTouchEvents(true);
         //setAcceptedMouseButtons(Qt::RightButton);
@@ -177,6 +216,7 @@ protected: // nur variablen
 private: // nur variablen
     QVector3D m_rotation;
     Camera camera;
+    Light lightInfos;
 
     QSet<int> keysPressed;
 

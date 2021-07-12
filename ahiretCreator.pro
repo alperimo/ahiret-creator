@@ -1,4 +1,4 @@
-QT += quick widgets
+QT += quick widgets opengl
 CONFIG += c++11
 
 QML_IMPORT_NAME = OpenGLUnderQML
@@ -10,6 +10,10 @@ QML_IMPORT_MAJOR_VERSION = 1
 LIBS   += -lopengl32
 LIBS   += -lglu32
 
+#win32: RC_ICONS += ahiret.ico
+RC_FILE = ahiret.rc
+//ICON = resource/icon/font-awesome-qml.icns
+
 INCLUDEPATH += C:\Qt\5.15.2\mingw81_64\include\
 
 # You can make your code fail to compile if it uses deprecated APIs.
@@ -18,15 +22,17 @@ INCLUDEPATH += C:\Qt\5.15.2\mingw81_64\include\
 
 SOURCES += \
         camera.cpp \
+        light.cpp \
         main.cpp \
         mytreemodel.cpp \
         openglitem.cpp \
         qml_camera.cpp \
+        qml_light.cpp \
         shader.cpp \
         squircle.cpp
 
 RESOURCES += \
-            qml.qrc
+            qml.qrc \
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
 QML_IMPORT_PATH =
@@ -43,6 +49,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 #    components/CustomBorder.qml
 
 DISTFILES += \
+    ahiret.rc \
     images/ediphocam.jpg \
     images/left_arrow.png \
     images/left_menu_button2.png \
@@ -54,8 +61,10 @@ DISTFILES += \
 
 HEADERS += \
     camera.h \
+    light.h \
     mytreemodel.h \
     openglitem.h \
     qml_camera.h \
+    qml_light.h \
     shader.h \
     squircle.h

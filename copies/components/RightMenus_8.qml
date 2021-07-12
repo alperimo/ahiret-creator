@@ -25,7 +25,7 @@ Rectangle {
 
         State {
             name: "hide"
-            PropertyChanges{
+            PropertyChanges {
                 id: hideChanges
                 target: rect
 
@@ -45,6 +45,10 @@ Rectangle {
                 visible: true
                 borderVisible : false
             }
+            /*PropertyChanges {
+                target: areaButton.borders
+                visible: false
+            }*/
         }
 
     ]
@@ -82,6 +86,7 @@ Rectangle {
         },
 
         Transition {
+
             from: "open"
             to: "hide"
 
@@ -93,7 +98,6 @@ Rectangle {
             onRunningChanged: {
                 if(!running){
                     rect.visible = false
-
                     console.log("rect.borderVisible on hiding: " + rect.borderVisible)
                 }
             }
@@ -130,13 +134,13 @@ Rectangle {
 
         property int pgB_bBorderwidth: 2
 
-        CustomButtonRectangle{id: areaButton; width: parent.pbBWidth; height: parent.pbBHeight; mouseAreaForText: true
+        /*CustomButtonRectangle{id: areaButton; width: parent.pbBWidth; height: parent.pbBHeight; mouseAreaForText: true
             normalColor: parent.pgB_normalColor; hoveredColor: parent.pgB_hoveredColor; clickedColor: parent.pgB_clickedColor;
             textR.text: "AREA"; textNormalColor: parent.pgB_textNormalColor; textHoverColor: parent.pgB_textHoveredColor;
             borders.visible: rect.borderVisible; borders.bBorderwidth: parent.pgB_bBorderwidth; borderNormalColor: parent.pgB_borderNormalColor; borderHoveredColor: parent.pgB_borderHoveredColor;
             font.family: "Gilroy"; font.pixelSize: 12; font.weight: Font.Bold; font.styleName: Font.Normal;
             checkable_fixed: true; mouseAreas.onClicked: changePage("AREA")
-        }
+        }*/
 
         CustomButtonRectangle{id: sceneButton; width: parent.pbBWidth; height: parent.pbBHeight; mouseAreaForText: true
             normalColor: parent.pgB_normalColor; hoveredColor: parent.pgB_hoveredColor; clickedColor: parent.pgB_clickedColor;
@@ -206,7 +210,7 @@ Rectangle {
         ]
 
         //AREA-page
-        /*Item{
+        Item{
             id: area_page
             anchors.fill: parent
             Rectangle{
@@ -232,15 +236,10 @@ Rectangle {
                     color: "#d3d3d3"
                 }
             }
-        }*/
-
-        //AREA-page
-        RightMenus_1_AREA{
-            id: area_page
         }
 
         //SCENE-page
-        RightMenus_1_SCENE{
+        RightMenus_8_SCENE{
             id: scene_page
         }
 
@@ -253,12 +252,12 @@ Rectangle {
         else
             return
 
-        areaButton.state = ""
+        //areaButton.state = ""
         sceneButton.state = ""
 
         if (newPage == "AREA")
         {
-            areaButton.state = "CLICKED"
+            //areaButton.state = "CLICKED"
             mainPage.state = "AREA"
         }
         else if (newPage == "SCENE"){
@@ -266,6 +265,5 @@ Rectangle {
             mainPage.state = "SCENE"
         }
     }
-
 
 }

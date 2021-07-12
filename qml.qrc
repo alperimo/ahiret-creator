@@ -19,8 +19,8 @@
         <file>images/left_menu_button_bottom1.png</file>
         <file>images/left_menu_button_bottom2.png</file>
         <file>images/left_menu_button1.svg</file>
-        <file>shaders/fragmentShader.txt</file>
-        <file>shaders/vertexShader.txt</file>
+        <file>shaders/shader.fs</file>
+        <file>shaders/shader.vs</file>
         <file>images/right_menu_button1.png</file>
         <file>images/right_menu_button2.png</file>
         <file>images/right_menu_button3.png</file>
@@ -46,5 +46,23 @@
         <file>images/combobox_popup_button.png</file>
         <file>components/CustomMenuBar.qml</file>
         <file>components/CustomMenu.qml</file>
+        <file>shaders/shaderLight.vs</file>
+        <file>shaders/shaderLight.fs</file>
+        <file>components/RightMenus_8.qml</file>
+        <file>components/RightMenus_8_SCENE.qml</file>
+        <file>components/RightMenus.qml</file>
+        <file>images/ahiret.ico</file>
+        <file>components/RightMenus_1_AREA.qml</file>
+        <file>components/colorpicker/content/Checkerboard.qml</file>
+        <file>components/colorpicker/content/ColorSlider.qml</file>
+        <file>components/colorpicker/content/NumberBox.qml</file>
+        <file>components/colorpicker/content/Palette.qml</file>
+        <file>components/colorpicker/content/Palettes.qml</file>
+        <file>components/colorpicker/content/PanelBorder.qml</file>
+        <file>components/colorpicker/content/SBPicker.qml</file>
+        <file>components/colorpicker/ColorPicker.qml</file>
+        <file>images/container2.png</file>
+        <file>images/container2_specular.png</file>
+        <file>images/emission_map.jpg</file>
     </qresource>
 </RCC>
