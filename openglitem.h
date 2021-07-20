@@ -30,6 +30,8 @@
 #include <qml_camera.h>
 #include <qml_light.h>
 
+#include "model.h"
+
 class CustomItemRenderer : public QQuickFramebufferObject::Renderer
 {
 public:
@@ -49,8 +51,6 @@ private: //model infos
 
 private:
 
-    QVector3D m_rotation;
-
     QQuickWindow *m_Window = nullptr; //pointing to mainWindow(GUI)
 
     Shader *shader;
@@ -61,6 +61,8 @@ private:
     Qml_light *light_qml;
 
     QVector3D lightPos;
+
+    QList<Model*> modelList;
 
     void drawObject();
 
@@ -85,8 +87,6 @@ private:
 class CustomItemBase : public QQuickFramebufferObject
 {
     Q_OBJECT
-    Q_PROPERTY(QVector3D rotation READ rotation WRITE setRotation NOTIFY rotationChanged)
-    Q_PROPERTY(int testx READ testx WRITE setTestx NOTIFY testxChanged)
     Q_PROPERTY(Qml_camera* cam READ cam CONSTANT)
     Q_PROPERTY(Qml_light* light READ light CONSTANT)
 
@@ -100,29 +100,14 @@ public:
         return m_qmlLight;
     }
 
-    void setTestx(const int &test){
-        if (test != m_testx){
-            qDebug() << "cpp testx degisti! old: " << m_testx << " new: " << test;
-            m_testx = test;
-            emit testxChanged();
-        }
-    }
-
-    int testx() const {
-        return m_testx;
-    }
-
 signals:
-    void testxChanged();
+
 
 private:
-    Qml_camera *m_qmlCamera;
-    Qml_light *m_qmlLight;
-    int m_testx;
+    QPointer<Qml_camera> m_qmlCamera;//Qml_camera *m_qmlCamera;
+    QPointer<Qml_light> m_qmlLight;//Qml_light *m_qmlLight;
 
 public:
-    QVector3D rotation() const { return m_rotation;}
-    void setRotation(const QVector3D &v);
 
     Camera* getCamera() { return &camera; }
     Light* getLight() {return &lightInfos; }
@@ -145,12 +130,7 @@ public:
         cam()->setNearDistance(0.01f);
         cam()->setFarDistance(100.0f);
 
-        //#FF33BD93
-
-        //QColor ambientColor;
-        //ambientColor.setHslF(0.45, 0.58, 0.47);
-
-        light()->setAmbient("#FFFFFFFF");//#FF33BD93 //light()->setAmbient(QColor(60, 179, 113));//light()->setAmbient(1.0f);
+        light()->setAmbient("#FFFFFFFF");
         light()->setDiffuse("#FFFFFFFF");
         light()->setSpecular("#FFFFFFFF");
 
@@ -208,20 +188,15 @@ public slots:
     void focusChangedSlot(bool focus);
 
 protected:
-
     Q_INVOKABLE void _mousePressEvent(QPointF p);
 
-protected: // nur variablen
-
 private: // nur variablen
-    QVector3D m_rotation;
     Camera camera;
     Light lightInfos;
 
     QSet<int> keysPressed;
 
     //keyboard, mouse io's
-
     float lastMX = 0.0f;
     float lastMY = 0.0f;
 

@@ -1,5 +1,7 @@
 #include "openglitem.h"
 
+#include <QFileInfo>
+
 static bool initialized = false;
 
 //Renderer
@@ -75,64 +77,11 @@ void CustomItemRenderer::initialize(){
         1, 2, 3    // second triangle
     };
 
-    //shader->getShaderProgram()->bind();
 
-    QOpenGLVertexArrayObject* shader_vao = shader->getVAO();
-    QOpenGLBuffer* shader_vbo = shader->getVBO();
-    QOpenGLBuffer* shader_ebo = shader->getEBO();
 
-    shader_vao->bind();
+    //QPointer<Model> modelTest = new Model("qrc:/scene/models/tank/IS4.obj");
 
-    shader_vbo->bind();
-    shader_vbo->allocate(vertices, sizeof(vertices));
-
-    ogl->glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (void*)0);
-    ogl->glEnableVertexAttribArray(0);
-
-    ogl->glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (void*)(3 * sizeof(float)));
-    ogl->glEnableVertexAttribArray(1);
-
-    ogl->glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (void*)(6 * sizeof(float)));
-    ogl->glEnableVertexAttribArray(2);
-
-    shader_ebo->bind();
-    shader_ebo->allocate(indices, sizeof(indices));
-
-        // Loading diffuse map
-    modelTextures[0] = new QOpenGLTexture(QImage(":/images/container2.png").mirrored(true, true), QOpenGLTexture::GenerateMipMaps);
-    if(!modelTextures[0]->isCreated()){
-        qDebug() << "Failed to load texture1";
-    }
-        // set the texture wrapping parameters
-    modelTextures[0]->setWrapMode(QOpenGLTexture::DirectionS, QOpenGLTexture::Repeat);// glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    modelTextures[0]->setWrapMode(QOpenGLTexture::DirectionT, QOpenGLTexture::Repeat);// glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-        // set texture filtering parameters
-    modelTextures[0]->setMinificationFilter(QOpenGLTexture::LinearMipMapLinear);  //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    modelTextures[0]->setMagnificationFilter(QOpenGLTexture::Linear);
-
-        // Loading specular map
-    modelTextures[1] = new QOpenGLTexture(QImage(":/images/container2_specular.png").mirrored(true, true), QOpenGLTexture::GenerateMipMaps);
-    if(!modelTextures[1]->isCreated()){
-        qDebug() << "Failed to load texture2";
-    }
-        // set the texture wrapping parameters
-    modelTextures[1]->setWrapMode(QOpenGLTexture::DirectionS, QOpenGLTexture::Repeat);// glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    modelTextures[1]->setWrapMode(QOpenGLTexture::DirectionT, QOpenGLTexture::Repeat);// glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-        // set texture filtering parameters
-    modelTextures[1]->setMinificationFilter(QOpenGLTexture::LinearMipMapLinear);  //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    modelTextures[1]->setMagnificationFilter(QOpenGLTexture::Linear);
-
-        //Loading emission map
-    QImage textureEmission(":/images/emission_map.jpg");
-    textureEmission = QGLWidget::convertToGLFormat(textureEmission);
-    ogl->glGenTextures(1, &textureIDs[0]);
-
-    ogl->glBindTexture(GL_TEXTURE_2D, textureIDs[0]);
-    ogl->glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
-    ogl->glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
-    ogl->glTexImage2D(GL_TEXTURE_2D,0,3,textureEmission.width(),textureEmission.height(),0,GL_RGBA,GL_UNSIGNED_BYTE,textureEmission.bits());
-
-    shader->releaseShader();
+    //modelTextures were removed
 
     shaderLight->getShaderProgram()->bind();
 
@@ -165,6 +114,10 @@ void CustomItemRenderer::initialize(){
 
     timer = new QElapsedTimer();
     timer->start();
+
+    shader->getShaderProgram()->bind();
+    QPointer<Model> modelTest2 = new Model("C:/textures/tank/IS4.obj", QOpenGLContext::currentContext());
+    modelList.append(modelTest2);
 }
 
 void CustomItemRenderer::render()
@@ -195,7 +148,6 @@ void CustomItemRenderer::render()
 void CustomItemRenderer::synchronize(QQuickFramebufferObject *item) {
     //std::cout << "CustomItemRenderer::synchronize()" << std::endl;
     CustomItemBase *customItemBase = static_cast<CustomItemBase *>(item);
-    m_rotation = customItemBase->rotation();
 
     m_Window = item->window();
 
@@ -298,11 +250,10 @@ void CustomItemRenderer::drawObject(){
     // Material properties
         //shaderProgram->setUniformValue(shaderProgram->uniformLocation("material.ambient"), QVector3D(0.24725f, 0.1995f, 0.0745f));
         //shaderProgram->setUniformValue(shaderProgram->uniformLocation("material.diffuse"), QVector3D(0.75164f, 0.60648f, 0.22648f));
-    shaderProgram->setUniformValue(shaderProgram->uniformLocation("material.diffuse"), 0); //load texture diffuse unit
-    shaderProgram->setUniformValue(shaderProgram->uniformLocation("material.specular"), 1); //load texture specular unit
-    shaderProgram->setUniformValue(shaderProgram->uniformLocation("material.emission"), 2); //load texture emission unit
-    shaderProgram->setUniformValue(shaderProgram->uniformLocation("material.specularStrength"), QVector3D(0.5f, 0.5f, 0.5f));
-    shaderProgram->setUniformValue(shaderProgram->uniformLocation("material.specularShininess"), 0.4f); // wird es * 128
+
+    for (Model* m : modelList){
+        m->Draw(*shader);
+    }
 
     //QVector3D objectColor(1.0f, 0.5f, 0.31f);
     QVector3D objectColor(1.0f, 0.839f, 0.0f);
@@ -314,7 +265,7 @@ void CustomItemRenderer::drawObject(){
     shaderProgram->setUniformValue(shaderProgram->uniformLocation("material.specularStrength"), QVector3D(0.5f, 0.5f, 0.5f));
     shaderProgram->setUniformValue(shaderProgram->uniformLocation("material.specularShininess"), 32.0f);*/
 
-    shader->getVAO()->bind();
+    /*shader->getVAO()->bind();
 
     ogl->glActiveTexture(GL_TEXTURE0);
     modelTextures[0]->bind();
@@ -345,7 +296,7 @@ void CustomItemRenderer::drawObject(){
         ogl->glDrawArrays(GL_TRIANGLES, 0, 36);
     }
 
-    shader->getVAO()->release();
+    shader->getVAO()->release();*/
 
     // lightShader
     QOpenGLShaderProgram* shaderLightProgram = shaderLight->getShaderProgram();
@@ -372,10 +323,10 @@ CustomItemRenderer::~CustomItemRenderer(){
         delete timer;
     }
 
-    for (u_int i=0; i<sizeof(modelTextures); i++){
+    /*for (u_int i=0; i<sizeof(modelTextures); i++){
         if (modelTextures[i])
             delete modelTextures[i];
-    }
+    }*/
 
 
     /*if (qTimer->isActive())
@@ -389,8 +340,6 @@ CustomItemRenderer::~CustomItemRenderer(){
 
 CustomItemBase::~CustomItemBase(){
     keysPressed.clear();
-
-    delete m_qmlCamera;
 }
 
 void CustomItemBase::activeFocusChangedx(const QString &msg){
@@ -498,13 +447,4 @@ bool CustomItemBase::againUpdate(){
         return true;
 
     return false;
-}
-
-void CustomItemBase::setRotation(const QVector3D &v){
-    std::cout << "CustomItemBase::setRotation()" << std::endl;
-    if (m_rotation != v){
-        m_rotation = v;
-        emit rotationChanged();
-        update();
-    }
 }

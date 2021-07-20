@@ -395,7 +395,7 @@ Item{
 
             property alias settings_layout: spotLight_settings_layout //es muss verändert werden.
 
-            page_title.text: "SPOTLIGHT SETTINGS"
+            page_title.text: "FLASHLIGHT SETTINGS"
 
             GridLayout{
                 id: spotLight_settings_layout

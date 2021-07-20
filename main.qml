@@ -3,6 +3,7 @@ import QtQuick.Window 2.12
 import "components"
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
+import QtQml 2.15
 import OpenGLUnderQML 1.0
 import QtGraphicalEffects 1.15
 
@@ -697,6 +698,8 @@ ApplicationWindow {
 
                     checkable: true
 
+                    state: "CLICKED"
+
                     Rectangle{
                         id: scene_line_1
                         width: parent.width
@@ -735,152 +738,56 @@ ApplicationWindow {
             height: parent.height - top_menu.height
             opacity: 1.0
 
-            //property Qml_camera test: 15
-
-            //cam.movementSpeed: 15
-
             Component.onCompleted: {
                 console.log("laaaaaan: " + cam.movementSpeed)
             }
 
-            //testx: 15
-
             focus: true
-
-            //signal activeFocusChangedxx2(msg: string)
 
             onActiveFocusChanged: {
                 console.log("qml 3d focus changed _ = " + focus)
-                //scene3D.activeFocusChangedxxNo()
-                //scene3D.activeFocusChangedxx("Hello from QML")
+
                 scene3D.focusChangedSignal(focus)
             }
 
-            /*focus: true
-
-            Keys.onPressed: {
-
-                if (event.key == Qt.Key_0){
-                    console.log("space basildi lo")
+            /*Connections{
+                target: bar22
+                Component.onCompleted: {
+                    console.log("Connection item eklenecek")
+                    bar22.addItem(yenibutton.createObject(yenibutton))
                 }
-
-                scene3D._keyPressEvent(event.key)
-                console.log("onPressed: " + event.key)
-            }
-
-            MouseArea{
-                acceptedButtons: Qt.LeftButton | Qt.RightButton
-                anchors.fill: parent
-                onPressed: {
-                    scene3D.focus = true
-
-                }
-                onPositionChanged: {
-                    if (pressedButtons == Qt.RightButton){
-                        //console.log("donusume hazir")
-                        scene3D._mousePressEvent(Qt.point(mouse.x, mouse.y))
-                    }
-                }
-                onReleased: {
-                    scene3D._mouseOnReleaseEvent()
-                }
-
             }*/
 
-            //Text{id: text_t; x: 15; y: 50; color: "white"; text: scene3D.activeFocus ? "I have active focus!" : "I do not have active focus"}
+
         }
 
+        /*Component{
+            id: yenibutton
+            TabButton {
+                text: qsTr("Heyyyy")
+            }
+        }
 
+        TabBar {
+            id: bar22
+            width: parent.width
+            TabButton {
+                text: qsTr("Home")
+            }
+            TabButton {
+                text: qsTr("Discover")
+            }
+            TabButton {
+                text: qsTr("Activity")
+            }
 
-        //TextInput{text:"Focus"; x: 300 + 293; y: 15; width: 100; height: 20; color: "white"; activeFocusOnPress: true}
+        }*/
+
     }
 
     onActiveFocusItemChanged: print("activeFocusItem", activeFocusItem)
 
-    /*MouseArea {
-        id: leftArea
-        anchors.left: parent.left
-        anchors.top: parent.top
-        anchors.topMargin: 5
-        anchors.bottom: parent.bottom
-        anchors.bottomMargin: 5
-        width: 15
-        onPressed: {
-            startMousePos = absoluteMousePos(leftArea)
-            startWindowPos = Qt.point(window.x, window.y)
-            startWindowSize = Qt.size(window.width, window.height)
-        }
-        onMouseXChanged: {
-            var abs = absoluteMousePos(leftArea)
-            var newWidth = Math.max(window.minimumWidth, startWindowSize.width - (abs.x - startMousePos.x))
-            var newX = startWindowPos.x - (newWidth - startWindowSize.width)
-            window.x = newX
-            window.width = newWidth
-        }
-    }*/
-
-
-
-    /*MouseArea {
-        id: rightArea
-        width: 5
-        anchors.right: parent.right
-        anchors.top: top_menu_bottom_line.bottom
-        anchors.topMargin: 5
-        anchors.bottom: parent.bottom
-        anchors.bottomMargin: 5
-
-        onPressed: {
-            startMousePos = absoluteMousePos(rightArea)
-            startWindowPos = Qt.point(window.x, window.y)
-            startWindowSize = Qt.size(window.width, window.height)
-        }
-        onMouseYChanged: {
-            var abs = absoluteMousePos(rightArea)
-            var newWidth = Math.max(window.minimumWidth, startWindowSize.width - (abs.x - startMousePos.x))
-            var newX = startWindowPos.x - (newWidth - startWindowSize.width)
-            window.x = newX
-            window.width = newWidth
-        }
-    }
-
-    MouseArea {
-        id: rightArea
-        width: 100
-        anchors.right: parent.right
-        anchors.top: parent.top
-        anchors.bottom: parent.bottom
-
-        onPressed: {
-            startMousePos = absoluteMousePos(leftArea)
-            startWindowPos = Qt.point(window.x, window.y)
-            startWindowSize = Qt.size(window.width, window.height)
-        }
-        onMouseYChanged: {
-            var abs = absoluteMousePos(leftArea)
-            var newWidth = Math.max(window.minimumWidth, startWindowSize.width - (abs.x - startMousePos.x))
-            var newX = startWindowPos.x - (newWidth - startWindowSize.width)
-            window.x = newX
-            window.width = newWidth
-        }
-    }*/
-
-    /*DropShadow {
-        id: rectShadow
-        anchors.fill: rectangle
-        cached: true
-        horizontalOffset: 0
-        verticalOffset: 0
-        radius: 10
-        samples: 16
-        color: "#80000000"
-        smooth: true
-        source: window
-    }*/
 }
-
-
-
 /*##^##
 Designer {
     D{i:0;formeditorZoom:0.5}
