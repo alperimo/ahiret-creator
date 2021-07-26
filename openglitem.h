@@ -24,11 +24,15 @@
 #include <QPointF>
 #include <QSet>
 
+#include <QFileSystemModel>
+
 #include <camera.h>
 #include <shader.h>
 #include <light.h>
 #include <qml_camera.h>
 #include <qml_light.h>
+#include <filesystem.h>
+#include <sandboxitemmodel.h>
 
 #include "model.h"
 
@@ -89,6 +93,8 @@ class CustomItemBase : public QQuickFramebufferObject
     Q_OBJECT
     Q_PROPERTY(Qml_camera* cam READ cam CONSTANT)
     Q_PROPERTY(Qml_light* light READ light CONSTANT)
+    Q_PROPERTY(QFileSystemModel* fileSystem READ fileSystem CONSTANT)
+    Q_PROPERTY(SandBoxItemModel* fileSystemNew READ fileSystemNew CONSTANT)
 
 //properties für qml
 public:
@@ -100,12 +106,22 @@ public:
         return m_qmlLight;
     }
 
+    QFileSystemModel* fileSystem() const {
+        return m_fileSystem;
+    }
+
+    SandBoxItemModel* fileSystemNew() const {
+        return m_fileSystemNew;
+    }
+
 signals:
 
 
 private:
     QPointer<Qml_camera> m_qmlCamera;//Qml_camera *m_qmlCamera;
     QPointer<Qml_light> m_qmlLight;//Qml_light *m_qmlLight;
+    QPointer<FileSystem> m_fileSystem;
+    QPointer<SandBoxItemModel> m_fileSystemNew;
 
 public:
 
@@ -123,6 +139,31 @@ public:
 
         m_qmlCamera = new Qml_camera(this);
         m_qmlLight = new Qml_light(this);
+
+        m_fileSystem = new FileSystem();
+        m_fileSystem->setRootPath("c:/ahiret/scene/objects/"); //QString("%1/scene/models/").arg(QCoreApplication::applicationDirPath())
+        qDebug() << "filePath from cpp: " << m_fileSystem->rootPath();
+        qDebug() << "filePathIndex from cpp: " << m_fileSystem->rootPathIndex();
+
+        m_fileSystemNew = new SandBoxItemModel();
+        QFile file("C:/ahiret/deneme.txt");              //sandbox locations are read from the text file
+        if (!file.open(QIODevice::ReadOnly)){
+            qDebug() << "file couldn't open!";
+
+        }else{
+            //qDebug() << "file okunan: " << file.readAll();
+            //qDebug() << "file okunan2: " << file.readAll().toStdString().c_str();
+            QString m_fileName = QString::fromStdString(file.readAll().toStdString());
+            //qDebug() << "file okunan QString: " << m_fileName;
+
+            //auto datax = file.readAll();
+            //QString s_data = QString::fromUtf8(datax.data());
+
+            qDebug() << "file okunan QString datax: " << m_fileName;
+
+            m_fileSystemNew->setSandBoxDetails(m_fileName);
+        }
+
 
         cam()->setMovementSpeed(5.0f);
         cam()->setRotationSpeed(0.5f);

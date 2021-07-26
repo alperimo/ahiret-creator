@@ -80,5 +80,9 @@
         <file>scene/models/tank/IS4.3ds</file>
         <file>scene/models/tank/cd.mtl</file>
         <file>scene/models/tank/cd.obj</file>
+        <file>components/ObjectMenu.qml</file>
+        <file>components/CustomTreeView.qml</file>
+        <file>components/qmldir</file>
+        <file>components/Style.qml</file>
     </qresource>
 </RCC>

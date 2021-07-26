@@ -48,6 +48,7 @@ Rectangle {
                 target: rect
 
                 x: windowWidth - realWidth
+
                 //opacity: 1
                 visible: true
                 borderVisible : false
@@ -69,6 +70,11 @@ Rectangle {
 
             PropertyAnimation{
                 properties: "x"
+
+                easing.type: Easing.OutQuad
+                easing.amplitude: 2.0
+                easing.period: 1.5
+
                 duration: 120
             }
 
@@ -82,6 +88,11 @@ Rectangle {
 
             PropertyAnimation{
                 properties: "x"
+
+                easing.type: Easing.OutQuad
+                easing.amplitude: 2.0
+                easing.period: 1.5
+
                 duration: 120
 
             }
@@ -96,6 +107,11 @@ Rectangle {
 
             PropertyAnimation{
                 properties: "x,opacity"
+
+                easing.type: Easing.OutQuad
+                easing.amplitude: 2.0
+                easing.period: 1.5
+
                 duration: 100
             }
 

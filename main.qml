@@ -2,6 +2,8 @@ import QtQuick 2.12
 import QtQuick.Window 2.12
 import "components"
 import QtQuick.Controls 2.15
+import QtQuick.Controls 1.4
+import QtQml.Models 2.15
 import QtQuick.Layouts 1.15
 import QtQml 2.15
 import OpenGLUnderQML 1.0
@@ -734,6 +736,7 @@ ApplicationWindow {
             anchors.top: scene_menu.bottom
             anchors.right: right_menu.left
             anchors.rightMargin: 1
+            anchors.bottom: object_menu.top
             width: parent.width - 2*(left_menu.width)
             height: parent.height - top_menu.height
             opacity: 1.0
@@ -758,6 +761,17 @@ ApplicationWindow {
                 }
             }*/
 
+
+        }
+
+
+
+        ObjectMenu{
+            id: object_menu
+            property alias currentScene: scene3D
+            anchors.left: left_menu.right
+            anchors.right: right_menu.left
+            anchors.bottom: parent.bottom
 
         }
 

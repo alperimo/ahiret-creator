@@ -28,6 +28,7 @@ INCLUDEPATH += C:\Qt\5.15.2\mingw81_64\include\
 
 SOURCES += \
         camera.cpp \
+        filesystem.cpp \
         light.cpp \
         main.cpp \
         mesh.cpp \
@@ -36,12 +37,14 @@ SOURCES += \
         openglitem.cpp \
         qml_camera.cpp \
         qml_light.cpp \
+        sandboxitemmodel.cpp \
         shader.cpp \
         squircle.cpp \
         stb_image.cpp
 
 RESOURCES += \
             qml.qrc \
+    scene.qrc
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
 QML_IMPORT_PATH =
@@ -78,6 +81,7 @@ DISTFILES += \
 
 HEADERS += \
     camera.h \
+    filesystem.h \
     includes/assimp/BaseImporter.h \
     includes/assimp/Bitmap.h \
     includes/assimp/BlobIOSystem.h \
@@ -170,6 +174,7 @@ HEADERS += \
     openglitem.h \
     qml_camera.h \
     qml_light.h \
+    sandboxitemmodel.h \
     shader.h \
     squircle.h \
     stb_image.h

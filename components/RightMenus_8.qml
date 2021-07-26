@@ -144,7 +144,7 @@ Rectangle {
 
         CustomButtonRectangle{id: sceneButton; width: parent.pbBWidth; height: parent.pbBHeight; mouseAreaForText: true
             normalColor: parent.pgB_normalColor; hoveredColor: parent.pgB_hoveredColor; clickedColor: parent.pgB_clickedColor;
-            textR.text: "SCENE"; textNormalColor: parent.pgB_textNormalColor; textHoverColor: parent.pgB_textHoveredColor;
+            textR.text: "LIGHT"; textNormalColor: parent.pgB_textNormalColor; textHoverColor: parent.pgB_textHoveredColor;
             borders.visible: rect.borderVisible; borders.bBorderwidth: parent.pgB_bBorderwidth; borderNormalColor: parent.pgB_borderNormalColor; borderHoveredColor: parent.pgB_borderHoveredColor;
             font.family: "Gilroy"; font.pixelSize: 12; font.weight: Font.Bold; font.styleName: Font.Normal;
             checkable_fixed: true; mouseAreas.onClicked: changePage("SCENE")
