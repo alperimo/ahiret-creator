@@ -146,6 +146,7 @@ public:
         qDebug() << "filePathIndex from cpp: " << m_fileSystem->rootPathIndex();
 
         m_fileSystemNew = new SandBoxItemModel();
+        m_fileSystemNew->setUseMainDirectory(true);
         QFile file("C:/ahiret/deneme.txt");              //sandbox locations are read from the text file
         if (!file.open(QIODevice::ReadOnly)){
             qDebug() << "file couldn't open!";

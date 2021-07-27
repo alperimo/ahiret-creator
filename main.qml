@@ -760,11 +760,7 @@ ApplicationWindow {
                     bar22.addItem(yenibutton.createObject(yenibutton))
                 }
             }*/
-
-
         }
-
-
 
         ObjectMenu{
             id: object_menu

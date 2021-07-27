@@ -22,7 +22,7 @@ Rectangle {
 
     }
 
-    CustomTreeView{
+    ObjectMenuTreeView{
         id: customview
         anchors.left: parent.left
         anchors.top: top_bar.bottom

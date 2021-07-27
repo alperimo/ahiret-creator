@@ -10,8 +10,8 @@ SandBoxItemModel::SandBoxItemModel(QObject *parent)
     :QStandardItemModel(parent)
 {
     rootItem = this->invisibleRootItem();
-    dirIcon = QApplication::style()->standardIcon(QStyle::SP_DirIcon);      //icon for directories
-    fileIcon = QApplication::style()->standardIcon(QStyle::SP_FileIcon);    //icon for files
+    dirIcon = QIcon("qrc:/images/object_menu_folder"); //QApplication::style()->standardIcon(QStyle::SP_DirIcon);      //icon for directories
+    fileIcon = QIcon("qrc:/images/object_menu_folder"); //QApplication::style()->standardIcon(QStyle::SP_FileIcon);    //icon for files
 
     m_roleNameMapping[NAME] = "name";
 }
@@ -41,18 +41,27 @@ void SandBoxItemModel::setSandBoxDetails(QString names)
 void SandBoxItemModel::populateSandBoxes(const QStringList &names)
 {
     QString name;
-    QStandardItem* parent;
+    CustomStandardItem* parent;
+
+    unsigned int fileIndex = 0;
 
     foreach (name, names) {
+        if (mainDirectory && (++fileIndex > 1)) return; // nur erster Folder wird Main.
+
         if(!name.isEmpty())
         {
             name.remove("\r");
             qDebug() << "SandBoxItemModel: path = " << name;
-            parent = new QStandardItem(dirIcon, name);  //create the parent directory item
+            parent = new CustomStandardItem(dirIcon, name);  //create the parent directory item
             parent->setAccessibleDescription(name);     //set actual path to item
-            rootItem->appendRow(parent);                //add the parent item to root item
+            parent->setType("dir");
+            if (!mainDirectory){
+                rootItem->appendRow(parent);                //add the parent item to root item
+                createDirectoryItem(name, parent);          //Iterate and populate the contents
+            }else{
+                createDirectoryItem(name, rootItem, true);          //Iterate and populate the contents
+            }
 
-            createDirectoryItem(name, parent);          //Iterate and populate the contents
         }else{
             qDebug() << "SandBoxItemModel: path = " << name << " but this is empty";
         }
@@ -67,27 +76,34 @@ void SandBoxItemModel::populateSandBoxes(const QStringList &names)
   which will be useful.
 
 */
-void SandBoxItemModel::createDirectoryItem(QString dirName, QStandardItem *parentItem)
+void SandBoxItemModel::createDirectoryItem(QString dirName, QStandardItem *parentItem, bool forMainDirectory)
 {
     QDir dir(dirName);
     QFileInfoList subFolders;
     QFileInfo folderName;
-    QStandardItem* child;
-    subFolders = dir.entryInfoList(QDir::Dirs | QDir::Files | QDir::NoDotAndDotDot);    //get all the sub folders
+    CustomStandardItem* child;
+    if (!forMainDirectory)
+        subFolders = dir.entryInfoList(QDir::Dirs | QDir::Files | QDir::NoDotAndDotDot);    //get all the sub folders
+    else
+        subFolders = dir.entryInfoList(QDir::Dirs | QDir::NoDotAndDotDot);
+
     foreach (folderName, subFolders)
     {
 
         if(folderName.isFile())
         {
             qDebug() << "SandBoxItemModel: fileName = " << folderName.fileName();
-            child = new QStandardItem(fileIcon, folderName.fileName());                 //Append a file
+            child = new CustomStandardItem(fileIcon, folderName.fileName());                 //Append a file
             child->setAccessibleDescription(folderName.filePath());                     //set actual path to item
+            child->setType("file");
+            child->setEnabled(false);
         }
         else
         {
             qDebug() << "SandBoxItemModel: folderName = " << folderName.fileName();
-            child = new QStandardItem(dirIcon, folderName.fileName());                  //Append a folder
+            child = new CustomStandardItem(dirIcon, folderName.fileName());                  //Append a folder
             child->setAccessibleDescription(folderName.filePath());                     //set actual path to item
+            child->setType("dir");
         }
         parentItem->appendRow(child);
         createDirectoryItem(folderName.filePath(), child);                              //Recurse its subdirectories

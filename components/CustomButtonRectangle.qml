@@ -20,6 +20,7 @@ Rectangle{
 
     property color textNormalColor: "white"
     property color textHoverColor: "white"
+    property color textClickedColor: textHoverColor
 
     property alias borders: borders
     property color borderNormalColor: "transparent"
@@ -30,6 +31,7 @@ Rectangle{
 
     property alias mouseAreas: mouseArea
     property bool mouseAreaForText: false // mouse area'yı sadece text için gecerli kılar. (arka plansız textButton olusturmak icin)
+    property bool custom_onEntered: false
 
     property bool clickedEnable: true
 
@@ -73,7 +75,7 @@ Rectangle{
             }
             PropertyChanges {
                 target: text_name
-                color: button_rect.textHoverColor
+                color: button_rect.textClickedColor
             }
             PropertyChanges{
                 target: borders
@@ -205,11 +207,13 @@ Rectangle{
         }*/
 
         onEntered: {
-            if (button_rect.state != "CLICKED")
-                button_rect.state = "HOVERED"
+            if (!custom_onEntered){
+                if (button_rect.state != "CLICKED")
+                    button_rect.state = "HOVERED"
+                /*if (button_rect.state == "CLICKED")
+                    button_rect.color = clickedColor*/
 
-            /*if (button_rect.state == "CLICKED")
-                button_rect.color = clickedColor*/
+            }
         }
 
         onExited: {

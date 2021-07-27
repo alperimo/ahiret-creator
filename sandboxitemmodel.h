@@ -5,7 +5,21 @@
 #include <QStandardItem>
 #include <QDebug>
 
+class CustomStandardItem : public QStandardItem
+{
+public:
+    CustomStandardItem();
+    CustomStandardItem(int rows, int columns = 1) : QStandardItem(rows, columns) {};
+    CustomStandardItem(const QIcon &icon, const QString &text) : QStandardItem(icon, text) {};
+    CustomStandardItem(const QString &text) : QStandardItem(text) {};
+    ~CustomStandardItem(){};
 
+    void setType(QString type_) {type = type_;}
+    decltype (auto) getType() {return type;}
+
+private:
+    QString type;
+};
 
 class SandBoxItemModel : public QStandardItemModel
 {
@@ -22,24 +36,23 @@ public:
 
     void setSandBoxDetails(QString names);
     void populateSandBoxes(const QStringList &names);
-    void createDirectoryItem(QString dirName, QStandardItem *parentItem = NULL);
+    void createDirectoryItem(QString dirName, QStandardItem *parentItem = NULL, bool forMainDirectory=false);
 
-
-
-    Q_INVOKABLE QVariant datax(const QModelIndex &index) const{
-        qDebug() << "from cpp datax called!!!";
-
-        return QStandardItemModel::itemFromIndex(index)->text();
+    Q_INVOKABLE QStandardItem* datax(const QModelIndex &index) const{
+        qDebug() << "from cpp: datax called!!!";
+        return QStandardItemModel::itemFromIndex(index);
     }
 
-    Q_INVOKABLE QVariant getName(const QModelIndex &index) const
+    Q_INVOKABLE QString getIconType(const QModelIndex &index) const
     {
-        return QStandardItemModel::itemFromIndex(index)->text();
+        return dynamic_cast<CustomStandardItem*>(QStandardItemModel::itemFromIndex(index))->getType();
     }
+
+
+    void setUseMainDirectory(bool flag){mainDirectory=flag;}
 
     /*Q_INVOKABLE QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override
     {
-        qDebug() << "data called hocaaaa";
         switch (role) {
             //case NAME:
             //    return QFileSystemModel::data(this->index(index.row(), 1, index.parent()),
@@ -56,6 +69,8 @@ private:
     QStandardItem *rootItem;
     QIcon dirIcon;
     QIcon fileIcon;
+
+    bool mainDirectory = false;
 };
 
 #endif // SANDBOXITEMMODEL_H
