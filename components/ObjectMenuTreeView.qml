@@ -61,8 +61,6 @@ TreeView{
 
             checkable_fixed: true
 
-
-
             Rectangle{id: selected; anchors.left: parent.left; anchors.top: parent.top; anchors.bottom: parent.bottom; width: 2; color: "transparent"
                 states: [
                     State {name: "SELECTED"; PropertyChanges { target: selected; color: Style.seamFoamGreen }}
@@ -83,7 +81,7 @@ TreeView{
             }
 
             CustomButtonImage{id: expandCollapseButton; rotation: -90;
-                anchors.right: parent.right; anchors.rightMargin: 8; anchors.top: parent.top; anchors.topMargin: 9;
+                anchors.right: parent.right; anchors.rightMargin: 8; anchors.verticalCenter: parent.verticalCenter
                 width: 16; height: 16; defaultImage: "../images/left_arrow.png"; hoveredImage: "../images/left_arrow.png"; clickedImage: "../images/left_arrow.png";
                 colorizedImage: true;
 
@@ -122,8 +120,6 @@ TreeView{
                 type = tree.model.getIconType(styleData.index)
                 console.log("desc: " + styleData.accessibleDescription)
             }
-
-
 
             Binding on state {when: !styleData.selected && !itemRect.expanded; value: ""; restoreMode: Binding.RestoreBinding}
             Binding on state {when: itemRect.expanded; value: "CLICKED"; restoreMode: Binding.RestoreBinding}

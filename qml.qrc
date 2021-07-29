@@ -64,22 +64,6 @@
         <file>images/container2_specular.png</file>
         <file>images/emission_map.jpg</file>
         <file>shaders/shader_copyd.fs</file>
-        <file>scene/models/backpack/Survival_BackPack_2.fbx</file>
-        <file>scene/models/backpack/1001_albedo.jpg</file>
-        <file>scene/models/backpack/1001_AO.jpg</file>
-        <file>scene/models/backpack/1001_metallic.jpg</file>
-        <file>scene/models/backpack/1001_normal.png</file>
-        <file>scene/models/backpack/1001_roughness.jpg</file>
-        <file>scene/models/backpack/test.mtl</file>
-        <file>scene/models/backpack/test.obj</file>
-        <file>scene/models/tank/IS4.mtl</file>
-        <file>scene/models/tank/IS_4M.dds</file>
-        <file>scene/models/tank/IS_4M_NM.dds</file>
-        <file>scene/models/tank/IS_4M_SM.dds</file>
-        <file>scene/models/tank/IS4.obj</file>
-        <file>scene/models/tank/IS4.3ds</file>
-        <file>scene/models/tank/cd.mtl</file>
-        <file>scene/models/tank/cd.obj</file>
         <file>components/ObjectMenu.qml</file>
         <file>components/ObjectMenuTreeView.qml</file>
         <file>components/qmldir</file>

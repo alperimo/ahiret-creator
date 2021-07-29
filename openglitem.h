@@ -38,6 +38,7 @@
 
 class CustomItemRenderer : public QQuickFramebufferObject::Renderer
 {
+
 public:
     CustomItemRenderer();
     ~CustomItemRenderer(); //normalde virtual idi.
@@ -78,11 +79,16 @@ private:
     QElapsedTimer *timer; //start, restart, elapsed, invalidate(isValid kontrolü yap)
 
 private:
+    bool firstSynchronize = true;
     bool firstRender = true;
     //keyboard, mouse io's
     float deltaTime = 0.0f;
     float lastFrame = 0.0f;
     float currentFrame = 0.0f;
+
+    unsigned int currentDepthTest;
+    QList<GLenum> depthFuncs = {0, GL_LESS, GL_ALWAYS, GL_NEVER, GL_EQUAL, GL_LEQUAL, GL_GREATER, GL_NOTEQUAL, GL_GEQUAL};
+
 };
 
 //Q_DECLARE_METATYPE(Qml_camera*)
@@ -137,6 +143,8 @@ public:
         QObject::connect(this, SIGNAL(activeFocusChangedxx(QString)), this, SLOT(activeFocusChangedx(QString)));
         QObject::connect(this, SIGNAL(focusChangedSignal(bool)), this, SLOT(focusChangedSlot(bool)));
 
+        QObject::connect(this, &CustomItemBase::depthFuncChanged, this, &CustomItemBase::setDepthFunc);
+
         m_qmlCamera = new Qml_camera(this);
         m_qmlLight = new Qml_light(this);
 
@@ -152,16 +160,8 @@ public:
             qDebug() << "file couldn't open!";
 
         }else{
-            //qDebug() << "file okunan: " << file.readAll();
-            //qDebug() << "file okunan2: " << file.readAll().toStdString().c_str();
             QString m_fileName = QString::fromStdString(file.readAll().toStdString());
-            //qDebug() << "file okunan QString: " << m_fileName;
-
-            //auto datax = file.readAll();
-            //QString s_data = QString::fromUtf8(datax.data());
-
             qDebug() << "file okunan QString datax: " << m_fileName;
-
             m_fileSystemNew->setSandBoxDetails(m_fileName);
         }
 
@@ -220,6 +220,7 @@ signals:
     void activeFocusChangedxx(const QString &msg);
     void activeFocusChangedxxNo();
     void focusChangedSignal(bool focus);
+    void depthFuncChanged(const unsigned int& value);
 
 public slots:
     void activeFocusChangedx(const QString &msg);
@@ -229,8 +230,13 @@ public slots:
     }
     void focusChangedSlot(bool focus);
 
+    void setDepthFunc(const unsigned int& value);
+
 protected:
     Q_INVOKABLE void _mousePressEvent(QPointF p);
+
+public: // synhronize variablen
+    unsigned int currentDepthTest = 1;
 
 private: // nur variablen
     Camera camera;
@@ -244,7 +250,6 @@ private: // nur variablen
 
     bool mouseRightClick = false;
     bool mouseRightClick2 = false;
-
 };
 
 

@@ -9,6 +9,7 @@ QtObject {
     property color seamFoamGreen: "#43b581"
 
     property string defaultFontFamily: "Segoe UI"
+    property string defaultTextColor: "#767676"
 
     //objectMenu
     property color itemBgNormalColor: "transparent"

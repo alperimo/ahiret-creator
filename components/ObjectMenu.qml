@@ -18,9 +18,9 @@ Rectangle {
 
         Rectangle{id: top_line; width: parent.width; height: 2; anchors.top: parent.top; color: Style.themeLineColor }
         Rectangle{id: bottom_line; width: parent.width; height: 1; anchors.bottom: parent.bottom; color: Style.themeLineColor }
-
-
     }
+
+    Rectangle{id: right_line_object; width: 1; height: customview.height; anchors.top: customview.top; anchors.right: customview.right; anchors.rightMargin: 2; color: Style.themeLineColor}
 
     ObjectMenuTreeView{
         id: customview
@@ -35,6 +35,9 @@ Rectangle {
             id: sel
             model: currentScene.fileSystemNew
         }
+
+
     }
+
 
 }

@@ -587,6 +587,94 @@ Item{
     }
 
     Component {
+        id: renderSettings
+        RightMenus_1_SCENE_Item{
+            id: renderSettingsItem
+            width: main_page_ref.scene_width
+            height: 31 + 88
+
+            property alias settings_layout: render_settings_layout //es muss verändert werden.
+
+            page_title.text: "RENDER SETTINGS"
+
+            GridLayout{
+                id: render_settings_layout
+                anchors.top: page_title_bg.bottom
+                anchors.topMargin: 5
+                anchors.left: page_title_bg.left
+                anchors.leftMargin: 4
+                anchors.right: page_title_bg.right
+                anchors.rightMargin: 4
+                rows: 3
+                columns: 1
+
+                rowSpacing: 10
+                columnSpacing: 22
+
+                visible: true
+
+                property int items_width_: 119
+                property int items_height_: 16
+
+                states: [
+                    State {
+                        name: "hide"
+                        PropertyChanges {
+                            target: pbrSettingsItem
+                            height: 31
+                        }
+                    }
+                ]
+
+                transitions: [
+                    Transition {
+                        from: ""
+                        to: "hide"
+                        reversible: true
+                        PropertyAnimation {
+                            properties: "height,anchors"
+                            duration: 300
+                        }
+                    }
+                ]
+
+                Item{
+                    Layout.preferredWidth: parent.width
+                    height: 23
+                    Text{id: depthTest_text; anchors.left: parent.left; anchors.verticalCenter: parent.verticalCenter
+                        text: "Depth Testing:"; font.family: Style.defaultFontFamily; font.pixelSize: 12; font.weight: Font.Normal; font.styleName: Font.Normal
+                        color: "#767676";
+                    }
+
+                    CustomComboBox{
+                        id: depthTest
+                        anchors.left: depthTest_text.right; anchors.leftMargin: 4
+                        anchors.right: parent.right
+                        anchors.verticalCenter: parent.verticalCenter
+                        height: parent.height
+                        font.pixelSize: 11
+                        model: ["Disable", "Pass less depth value(Default) [GL_LESS]", "Pass always depth test [GL_ALWAYS]", "Pass never depth test [GL_NEVER]",
+                            "Pass equal depth value [GL_EQUAL]", "Pass less or equal depth value [GL_LEQUAL]", "Pass greater depth value [GL_GREATER]",
+                            "Pass non-equal depth value [GL_NOTEQUAL]", "Pass greater or equal depth value [GL_GEQUAL]"]
+
+                        textHorizontalAlign: true
+                        popup.y: height + 2
+
+                        currentIndex: 4
+
+                        setPopupMaxHeight: 120
+
+                        onCurrentIndexChanged: {
+                            console.log("current index: " + currentIndex)
+                            main_rightmenu.currentScene.depthFuncChanged(currentIndex)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    Component {
         id: graphicSettings
         Rectangle {
             width: main_page_ref.scene_width
@@ -620,6 +708,9 @@ Item{
                 title: "pbr_settings"
             }
             ListElement {
+                title: "render_settings"
+            }
+            ListElement {
                 title: "graphic_settings"
             }
         }
@@ -636,6 +727,7 @@ Item{
                 case "toggle_settings": return toggleSettings
                 case "camera_settings": return cameraSettings
                 case "pbr_settings": return pbrSettings
+                case "render_settings": return renderSettings
                 case "graphic_settings": return graphicSettings
                 default: console.log("hicbiri degil title: " + title)
             }

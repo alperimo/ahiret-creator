@@ -124,8 +124,15 @@ void CustomItemRenderer::render()
 {
     if (firstRender){
         firstRender = false;
-        ogl->glEnable(GL_DEPTH_TEST); // zBuffer/Depthbuffer/Depth testing aktif.
+        //ogl->glEnable(GL_DEPTH_TEST); // zBuffer/Depthbuffer/Depth testing aktif.
         initialize();
+    }
+
+    if (currentDepthTest == 0) ogl->glDisable(GL_DEPTH_TEST);
+    else{
+        if (!ogl->glIsEnabled(GL_DEPTH_TEST))
+            ogl->glEnable(GL_DEPTH_TEST);
+        ogl->glDepthFunc(depthFuncs.at(currentDepthTest));
     }
 
     ogl->glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
@@ -161,6 +168,14 @@ void CustomItemRenderer::synchronize(QQuickFramebufferObject *item) {
     light = customItemBase->getLight();
 
     light_qml = customItemBase->light();
+
+    currentDepthTest = customItemBase->currentDepthTest;
+
+    /*if (firstSynchronize){
+        connect(customItemBase, &CustomItemBase::setDepthFunc, this, &CustomItemRenderer::setDepthFunc);
+        firstSynchronize = false;
+    }*/
+
 
     GLsizei w = item->width();
     GLsizei h = item->height();
@@ -448,3 +463,9 @@ bool CustomItemBase::againUpdate(){
 
     return false;
 }
+
+void CustomItemBase::setDepthFunc(const unsigned int& value){
+    qDebug() << "CustomItemRenderer:: setDepthFunc, value = " << value;
+    currentDepthTest = value;
+}
+

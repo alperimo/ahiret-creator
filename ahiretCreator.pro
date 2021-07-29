@@ -61,8 +61,6 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 #    components/CustomBorder.qml
 
 DISTFILES += \
-    ../../../../../../textures/tank/IS_4M.dds \
-    ../../../../../../textures/tank/IS_4M.jpg \
     ahiret.rc \
     cd.mtl \
     cd.obj \
@@ -75,7 +73,6 @@ DISTFILES += \
     includes/assimp/.editorconfig \
     includes/assimp/config.h.in \
     includes/lib/assimp-vc142-mt.lib \
-    scene/models/backpack/Survival_BackPack_2.fbx \
     shaders/fragmentShader.txt \
     shaders/vertexShader.txt
 
