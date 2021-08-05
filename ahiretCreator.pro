@@ -36,6 +36,7 @@ SOURCES += \
         mytreemodel.cpp \
         openglitem.cpp \
         qml_camera.cpp \
+        qml_generalData.cpp \
         qml_light.cpp \
         sandboxitemmodel.cpp \
         shader.cpp \
@@ -170,6 +171,7 @@ HEADERS += \
     mytreemodel.h \
     openglitem.h \
     qml_camera.h \
+    qml_generalData.h \
     qml_light.h \
     sandboxitemmodel.h \
     shader.h \

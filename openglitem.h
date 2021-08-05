@@ -31,6 +31,7 @@
 #include <light.h>
 #include <qml_camera.h>
 #include <qml_light.h>
+#include <qml_generalData.h>
 #include <filesystem.h>
 #include <sandboxitemmodel.h>
 
@@ -63,7 +64,8 @@ private:
     Camera *camera;
     Light *light;
 
-    Qml_light *light_qml;
+    Qml_light* light_qml;
+    Qml_generalData* generalData_qml;
 
     QVector3D lightPos;
 
@@ -86,7 +88,6 @@ private:
     float lastFrame = 0.0f;
     float currentFrame = 0.0f;
 
-    unsigned int currentDepthTest;
     QList<GLenum> depthFuncs = {0, GL_LESS, GL_ALWAYS, GL_NEVER, GL_EQUAL, GL_LEQUAL, GL_GREATER, GL_NOTEQUAL, GL_GEQUAL};
 
 };
@@ -99,6 +100,7 @@ class CustomItemBase : public QQuickFramebufferObject
     Q_OBJECT
     Q_PROPERTY(Qml_camera* cam READ cam CONSTANT)
     Q_PROPERTY(Qml_light* light READ light CONSTANT)
+    Q_PROPERTY(Qml_generalData* generalData READ generalData CONSTANT)
     Q_PROPERTY(QFileSystemModel* fileSystem READ fileSystem CONSTANT)
     Q_PROPERTY(SandBoxItemModel* fileSystemNew READ fileSystemNew CONSTANT)
 
@@ -110,6 +112,10 @@ public:
 
     Qml_light *light() const{
         return m_qmlLight;
+    }
+
+    Qml_generalData* generalData() const{
+        return m_qmlGeneralData;
     }
 
     QFileSystemModel* fileSystem() const {
@@ -126,6 +132,7 @@ signals:
 private:
     QPointer<Qml_camera> m_qmlCamera;//Qml_camera *m_qmlCamera;
     QPointer<Qml_light> m_qmlLight;//Qml_light *m_qmlLight;
+    QPointer<Qml_generalData> m_qmlGeneralData;
     QPointer<FileSystem> m_fileSystem;
     QPointer<SandBoxItemModel> m_fileSystemNew;
 
@@ -143,10 +150,11 @@ public:
         QObject::connect(this, SIGNAL(activeFocusChangedxx(QString)), this, SLOT(activeFocusChangedx(QString)));
         QObject::connect(this, SIGNAL(focusChangedSignal(bool)), this, SLOT(focusChangedSlot(bool)));
 
-        QObject::connect(this, &CustomItemBase::depthFuncChanged, this, &CustomItemBase::setDepthFunc);
+        //QObject::connect(this, &CustomItemBase::depthFuncChanged, this, &CustomItemBase::setDepthFunc);
 
         m_qmlCamera = new Qml_camera(this);
         m_qmlLight = new Qml_light(this);
+        m_qmlGeneralData = new Qml_generalData(this);
 
         m_fileSystem = new FileSystem();
         m_fileSystem->setRootPath("c:/ahiret/scene/objects/"); //QString("%1/scene/models/").arg(QCoreApplication::applicationDirPath())
@@ -184,6 +192,8 @@ public:
         light()->setCutOff(12.5f);
         light()->setOutCutOff(17.5f);
 
+        generalData()->setCurrentDepthTest(1);
+
         //setAcceptTouchEvents(true);
         //setAcceptedMouseButtons(Qt::RightButton);
 
@@ -220,7 +230,7 @@ signals:
     void activeFocusChangedxx(const QString &msg);
     void activeFocusChangedxxNo();
     void focusChangedSignal(bool focus);
-    void depthFuncChanged(const unsigned int& value);
+    //void depthFuncChanged(const unsigned int& value);
 
 public slots:
     void activeFocusChangedx(const QString &msg);

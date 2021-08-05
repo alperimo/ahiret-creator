@@ -660,13 +660,14 @@ Item{
                         textHorizontalAlign: true
                         popup.y: height + 2
 
-                        currentIndex: 4
+                        currentIndex: main_rightmenu.currentScene.generalData.currentDepthTest
 
                         setPopupMaxHeight: 120
 
                         onCurrentIndexChanged: {
                             console.log("current index: " + currentIndex)
-                            main_rightmenu.currentScene.depthFuncChanged(currentIndex)
+                            main_rightmenu.currentScene.generalData.currentDepthTest = currentIndex
+                            //main_rightmenu.currentScene.depthFuncChanged(currentIndex)
                         }
                     }
                 }

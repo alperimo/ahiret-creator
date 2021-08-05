@@ -128,12 +128,14 @@ void CustomItemRenderer::render()
         initialize();
     }
 
-    if (currentDepthTest == 0) ogl->glDisable(GL_DEPTH_TEST);
+    auto currentDepthT = generalData_qml->currentDepthTest();
+    if (currentDepthT == 0) ogl->glDisable(GL_DEPTH_TEST);
     else{
         if (!ogl->glIsEnabled(GL_DEPTH_TEST))
             ogl->glEnable(GL_DEPTH_TEST);
-        ogl->glDepthFunc(depthFuncs.at(currentDepthTest));
+        ogl->glDepthFunc(depthFuncs.at(currentDepthT));
     }
+
 
     ogl->glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 
@@ -168,8 +170,9 @@ void CustomItemRenderer::synchronize(QQuickFramebufferObject *item) {
     light = customItemBase->getLight();
 
     light_qml = customItemBase->light();
+    generalData_qml = customItemBase->generalData();
 
-    currentDepthTest = customItemBase->currentDepthTest;
+    //currentDepthTest = customItemBase->currentDepthTest;
 
     /*if (firstSynchronize){
         connect(customItemBase, &CustomItemBase::setDepthFunc, this, &CustomItemRenderer::setDepthFunc);
