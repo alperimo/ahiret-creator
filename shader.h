@@ -21,6 +21,8 @@ public:
     QOpenGLBuffer* getVBO(){return &m_vbo;}
     QOpenGLBuffer* getEBO(){return &m_ebo;}
 
+    void loadToVAO(QList<float> vertices, QList<int> indices); //vnt: vertices, normals, textureCoords
+
     void releaseShader();
 
 private:

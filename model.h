@@ -1,7 +1,5 @@
 #include "mesh.h"
 
-
-
 class Model : public QObject
 {
     Q_OBJECT
@@ -26,7 +24,5 @@ private:
     Mesh* processMesh(aiMesh* mesh, const aiScene* scene);
     QVector<Texture> loadMaterialTextures(aiMaterial* mat, aiTextureType type, QString typeName);
     QSharedPointer<Material> processMaterial(aiMaterial* material);
-
-    GLuint textureFromFile(const char* fileName_, const QString& directory, bool gamma = false);
 };
 

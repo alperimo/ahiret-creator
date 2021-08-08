@@ -33,6 +33,7 @@ SOURCES += \
         main.cpp \
         mesh.cpp \
         model.cpp \
+        modeltexture.cpp \
         mytreemodel.cpp \
         openglitem.cpp \
         qml_camera.cpp \
@@ -41,7 +42,8 @@ SOURCES += \
         sandboxitemmodel.cpp \
         shader.cpp \
         squircle.cpp \
-        stb_image.cpp
+        stb_image.cpp \
+        terrain.cpp
 
 RESOURCES += \
             qml.qrc \
@@ -168,6 +170,7 @@ HEADERS += \
     light.h \
     mesh.h \
     model.h \
+    modeltexture.h \
     mytreemodel.h \
     openglitem.h \
     qml_camera.h \
@@ -176,7 +179,8 @@ HEADERS += \
     sandboxitemmodel.h \
     shader.h \
     squircle.h \
-    stb_image.h
+    stb_image.h \
+    terrain.h
 
 win32:CONFIG(release, debug|release): LIBS += -L$$PWD/includes/lib/ -lassimp-vc142-mt
 else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/includes/lib/ -lassimp-vc142-mt

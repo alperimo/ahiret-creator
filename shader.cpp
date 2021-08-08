@@ -47,6 +47,29 @@ Shader::Shader(QString vertexShader, QString fragmentShader, QOpenGLFunctions *o
     std::cout << "Shader() olusturuldu." << std::endl;
 }
 
+void Shader::loadToVAO(QList<float> vertices, QList<int> indices){
+    m_program->bind();
+    m_vao.bind();
+    m_vbo.bind();
+
+    m_vbo.allocate(&vertices, vertices.size());
+
+    QOpenGLFunctions* ogl = QOpenGLContext::currentContext()->functions();
+
+    ogl->glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (void*)0);
+    ogl->glEnableVertexAttribArray(0);
+
+    ogl->glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (void*)(3 * sizeof(float)));
+    ogl->glEnableVertexAttribArray(1);
+
+    ogl->glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (void*)(6 * sizeof(float)));
+    ogl->glEnableVertexAttribArray(2);
+
+    m_ebo.bind();
+    m_ebo.allocate(&indices, indices.size());
+
+}
+
 Shader::~Shader(){
     m_vao.destroy();
     m_vbo.destroy();

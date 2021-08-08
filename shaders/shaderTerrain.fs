@@ -1,12 +1,20 @@
 #version 330 core
 
+const int textureUnitLimit = 4;
+
 struct Material{
-    //vec3 ambient; // es wird nicht mehr gebraucht, weil diffuse map(texture) auch ambient ist.
-    sampler2D diffuse; //vec3 diffuse; // durch diffuse map(texture) wird ersetzt.
-    sampler2D specular; //vec3 specular;
-    sampler2D emission;
+    sampler2D texture_diffuse[textureUnitLimit];
+    sampler2D texture_specular[textureUnitLimit];
+    sampler2D texture_emission[textureUnitLimit];
     vec3 specularStrength;
     float specularShininess;
+
+    vec3 ambient;
+    vec3 diffuse;
+    vec3 specular;
+    vec3 emission;
+
+    bool texture_activ[3]; // texture_diffuse, texture_specular, texture_emission
 };
 
 struct Light{
@@ -58,11 +66,35 @@ uniform Material material;
 uniform Light light;
 
 vec3 hsl2rgb( in vec3 c );
+void calculatePhongLighting(inout vec3 phongLight[4]);
+void calculatePointLight(inout vec3 phongLight[4]);
+void calculateSpotLight(inout vec3 spotLight);
 
 void main()
 {
+    vec3 phongLight[4]; //0:ambientLight, 1:diffuseLight, 2:specularLight, 3:toLightVector
+    calculatePhongLighting(phongLight);
 
-    vec3 ambientLight = texture(material.diffuse, texCoord).rgb * (light.ambient);// material.ambient * (light.ambient)
+    vec3 emission = (material.texture_activ[2]) ? texture(material.texture_emission[0], texCoord).rgb : material.emission;
+    vec3 emissionLight = emission;
+
+    calculatePointLight(phongLight);
+
+    vec3 phongLightResult = phongLight[0] + phongLight[1] + phongLight[2];
+
+    vec3 spotLight = vec3(0.0f);
+    calculateSpotLight(spotLight);
+
+    //vec3 result = (ambientLight + diffuseLight + specularLight) * objectColor;
+    vec3 result = (phongLightResult + spotLight); // emissionLight
+    FragColor = vec4(result, 1.0); // beyaz isigin objenin uzerine vurmasiyle yansitilan renkler.
+}
+
+void calculatePhongLighting(inout vec3 phongLight[4]){
+    vec3 ambient = (material.texture_activ[0]) ? texture(material.texture_diffuse[0], texCoord).rgb : material.ambient;
+
+    vec3 ambientLight = ambient * (light.ambient);// material.ambient * (light.ambient)
+
     //vec3 ambientLight = clamp(ambientFactor, 0.1, 1.0);
 
     vec3 normalized_normalCoords = normalize(normalCoords);
@@ -75,48 +107,45 @@ void main()
 
     vec3 fromLightVector = -toLightVector; // to viewCoords
     float diffuseFactor = max(dot(normalized_normalCoords, toLightVector), 0.0);
-    vec3 diffuseLight = diffuseFactor * texture(material.diffuse, texCoord).rgb * light.diffuse; // diffuseFactor * material.diffuse * light.diffuse;
+    vec3 diffuse = (material.texture_activ[0]) ? texture(material.texture_diffuse[0], texCoord).rgb : material.diffuse;
+    vec3 diffuseLight = diffuseFactor * diffuse * light.diffuse; // diffuseFactor * material.diffuse * light.diffuse;
     vec3 normalized_cameraDirection = normalize(-viewCoords); //cameraPos in View Space A = (0, 0, 0) camDirection = (0,0,0) - viewCoords;
     vec3 reflectedDirection = reflect(fromLightVector, normalized_normalCoords);
 
     vec3 specularStrength = material.specularStrength;
     float specularShininess = material.specularShininess * 128.0f;
     float specularFactor = pow(max(dot(normalized_cameraDirection, reflectedDirection), 0.0), specularShininess);
-    vec3 specularLight = (specularStrength * specularFactor) * texture(material.specular, texCoord).rgb * light.specular;//(specularStrength * specularFactor) * light.specular;
+    vec3 specular = (material.texture_activ[1]) ? texture(material.texture_specular[1], texCoord).rgb : material.specular;
 
-    vec3 emissionLight = texture(material.emission, texCoord).rgb;
+    vec3 specularLight = (specularStrength * specularFactor) * specular * light.specular;//(specularStrength * specularFactor) * light.specular;
 
+    phongLight[0] = ambientLight;
+    phongLight[1] = diffuseLight;
+    phongLight[2] = specularLight;
+    phongLight[3] = toLightVector;
+}
+
+void calculatePointLight(inout vec3 phongLight[4]){
+    vec3 toLightVector = phongLight[3];
     if (light.pointLight) {
         float distance_ = length(toLightVector);
         float attenuation = 1.0 / (light.constant + (light.linear * distance_) + (light.quadratic * (distance_ * distance_)));
 
-        ambientLight *= attenuation;
-        diffuseLight *= attenuation;
-        specularLight *= attenuation;
+        phongLight[0] *= attenuation;
+        phongLight[1] *= attenuation;
+        phongLight[2] *= attenuation;
     }
+}
 
-    vec3 spotLight = vec3(0.0f);
+void calculateSpotLight(inout vec3 spotLight){
     if (light.spotLight)
     {
         vec3 spotLightDirection = normalize(worldCoords - light.cameraPos);
         float theta = dot(spotLightDirection, normalize(light.cameraFront));
         float epsilon = light.outCutOff - light.cutOff;
         float spotlightFactor = clamp( ( (light.outCutOff - theta) / epsilon ), 0.0, 1.0);
-        spotLight = (texture(material.diffuse, texCoord).rgb)/2 * spotlightFactor;
+        spotLight = (texture(material.texture_diffuse[0], texCoord).rgb)/2 * spotlightFactor;
     }
-
-    /*if (theta > light.cutOff) // angle olarak theta daha küçük olmalı ancak burada theta cosinus olduğu için angle küçük ise değeri büyük olmalı.
-    {
-        //
-    }*/
-
-    //vec3 result = (ambientLight + diffuseLight + specularLight) * objectColor;
-    vec3 result = (ambientLight + diffuseLight + specularLight + spotLight); // emissionLight
-    FragColor = vec4(result, 1.0); // beyaz isigin objenin uzerine vurmasiyle yansitilan renkler.
-}
-
-vec3 calculatePhongLight(){
-
 }
 
 vec3 hsl2rgb( in vec3 c )

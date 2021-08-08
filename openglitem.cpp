@@ -25,6 +25,7 @@ void CustomItemRenderer::initialize(){
     // initialize OpenGL parts... (shaders)
     shader = new Shader("shader.vs", "shader.fs", ogl);
     shaderLight = new Shader("shaderLight.vs", "shaderLight.fs", ogl);
+    shaderTerrain = new Shader("shaderTerrain.vs", "shaderTerrain.fs", ogl);
 
     // VBO ve EBO(indices buffer object) oluşturma
     float vertices[] = {
@@ -77,12 +78,6 @@ void CustomItemRenderer::initialize(){
         1, 2, 3    // second triangle
     };
 
-
-
-    //QPointer<Model> modelTest = new Model("qrc:/scene/models/tank/IS4.obj");
-
-    //modelTextures were removed
-
     shaderLight->getShaderProgram()->bind();
 
     lightPos = QVector3D(0.0f, 0.0f, 0.0f); //QVector3D(1.2f, 1.0f, 2.0f);//QVector3D(3.0f, 0.5f, -1.0f);
@@ -107,24 +102,25 @@ void CustomItemRenderer::initialize(){
 
     shaderLight->releaseShader();
 
-    //camera = new Camera();
+    timer = new QElapsedTimer(); //qTimer = new QTimer();
+    timer->start(); //qTimer->start(1000);
 
-    /*qTimer = new QTimer();
-    qTimer->start(1000);*/
-
-    timer = new QElapsedTimer();
-    timer->start();
-
+    // Model
     shader->getShaderProgram()->bind();
-    QPointer<Model> modelTest2 = new Model("C:/textures/tank/IS4.obj", QOpenGLContext::currentContext());
-    modelList.append(modelTest2);
+    auto modelTest = QSharedPointer<Model>(new Model("C:/textures/tank/IS4.obj", QOpenGLContext::currentContext()));
+    modelList.append(modelTest);
+
+    // Terrain
+    auto terrain1 = QSharedPointer<Terrain>(new Terrain(1, 1, shaderTerrain));
+    QList<QString> textureList = {"texture1.png"};
+    terrain1->appendTexture(textureList, fileSystem);
+    terrainList.append(terrain1);
 }
 
 void CustomItemRenderer::render()
 {
     if (firstRender){
         firstRender = false;
-        //ogl->glEnable(GL_DEPTH_TEST); // zBuffer/Depthbuffer/Depth testing aktif.
         initialize();
     }
 
@@ -164,21 +160,13 @@ void CustomItemRenderer::synchronize(QQuickFramebufferObject *item) {
     customItemBase->currentFrame = currentFrame;
     customItemBase->lastFrame = lastFrame;
 
-    //std::cout << "deltaTime: " << deltaTime << std::endl;
-
     camera = customItemBase->getCamera();
     light = customItemBase->getLight();
 
     light_qml = customItemBase->light();
     generalData_qml = customItemBase->generalData();
 
-    //currentDepthTest = customItemBase->currentDepthTest;
-
-    /*if (firstSynchronize){
-        connect(customItemBase, &CustomItemBase::setDepthFunc, this, &CustomItemRenderer::setDepthFunc);
-        firstSynchronize = false;
-    }*/
-
+    fileSystem = customItemBase->getFileSystem();
 
     GLsizei w = item->width();
     GLsizei h = item->height();
@@ -186,7 +174,6 @@ void CustomItemRenderer::synchronize(QQuickFramebufferObject *item) {
 
     m_projection.setToIdentity();
     m_projection.perspective(camera->getFov(), GLfloat(w) / GLfloat(h), camera->getNearDistance(), camera->getFarDistance());
-    //m_projection.perspective(45.0f, GLfloat(w) / GLfloat(h), 0.01f, 100.0f);
 
     if (customItemBase->againUpdate())
         customItemBase->_keyPressEvent();
@@ -205,7 +192,6 @@ void CustomItemRenderer::drawObject(){
     m_model.setToIdentity();
     //m_model.rotate(timer->elapsed() * 0.1, QVector3D(0.5, 1, 0));
     m_view.setToIdentity();
-    //m_view.translate(0, 0, -3);
     m_view = camera->getCameraViewMatrix();
 
     m_model_forNormal = m_model.inverted().transposed();
@@ -230,11 +216,9 @@ void CustomItemRenderer::drawObject(){
     shaderProgram->setUniformValue(shaderProgram->uniformLocation("viewMatrix_forNormal"), m_view_forNormal); //shaderProgram->setUniformValue(shaderProgram->uniformLocation("modelMatrix_forNormal"), m_model_forNormal);
 
     shaderProgram->setUniformValue(shaderProgram->uniformLocation("lightPos"), lightPos); // für VS
-    //shaderProgram->setUniformValue(shaderProgram->uniformLocation("cameraPos"), camera->getCameraPos());
 
         // Light properties
     QVector3D lightColor = QVector3D(1.0f, 1.0f, 1.0f);//QVector3D(2.0f, 0.7f, 1.3f);
-    //QVector3D light_diffuse = lightColor;// lightColor * 0.5f;
 
     QColor light_ambient = light->getAmbient();//QVector3D(1.0f, 1.0f, 1.0f);//lightDiffuseColor * 0.2f;
     QColor light_diffuse = light->getDiffuse();//QVector3D(1.0f, 1.0f, 1.0f);//lightDiffuseColor * 0.2f;
@@ -259,62 +243,12 @@ void CustomItemRenderer::drawObject(){
     shaderProgram->setUniformValue(shaderProgram->uniformLocation("light.cutOff"), (float) qCos(qDegreesToRadians(light_qml->cutOff())));
     shaderProgram->setUniformValue(shaderProgram->uniformLocation("light.outCutOff"), (float) qCos(qDegreesToRadians(light_qml->outCutOff())));
 
-
-    //shaderProgram->setUniformValue(shaderProgram->uniformLocation("light.diffuse"), light->getDiffuse() * light_diffuse);
-    //shaderProgram->setUniformValue(shaderProgram->uniformLocation("light.specular"), light->getSpecular() * lightColor);
-
-    //shaderProgram->setUniformValue(shaderProgram->uniformLocation("lightColor"), lightColor);
-
-    // Material properties
-        //shaderProgram->setUniformValue(shaderProgram->uniformLocation("material.ambient"), QVector3D(0.24725f, 0.1995f, 0.0745f));
-        //shaderProgram->setUniformValue(shaderProgram->uniformLocation("material.diffuse"), QVector3D(0.75164f, 0.60648f, 0.22648f));
-
-    for (Model* m : modelList){
+    for (auto m : modelList){
         m->Draw(*shader);
     }
 
-    //QVector3D objectColor(1.0f, 0.5f, 0.31f);
     QVector3D objectColor(1.0f, 0.839f, 0.0f);
     shaderProgram->setUniformValue(shaderProgram->uniformLocation("objectColor"), objectColor);
-
-    /*shaderProgram->setUniformValue(shaderProgram->uniformLocation("material.ambient"), QVector3D(1.0f, 1.0f, 1.0f));
-    shaderProgram->setUniformValue(shaderProgram->uniformLocation("material.diffuse"), QVector3D(1.0f, 1.0f, 1.0f));
-    shaderProgram->setUniformValue(shaderProgram->uniformLocation("material.specular"), QVector3D(1.0f, 1.0f, 1.0f));
-    shaderProgram->setUniformValue(shaderProgram->uniformLocation("material.specularStrength"), QVector3D(0.5f, 0.5f, 0.5f));
-    shaderProgram->setUniformValue(shaderProgram->uniformLocation("material.specularShininess"), 32.0f);*/
-
-    /*shader->getVAO()->bind();
-
-    ogl->glActiveTexture(GL_TEXTURE0);
-    modelTextures[0]->bind();
-    ogl->glActiveTexture(GL_TEXTURE1);
-    modelTextures[1]->bind();
-    ogl->glActiveTexture(GL_TEXTURE2);
-    ogl->glBindTexture(GL_TEXTURE_2D, textureIDs[0]);
-
-    QVector3D cubePositions[] = {
-        QVector3D( 0.0f,  0.0f,  0.0f),
-        QVector3D( 2.0f,  5.0f, -15.0f),
-        QVector3D(-1.5f, -2.2f, -2.5f),
-        QVector3D(-3.8f, -2.0f, -12.3f),
-        QVector3D( 2.4f, -0.4f, -3.5f),
-        QVector3D(-1.7f,  3.0f, -7.5f),
-        QVector3D( 1.3f, -2.0f, -2.5f),
-        QVector3D( 1.5f,  2.0f, -2.5f),
-        QVector3D( 1.5f,  0.2f, -1.5f),
-        QVector3D(-1.3f,  1.0f, -1.5f)
-    };
-
-    for (GLuint i=0; i<1; i++){
-        m_model.setToIdentity();
-        m_model.translate(cubePositions[i]);
-        float angle = 20.0f * i;
-        m_model.rotate(angle, QVector3D(1.0f, 0.3f, 0.5f));
-        shaderProgram->setUniformValue(m_modelLoc, m_model);
-        ogl->glDrawArrays(GL_TRIANGLES, 0, 36);
-    }
-
-    shader->getVAO()->release();*/
 
     // lightShader
     QOpenGLShaderProgram* shaderLightProgram = shaderLight->getShaderProgram();
@@ -323,13 +257,17 @@ void CustomItemRenderer::drawObject(){
     shaderLightProgram->setUniformValue(shaderLightProgram->uniformLocation("viewMatrix"), m_view);
     m_model.setToIdentity();
     m_model.translate(lightPos);
-    //m_model.translate(QVector3D(3.0f, 0.5f, -1.0f));
     m_model.scale(0.2f);
     shaderLightProgram->setUniformValue(shaderLightProgram->uniformLocation("modelMatrix"), m_model);
 
     shaderLight->getVAO()->bind();
     ogl->glDrawArrays(GL_TRIANGLES, 0, 36);
     shaderLight->getVAO()->release();
+
+    // terrainShader
+    /*for (auto& t: terrainList){
+        t->renderTerrain();
+    }*/
 }
 
 CustomItemRenderer::~CustomItemRenderer(){
@@ -340,12 +278,6 @@ CustomItemRenderer::~CustomItemRenderer(){
         timer->invalidate();
         delete timer;
     }
-
-    /*for (u_int i=0; i<sizeof(modelTextures); i++){
-        if (modelTextures[i])
-            delete modelTextures[i];
-    }*/
-
 
     /*if (qTimer->isActive())
     {
@@ -369,19 +301,13 @@ void CustomItemBase::focusChangedSlot(bool focus){
 }
 
 void CustomItemBase::keyPressEvent(QKeyEvent *event){
-    //qDebug() << "cpp keyPressEvent: " << event->text();
-
     if (!keysPressed.contains(event->key()))
         keysPressed.insert(event->key());
-
-    qDebug() << "size of keysPressed = " << keysPressed.size();
 
     _keyPressEvent();
 }
 
 void CustomItemBase::keyReleaseEvent(QKeyEvent *event){
-    //keysPressed -= event->key();
-    //qDebug() << "cpp keyReleaseEvent: " << event->text();
     if (keysPressed.contains(event->key()))
         keysPressed.remove(event->key());
 
@@ -390,7 +316,6 @@ void CustomItemBase::keyReleaseEvent(QKeyEvent *event){
 
 void CustomItemBase::mousePressEvent(QMouseEvent *event){
     setFocus(true);
-    qDebug() << "cpp mousePressEvent: " << event->button();
     if (event->button() == Qt::RightButton){
         mouseRightClick = true;
         qDebug() << "x: " << event->x() << " y: " << event->y();
@@ -416,8 +341,6 @@ void CustomItemBase::mouseMoveEvent(QMouseEvent *event){
 
     lastMX = currentX;
     lastMY = currentY;
-
-    qDebug() << "offsetX: " << offsetX << " offsetY: " << offsetY;
 
     camera.processMouseMovement(offsetX, offsetY, true);
 
@@ -465,10 +388,5 @@ bool CustomItemBase::againUpdate(){
         return true;
 
     return false;
-}
-
-void CustomItemBase::setDepthFunc(const unsigned int& value){
-    qDebug() << "CustomItemRenderer:: setDepthFunc, value = " << value;
-    currentDepthTest = value;
 }
 

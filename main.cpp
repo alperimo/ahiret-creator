@@ -32,30 +32,11 @@ int main(int argc, char *argv[])
 
     std::cout << "int main()" << std::endl;
 
-
-
     qmlRegisterType<CustomItem>("OpenGLUnderQML", 1, 0, "CustomItem");
-
-    //qRegisterMetaType<Qml_camera*>("Qml_camera*");
 
     qmlRegisterType<Qml_camera>("OpenGLCamera", 1, 0, "Qml_camera");
 
-    //qmlRegisterType<Qml_camera>();
-
-    //qmlRegisterType<Qml_camera>("OpenGLUnderQML", 1, 0, "Qml_camera");
-
-    //qmlRegisterUncreatableType<Qml_camera>("OpenGLCamera", 1, 0, "Qml_camera", "test");
-
     qmlRegisterType<MyTreeModel>("MyTreeModel", 1, 0, "MyTreeModel");
-
-    /*
-    qmlRegisterType<Squircle>("OpenGLUnderQML", 1, 0, "Squircle");
-    QQuickView view;
-    view.setResizeMode(QQuickView::SizeRootObjectToView);
-    view.setSource(QUrl("qrc:/main2.qml"));
-    view.show();*/
-
-
 
     QQmlApplicationEngine engine;
     const QUrl url(QStringLiteral("qrc:/main.qml"));
@@ -64,8 +45,6 @@ int main(int argc, char *argv[])
         if (!obj && url == objUrl)
             QCoreApplication::exit(-1);
     }, Qt::QueuedConnection);
-
-    //CustomItem customItem;
 
     engine.load(url);
 

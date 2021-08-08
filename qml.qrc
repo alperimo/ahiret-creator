@@ -63,12 +63,13 @@
         <file>images/container2.png</file>
         <file>images/container2_specular.png</file>
         <file>images/emission_map.jpg</file>
-        <file>shaders/shader_copyd.fs</file>
         <file>components/ObjectMenu.qml</file>
         <file>components/ObjectMenuTreeView.qml</file>
         <file>components/qmldir</file>
         <file>components/Style.qml</file>
         <file>images/object_menu_folder.png</file>
         <file>components/CustomImage.qml</file>
+        <file>shaders/shaderTerrain.vs</file>
+        <file>shaders/shaderTerrain.fs</file>
     </qresource>
 </RCC>

@@ -21,6 +21,8 @@
 #include <shader.h>
 #include "stb_image.h"
 
+#include "modeltexture.h"
+
 struct Vertex
 {
     QVector3D position;

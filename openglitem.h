@@ -36,6 +36,7 @@
 #include <sandboxitemmodel.h>
 
 #include "model.h"
+#include "terrain.h"
 
 class CustomItemRenderer : public QQuickFramebufferObject::Renderer
 {
@@ -59,17 +60,21 @@ private:
 
     QQuickWindow *m_Window = nullptr; //pointing to mainWindow(GUI)
 
-    Shader *shader;
-    Shader *shaderLight;
+    Shader* shader;
+    Shader* shaderLight;
+    Shader* shaderTerrain;
     Camera *camera;
     Light *light;
 
     Qml_light* light_qml;
     Qml_generalData* generalData_qml;
 
+    FileSystem* fileSystem;
+
     QVector3D lightPos;
 
-    QList<Model*> modelList;
+    QList<QSharedPointer<Model>> modelList;
+    QList<QSharedPointer<Terrain>> terrainList;
 
     void drawObject();
 
@@ -126,9 +131,6 @@ public:
         return m_fileSystemNew;
     }
 
-signals:
-
-
 private:
     QPointer<Qml_camera> m_qmlCamera;//Qml_camera *m_qmlCamera;
     QPointer<Qml_light> m_qmlLight;//Qml_light *m_qmlLight;
@@ -150,29 +152,25 @@ public:
         QObject::connect(this, SIGNAL(activeFocusChangedxx(QString)), this, SLOT(activeFocusChangedx(QString)));
         QObject::connect(this, SIGNAL(focusChangedSignal(bool)), this, SLOT(focusChangedSlot(bool)));
 
-        //QObject::connect(this, &CustomItemBase::depthFuncChanged, this, &CustomItemBase::setDepthFunc);
-
         m_qmlCamera = new Qml_camera(this);
         m_qmlLight = new Qml_light(this);
         m_qmlGeneralData = new Qml_generalData(this);
 
         m_fileSystem = new FileSystem();
-        m_fileSystem->setRootPath("c:/ahiret/scene/objects/"); //QString("%1/scene/models/").arg(QCoreApplication::applicationDirPath())
-        qDebug() << "filePath from cpp: " << m_fileSystem->rootPath();
-        qDebug() << "filePathIndex from cpp: " << m_fileSystem->rootPathIndex();
+        m_fileSystem->setRootPath(m_fileSystem->getCurrentScenePath()+"objects/");
 
         m_fileSystemNew = new SandBoxItemModel();
         m_fileSystemNew->setUseMainDirectory(true);
-        QFile file("C:/ahiret/deneme.txt");              //sandbox locations are read from the text file
+        QFile file(m_fileSystem->getMainPath()+"deneme.txt"); //sandbox locations are read from the text file
         if (!file.open(QIODevice::ReadOnly)){
             qDebug() << "file couldn't open!";
 
         }else{
-            QString m_fileName = QString::fromStdString(file.readAll().toStdString());
+            //QString m_fileName = QString::fromStdString(file.readAll().toStdString());
+            QString m_fileName = m_fileSystem->getObjectPath();
             qDebug() << "file okunan QString datax: " << m_fileName;
             m_fileSystemNew->setSandBoxDetails(m_fileName);
         }
-
 
         cam()->setMovementSpeed(5.0f);
         cam()->setRotationSpeed(0.5f);
@@ -201,12 +199,13 @@ public:
 
     ~CustomItemBase();
 
-    //virtual Renderer * createRenderer() const { return new CustomItemRenderer; }
     QQuickFramebufferObject::Renderer *createRenderer() const
     {
         std::cout << "createRenderer()!!!" << std::endl;
         return new CustomItemRenderer();
     }
+
+    FileSystem* getFileSystem() const { return m_fileSystem; }
 
     virtual void keyPressEvent(QKeyEvent *event);
     virtual void keyReleaseEvent(QKeyEvent *event);
@@ -230,17 +229,12 @@ signals:
     void activeFocusChangedxx(const QString &msg);
     void activeFocusChangedxxNo();
     void focusChangedSignal(bool focus);
-    //void depthFuncChanged(const unsigned int& value);
 
 public slots:
     void activeFocusChangedx(const QString &msg);
-    void activeFocusChangedxNo(){
-        qDebug() << "cpp al olm mesaji";
+    void activeFocusChangedxNo(){};
 
-    }
     void focusChangedSlot(bool focus);
-
-    void setDepthFunc(const unsigned int& value);
 
 protected:
     Q_INVOKABLE void _mousePressEvent(QPointF p);
@@ -269,7 +263,5 @@ public:
     CustomItem(QQuickItem * parent = nullptr) : CustomItemBase(parent) {}
     virtual ~CustomItem() {}
 };
-
-
 
 #endif // OPENGLITEM_H

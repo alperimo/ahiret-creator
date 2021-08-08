@@ -22,8 +22,6 @@ void Model::loadModel(const QString& path){
 
     qDebug() << "assimp path: " << path.toStdString().c_str();
 
-    //if(!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
-
     if(!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
     {
         qDebug() << "ERROR::ASSIMP::" << import.GetErrorString();
@@ -37,17 +35,6 @@ void Model::loadModel(const QString& path){
         }
     }
 
-    /*int width, height, nrComponents;
-    unsigned char *data = stbi_load("C:\textures\tank\container.jpg", &width, &height, &nrComponents, 0);
-    if (data)
-    {
-        qDebug() << " data yüklendi.";
-    }
-    else{
-        qDebug() << " data yüklenemedi........";
-        qDebug() << "reason: " << stbi_failure_reason();
-    }*/
-
     directory = path.mid(0, path.toStdString().find_last_of("/")); // mid for QString, substr for std::string
 
     processNode(scene->mRootNode, scene);
@@ -57,7 +44,6 @@ void Model::processNode(aiNode *node, const aiScene *scene){
     for (unsigned int i = 0; i < node->mNumMeshes; i++){
         aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
         meshes.push_back(processMesh(mesh, scene));
-        //processMesh(mesh, scene);
     }
 
     // for each children node of this node
@@ -71,8 +57,6 @@ Mesh* Model::processMesh(aiMesh *mesh, const aiScene *scene){
     QVector<GLuint> indices;
     QVector<Texture> textures;
     QSharedPointer<Material> material_;
-
-    qDebug() << "mNumVertices: " << mesh->mNumVertices;
 
     for (unsigned int i = 0; i<mesh->mNumVertices; i++)
     {
@@ -91,16 +75,6 @@ Mesh* Model::processMesh(aiMesh *mesh, const aiScene *scene){
         }
 
         vertices.push_back(vertex);
-    }
-
-    if (vertices.size() < 40)
-    {
-        for (unsigned int i = 0; i<mesh->mNumVertices; i++)
-        {
-            qDebug() << "vertex " << i << " " << vertices[i].position;
-        }
-
-        qDebug() << "mesh->mNumFaces: " << mesh->mNumFaces;
     }
 
     for (unsigned int i = 0; i<mesh->mNumFaces; i++){
@@ -176,7 +150,8 @@ QVector<Texture> Model::loadMaterialTextures(aiMaterial* mat, aiTextureType type
         if (!skip)
         {
             Texture texture;
-            texture.id = textureFromFile(str.C_Str(), this->directory);
+            //texture.id = textureFromFile(str.C_Str(), this->directory);
+            texture.id = ModelTexture::textureFromFile(QString("%1/%2").arg(this->directory, str.C_Str()));
             texture.type = typeName;
             texture.path = str;
             textures.push_back(texture);
@@ -184,57 +159,6 @@ QVector<Texture> Model::loadMaterialTextures(aiMaterial* mat, aiTextureType type
 
     }
     return textures;
-}
-
-GLuint Model::textureFromFile(const char* fileName_, const QString& directory, bool gamma){
-
-    //QOpenGLFunctions *ogl = QOpenGLContext::currentContext()->functions();
-    QOpenGLFunctions* ogl = ogl_->currentContext()->functions();
-
-    QString filename = QStringLiteral("%1/%2").arg(directory, fileName_);
-
-    QImage textureEmission;
-    bool yuklendi = textureEmission.load(filename); //":/images/container2_specular.png"
-
-    //qDebug() << "image width before: " << textureEmission.width() << " yuklendi: " << yuklendi;
-
-    GLuint textureID;
-    ogl->glGenTextures(1, &textureID);
-
-    int width, height, nrComponents;
-    //qDebug() << "dosya adi: " << filename.toStdString().c_str(); // filename.toLocal8Bit().constData();
-    //unsigned char* data = stbi_load(":/scene/models/backpack/1001_albedo.jpg", &width, &height, &nrComponents, 0);
-
-    if (yuklendi)
-    {
-        qDebug() << "image width: " << textureEmission.width();
-        textureEmission = QGLWidget::convertToGLFormat(textureEmission);
-        GLenum format;
-        if (nrComponents == 1)
-            format = GL_RED;
-        else if (nrComponents == 3)
-            format = GL_RGB;
-        else if (nrComponents == 4)
-            format = GL_RGBA;
-
-        ogl->glBindTexture(GL_TEXTURE_2D, textureID);
-        ogl->glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, textureEmission.width(), textureEmission.height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, textureEmission.bits());
-        ogl->glGenerateMipmap(GL_TEXTURE_2D);
-
-        ogl->glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-        ogl->glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-        ogl->glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-        ogl->glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-        //stbi_image_free(data);
-    }
-    else
-    {
-        qDebug() << "Texture failed to load with QImage at path : " << filename;
-        //stbi_image_free(data);
-    }
-
-    return textureID;
 }
 
 QSharedPointer<Material> Model::processMaterial(aiMaterial *material){
