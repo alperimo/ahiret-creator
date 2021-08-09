@@ -1,8 +1,9 @@
 #include "shader.h"
 
-Shader::Shader(QString vertexShader, QString fragmentShader, QOpenGLFunctions *ogl)
+Shader::Shader(QString vertexShader, QString fragmentShader, QOpenGLContext *ogl)
 {
     // Shader program oluşturma, vertex ve fragment shader oluşturup shader programa bağlanması
+
     m_program = new QOpenGLShaderProgram();
 
     QString vertexShaderUrl = ":/shaders/" + vertexShader;
@@ -33,6 +34,8 @@ Shader::Shader(QString vertexShader, QString fragmentShader, QOpenGLFunctions *o
     m_vao.create();
     m_vao.bind();
 
+    this->ogl_ = ogl;
+
     /*m_program->enableAttributeArray(0);
     //m_program->setAttributeBuffer(0, GL_FLOAT, 0, 3); //3 vertex, 2 koordinats için
     m_program->setAttributeBuffer(0, GL_FLOAT, 0, 3, 5 * sizeof(GL_FLOAT));
@@ -47,14 +50,15 @@ Shader::Shader(QString vertexShader, QString fragmentShader, QOpenGLFunctions *o
     std::cout << "Shader() olusturuldu." << std::endl;
 }
 
-void Shader::loadToVAO(QList<float> vertices, QList<int> indices){
+void Shader::loadToVAO(QVector<float> vertices, QVector<int> indices){
+
+    QOpenGLFunctions* ogl = ogl_->currentContext()->functions();
+
     m_program->bind();
     m_vao.bind();
     m_vbo.bind();
 
-    m_vbo.allocate(&vertices, vertices.size());
-
-    QOpenGLFunctions* ogl = QOpenGLContext::currentContext()->functions();
+    m_vbo.allocate(&vertices[0], vertices.size() * sizeof(float));
 
     ogl->glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (void*)0);
     ogl->glEnableVertexAttribArray(0);
@@ -66,8 +70,7 @@ void Shader::loadToVAO(QList<float> vertices, QList<int> indices){
     ogl->glEnableVertexAttribArray(2);
 
     m_ebo.bind();
-    m_ebo.allocate(&indices, indices.size());
-
+    m_ebo.allocate(&indices[0], indices.size() * sizeof(int));
 }
 
 Shader::~Shader(){

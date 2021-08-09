@@ -441,7 +441,7 @@ Item{
                     Layout.row: 5; Layout.column: 0;
                     text_property_name.text: "Far Distance:"
 
-                    unit: ""
+                    unit: ""; slider.from: 0; slider.to: 300
 
                     items_width: parent.items_width_
                     items_height: parent.items_height_
@@ -454,10 +454,7 @@ Item{
                         main_rightmenu.currentScene.cam.farDistance = slider.value
                     }
                 }
-
             }
-
-
         }
     }
 

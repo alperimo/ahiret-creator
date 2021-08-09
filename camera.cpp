@@ -45,8 +45,7 @@ void Camera::processKeyboard(cameraMovement direction, float deltaTime){
     if (direction == RIGHT)
         cameraPos += velocity * cameraRight;
 
-    //qDebug() << "cameraPos: " << cameraPos;
-    qDebug() << "movementSpeed in renderer: " << movementSpeed;
+    qDebug() << "cameraPos: " << cameraPos;
 }
 
 void Camera::processMouseMovement(float xoffset, float yoffset, bool constrainPitch) {

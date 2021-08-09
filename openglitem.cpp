@@ -23,9 +23,9 @@ CustomItemRenderer::CustomItemRenderer(){
 
 void CustomItemRenderer::initialize(){
     // initialize OpenGL parts... (shaders)
-    shader = new Shader("shader.vs", "shader.fs", ogl);
-    shaderLight = new Shader("shaderLight.vs", "shaderLight.fs", ogl);
-    shaderTerrain = new Shader("shaderTerrain.vs", "shaderTerrain.fs", ogl);
+    shader = new Shader("shader.vs", "shader.fs", QOpenGLContext::currentContext());
+    shaderLight = new Shader("shaderLight.vs", "shaderLight.fs", QOpenGLContext::currentContext());
+    shaderTerrain = new Shader("shaderTerrain.vs", "shaderTerrain.fs", QOpenGLContext::currentContext());
 
     // VBO ve EBO(indices buffer object) oluşturma
     float vertices[] = {
@@ -111,8 +111,8 @@ void CustomItemRenderer::initialize(){
     modelList.append(modelTest);
 
     // Terrain
-    auto terrain1 = QSharedPointer<Terrain>(new Terrain(1, 1, shaderTerrain));
-    QList<QString> textureList = {"texture1.png"};
+    auto terrain1 = QSharedPointer<Terrain>(new Terrain(0, -1, shaderTerrain));
+    QList<QString> textureList = {"grass1.png"};
     terrain1->appendTexture(textureList, fileSystem);
     terrainList.append(terrain1);
 }
@@ -244,11 +244,20 @@ void CustomItemRenderer::drawObject(){
     shaderProgram->setUniformValue(shaderProgram->uniformLocation("light.outCutOff"), (float) qCos(qDegreesToRadians(light_qml->outCutOff())));
 
     for (auto m : modelList){
-        m->Draw(*shader);
+       // m->Draw(*shader);
     }
 
     QVector3D objectColor(1.0f, 0.839f, 0.0f);
     shaderProgram->setUniformValue(shaderProgram->uniformLocation("objectColor"), objectColor);
+
+    // terrainShader
+    QOpenGLShaderProgram* shaderTerrainProgram = shaderTerrain->getShaderProgram();
+    shaderTerrainProgram->bind();
+    shaderTerrainProgram->setUniformValue(shaderTerrainProgram->uniformLocation("projectionMatrix"), m_projection);
+    shaderTerrainProgram->setUniformValue(shaderTerrainProgram->uniformLocation("viewMatrix"), m_view);
+    for (auto& t: terrainList){
+        t->renderTerrain();
+    }
 
     // lightShader
     QOpenGLShaderProgram* shaderLightProgram = shaderLight->getShaderProgram();
@@ -261,13 +270,10 @@ void CustomItemRenderer::drawObject(){
     shaderLightProgram->setUniformValue(shaderLightProgram->uniformLocation("modelMatrix"), m_model);
 
     shaderLight->getVAO()->bind();
-    ogl->glDrawArrays(GL_TRIANGLES, 0, 36);
+    //ogl->glDrawArrays(GL_TRIANGLES, 0, 36);
     shaderLight->getVAO()->release();
 
-    // terrainShader
-    /*for (auto& t: terrainList){
-        t->renderTerrain();
-    }*/
+
 }
 
 CustomItemRenderer::~CustomItemRenderer(){

@@ -16,6 +16,9 @@ public:
     void appendTexture(const QList<QString>& texturePaths, FileSystem* fileSystem);
     void renderTerrain();
 
+    decltype (auto) getTerrainPosition() { return position; }
+    auto getVertices() -> const QVector<float>& { return vertices; }
+
 private:
     struct Texture{
         GLuint id;
@@ -24,6 +27,8 @@ private:
 protected:
 
 private:
+    QVector3D position;
+
     Shader* shader;
 
     const float GRID_SIZE = 256;
@@ -33,8 +38,10 @@ private:
 
     QVector<Texture> textures;
 
-    QList<float> vertices;
-    QList<int> indices;
+    QVector<float> vertices;
+    QVector<int> indices;
+
+    float vertices_[];
 
     void setTerrainGridXZ(int gridX, int gridZ);
     void generateTerrain();
