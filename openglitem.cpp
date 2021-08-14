@@ -25,7 +25,10 @@ void CustomItemRenderer::initialize(){
     // initialize OpenGL parts... (shaders)
     shader = new Shader("shader.vs", "shader.fs", QOpenGLContext::currentContext());
     shaderLight = new Shader("shaderLight.vs", "shaderLight.fs", QOpenGLContext::currentContext());
-    shaderTerrain = new Shader("shaderTerrain.vs", "shaderTerrain.fs", QOpenGLContext::currentContext());
+
+    shaderTerrainHq = QSharedPointer<Shader>(new Shader("shaderTerrain.vs", "shaderTerrain.fs", QOpenGLContext::currentContext()));
+    shaderTerrainMq = QSharedPointer<Shader>(new Shader("shaderTerrain.vs", "shaderTerrain.fs", QOpenGLContext::currentContext()));
+    shaderTerrainLq = QSharedPointer<Shader>(new Shader("shaderTerrain.vs", "shaderTerrain.fs", QOpenGLContext::currentContext()));
 
     // VBO ve EBO(indices buffer object) oluşturma
     float vertices[] = {
@@ -111,10 +114,14 @@ void CustomItemRenderer::initialize(){
     modelList.append(modelTest);
 
     // Terrain
-    auto terrain1 = QSharedPointer<Terrain>(new Terrain(0, -1, shaderTerrain));
+    QList<QSharedPointer<Shader>> shaderTerrains = {shaderTerrainHq, shaderTerrainMq, shaderTerrainLq};
+    auto terrain1 = QSharedPointer<Terrain>(new Terrain(0, -1, shaderTerrains, camera));
+    auto terrain2 = QSharedPointer<Terrain>(new Terrain(-1, -1, shaderTerrains, camera));
+
     QList<QString> textureList = {"grass1.png"};
     terrain1->appendTexture(textureList, fileSystem);
     terrainList.append(terrain1);
+    terrainList.append(terrain2);
 }
 
 void CustomItemRenderer::render()
@@ -145,7 +152,7 @@ void CustomItemRenderer::render()
     update();
 
     if (m_Window){
-        m_Window->resetOpenGLState();
+        //m_Window->resetOpenGLState();
     }
 
 }
@@ -156,6 +163,7 @@ void CustomItemRenderer::synchronize(QQuickFramebufferObject *item) {
 
     m_Window = item->window();
 
+    customItemBase->generalData()->setDeltaTime(deltaTime);
     customItemBase->deltaTime = deltaTime;
     customItemBase->currentFrame = currentFrame;
     customItemBase->lastFrame = lastFrame;
@@ -251,13 +259,18 @@ void CustomItemRenderer::drawObject(){
     shaderProgram->setUniformValue(shaderProgram->uniformLocation("objectColor"), objectColor);
 
     // terrainShader
-    QOpenGLShaderProgram* shaderTerrainProgram = shaderTerrain->getShaderProgram();
-    shaderTerrainProgram->bind();
-    shaderTerrainProgram->setUniformValue(shaderTerrainProgram->uniformLocation("projectionMatrix"), m_projection);
-    shaderTerrainProgram->setUniformValue(shaderTerrainProgram->uniformLocation("viewMatrix"), m_view);
+    QList<QSharedPointer<Shader>> shaderTerrains = {shaderTerrainHq, shaderTerrainMq, shaderTerrainLq};
+    for (auto st: shaderTerrains){
+        QOpenGLShaderProgram* shaderTerrainProgram = st->getShaderProgram();
+        shaderTerrainProgram->bind();
+        shaderTerrainProgram->setUniformValue(shaderTerrainProgram->uniformLocation("projectionMatrix"), m_projection);
+        shaderTerrainProgram->setUniformValue(shaderTerrainProgram->uniformLocation("viewMatrix"), m_view);
+    }
+
     for (auto& t: terrainList){
         t->renderTerrain();
     }
+
 
     // lightShader
     QOpenGLShaderProgram* shaderLightProgram = shaderLight->getShaderProgram();

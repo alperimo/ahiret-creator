@@ -2,12 +2,10 @@ import QtQuick 2.12
 import QtQuick.Window 2.12
 import "components"
 import QtQuick.Controls 2.15
-import QtQuick.Controls 1.4
 import QtQml.Models 2.15
 import QtQuick.Layouts 1.15
 import QtQml 2.15
 import OpenGLUnderQML 1.0
-import QtGraphicalEffects 1.15
 
 import OpenGLCamera 1.0
 
@@ -248,6 +246,7 @@ ApplicationWindow {
              }
 
              CustomComboBox{
+                 id: customCombo
                  width: 91
                  height: 25
 
@@ -256,6 +255,13 @@ ApplicationWindow {
                  anchors.right: systemButtons.left
                  anchors.rightMargin: 30
                  anchors.verticalCenter: top_menu.verticalCenter
+             }
+
+             Text{
+                 property real delta: scene3D.generalData.deltaTime
+                 id: fps_text; anchors.verticalCenter: parent.verticalCenter; anchors.right: customCombo.left; anchors.rightMargin: 10
+                 text: "FPS: " + ((delta == 0) ? "" : (1/delta).toFixed(3)); font.family: "Arial"; font.pixelSize: 10; font.weight: Font.Normal; font.styleName: Font.Normal
+                 color: "white"
              }
         }
 
@@ -727,7 +733,6 @@ ApplicationWindow {
             }
         }
 
-
         CustomItem {
             id: scene3D
             anchors.left: left_menu.right
@@ -741,11 +746,11 @@ ApplicationWindow {
             height: parent.height - top_menu.height
             opacity: 1.0
 
-            Component.onCompleted: {
-                console.log("laaaaaan: " + cam.movementSpeed)
-            }
+            visible: true
 
             focus: true
+
+            property real deltaTime: generalData.deltaTime
 
             onActiveFocusChanged: {
                 console.log("qml 3d focus changed _ = " + focus)
@@ -760,6 +765,8 @@ ApplicationWindow {
                     bar22.addItem(yenibutton.createObject(yenibutton))
                 }
             }*/
+
+
         }
 
         ObjectMenu{
@@ -768,6 +775,8 @@ ApplicationWindow {
             anchors.left: left_menu.right
             anchors.right: right_menu.left
             anchors.bottom: parent.bottom
+
+            height: 0
 
         }
 

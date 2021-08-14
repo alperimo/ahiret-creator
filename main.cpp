@@ -8,8 +8,6 @@
 
 #include <QIcon>
 
-#include "squircle.h"
-
 #include "openglitem.h"
 #include "mytreemodel.h"
 

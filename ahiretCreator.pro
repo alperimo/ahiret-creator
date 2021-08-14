@@ -7,8 +7,6 @@ QML_IMPORT_MAJOR_VERSION = 1
 QML_IMPORT_NAME = OpenGLCamera
 QML_IMPORT_MAJOR_VERSION = 1
 
-
-
 LIBS   += -lopengl32
 LIBS   += -lglu32
 
@@ -17,6 +15,7 @@ win32: RC_ICONS += images/ahiret.ico
 #ICON = resource/icon/font-awesome-qml.icns
 
 INCLUDEPATH += C:\Qt\5.15.2\mingw81_64\include\
+INCLUDEPATH += C:\Qt\5.15.2\msvc2019_64\include\
 
 #LIBS += -L$$PWD/includes/lib/assimp-vc142-mt
 #PRE_TARGETDEPS += $$PWD/includes/lib/assimp-vc142-mt.dll
@@ -41,13 +40,11 @@ SOURCES += \
         qml_light.cpp \
         sandboxitemmodel.cpp \
         shader.cpp \
-        squircle.cpp \
         stb_image.cpp \
         terrain.cpp
 
 RESOURCES += \
-            qml.qrc \
-    scene.qrc
+            qml.qrc
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
 QML_IMPORT_PATH =
@@ -178,7 +175,6 @@ HEADERS += \
     qml_light.h \
     sandboxitemmodel.h \
     shader.h \
-    squircle.h \
     stb_image.h \
     terrain.h
 

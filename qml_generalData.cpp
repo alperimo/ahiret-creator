@@ -36,3 +36,10 @@ void Qml_generalData::setCurrentDepthTest(const unsigned int& depthTest)
         emit currentDepthTest();
     }
 }
+
+void Qml_generalData::setDeltaTime(const float &value){
+    if (value != m_deltaTime){
+        m_deltaTime = value;
+        emit deltaTimeChanged();
+    }
+}

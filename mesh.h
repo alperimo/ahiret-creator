@@ -10,7 +10,6 @@
 #include <QOpenGLFunctions>
 #include <QOpenGLBuffer>
 #include <QOpenGLVertexArrayObject>
-#include <QGLWidget>
 
 #include <QImage>
 

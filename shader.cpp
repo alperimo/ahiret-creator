@@ -52,6 +52,9 @@ Shader::Shader(QString vertexShader, QString fragmentShader, QOpenGLContext *ogl
 
 void Shader::loadToVAO(QVector<float> vertices, QVector<int> indices){
 
+    if (vertices.size() == 0 || indices.size() == 0)
+        return;
+
     QOpenGLFunctions* ogl = ogl_->currentContext()->functions();
 
     m_program->bind();

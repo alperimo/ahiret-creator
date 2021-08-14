@@ -9,6 +9,7 @@ class Qml_generalData : public QObject
     Q_OBJECT
 
     Q_PROPERTY(unsigned int currentDepthTest READ currentDepthTest WRITE setCurrentDepthTest NOTIFY currentDepthTestChanged)//Q_PROPERTY(float ambient READ ambient WRITE setAmbient NOTIFY ambientChanged)
+    Q_PROPERTY(float deltaTime READ deltaTime WRITE setDeltaTime NOTIFY deltaTimeChanged)//Q_PROPERTY(float ambient READ ambient WRITE setAmbient NOTIFY ambientChanged)
 
 
 public:
@@ -17,17 +18,23 @@ public:
     virtual ~Qml_generalData() {}
 
     void setCurrentDepthTest(const unsigned int& depthTest);
+    void setDeltaTime(const float& value);
 
-    auto currentDepthTest() const {
+    decltype (auto) currentDepthTest() const {
         return m_currentDepthTest;
     }
 
+    float deltaTime() const {
+        return m_deltaTime;
+    }
 
 signals:
     void currentDepthTestChanged();
+    void deltaTimeChanged();
 
 private:
     unsigned int m_currentDepthTest;
+    float m_deltaTime = 0.0f;
 
     void updateRenderer();
 

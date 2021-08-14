@@ -8,7 +8,6 @@
 #include <QOpenGLFramebufferObjectFormat>
 #include <QOpenGLFunctions>
 #include <QOpenGLTexture>
-#include <QGLWidget>
 
 #include <QOpenGLVertexArrayObject>
 #include <QOpenGLBuffer>
@@ -62,7 +61,7 @@ private:
 
     Shader* shader;
     Shader* shaderLight;
-    Shader* shaderTerrain;
+    QSharedPointer<Shader> shaderTerrainHq, shaderTerrainMq, shaderTerrainLq;
     Camera *camera;
     Light *light;
 
@@ -108,6 +107,7 @@ class CustomItemBase : public QQuickFramebufferObject
     Q_PROPERTY(Qml_generalData* generalData READ generalData CONSTANT)
     Q_PROPERTY(QFileSystemModel* fileSystem READ fileSystem CONSTANT)
     Q_PROPERTY(SandBoxItemModel* fileSystemNew READ fileSystemNew CONSTANT)
+
 
 //properties für qml
 public:

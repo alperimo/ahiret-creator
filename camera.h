@@ -66,11 +66,11 @@ class Camera
         void processMouseMovement(float xoffset, float yoffset, bool constrainPitch = true);
         void processMouseScroll(float yoffset);
 
-        QVector3D getCameraPos() { return cameraPos; };
-        QVector3D getCameraFront() { return cameraFront; };
-        QVector3D getCameraTarget() { return cameraTarget; };
-        QVector3D getCameraDirection() { return cameraDirection; };
-        QVector3D getCameraUp() { return cameraUp; };
+        QVector3D getCameraPos() const { return cameraPos; };
+        QVector3D getCameraFront() const { return cameraFront; };
+        QVector3D getCameraTarget() const { return cameraTarget; };
+        QVector3D getCameraDirection() const { return cameraDirection; };
+        QVector3D getCameraUp() const { return cameraUp; };
 
         void setMovementSpeed(float movSpeed);
         void setRotationSpeed(float rotSpeed);

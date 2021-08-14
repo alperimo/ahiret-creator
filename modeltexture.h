@@ -4,8 +4,9 @@
 #include <QObject>
 #include <QOpenGLFunctions>
 #include <QImage>
-#include <QGLWidget>
 #include <QDebug>
+#include <QOpenGLTexture>
+#include <QGLWidget>
 
 class ModelTexture : QObject
 {
