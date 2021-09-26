@@ -48,7 +48,6 @@ ApplicationWindow {
 
         Keys.onPressed: {
             if (event.key === Qt.Key_Space){
-                console.log("space basildi lo")
                 left_menu_button1.state = "CLICKED"
             }
         }
@@ -56,8 +55,6 @@ ApplicationWindow {
         onClicked: {
             focus: true
         }
-
-
     }
 
     DragHandler {
@@ -146,25 +143,13 @@ ApplicationWindow {
                 CustomMenu{
                     title: qsTr("File")
 
-                    /*menuItemHoveredColor: top_menu_bar.general_menuItemHoveredColor//"#5E5F60"
-                    menuItemTextColor: top_menu_bar.general_menuItemTextColor
-                    menuItemTextHoveredColor: top_menu_bar.general_menuItemTextHoveredColor*/
-
                     Action {
-                        text: qsTr("Tool Bar"); checkable: true; shortcut: "CTRL+K"; onTriggered: console.log("Tool Bar Trigged!")
+                        text: qsTr("Tool Bar"); checkable: true; shortcut: "CTRL+K"; onTriggered: {}
                     }
 
                     Action { text: qsTr("Side Bar"); checkable: true; enabled: false; checked: true }
 
                     Action { text: qsTr("Status Bar"); checkable: true; checked: true }
-
-                    /*MenuSeparator {
-                        contentItem: Rectangle {
-                            implicitWidth: menuBar.menuItemWidth
-                            implicitHeight: 1
-                            color: menuBar.menuItemSeperatorColor
-                        }
-                    }*/
 
                     CustomMenu{
                         title: qsTr("Advanced")
@@ -205,35 +190,6 @@ ApplicationWindow {
 
             }
 
-            /*GridLayout{
-                rows: 1
-                columns: 8
-
-                x: 0
-                anchors.top: parent.top
-
-                property color textColor: "#b3b3b3"
-                property color textHoverC: "#a0a0a0"
-                property string fontFamily: "Verdana"
-                property real fontPointSize: 9
-
-                columnSpacing: 0
-
-                property color normalBG: "#151616" // rectangle icin.
-
-                CustomButtonRectangle{id: top_menu_fileButton; width: left_menu.width; height: top_menu.height; textR.text: "File"; textNormalColor: parent.textColor; textHoverColor: parent.textHoverC; font.family: parent.fontFamily; font.pointSize: parent.fontPointSize; normalColor: parent.normalBG;}
-                CustomButtonRectangle{id: top_menu_editButton; width: left_menu.width; height: top_menu.height; textR.text: "Edit"; textNormalColor: parent.textColor; textHoverColor: parent.textHoverC; font.family: parent.fontFamily; font.pointSize: parent.fontPointSize; normalColor: parent.normalBG;}
-                CustomButtonRectangle{id: top_menu_objectButton; width: left_menu.width; height: top_menu.height; textR.text: "Object"; textNormalColor: parent.textColor; textHoverColor: parent.textHoverC; font.family: parent.fontFamily; font.pointSize: parent.fontPointSize; normalColor: parent.normalBG; }
-                CustomButtonRectangle{id: top_menu_pluginsButton; width: left_menu.width; height: top_menu.height; Layout.leftMargin: 13; textR.text: "Plugins"; textNormalColor: parent.textColor; textHoverColor: parent.textHoverC; font.family: parent.fontFamily; font.pointSize: parent.fontPointSize; normalColor: parent.normalBG; }
-                CustomButtonRectangle{id: top_menu_viewButton; width: left_menu.width; height: top_menu.height; textR.text: "View"; Layout.leftMargin: 5; textNormalColor: parent.textColor; textHoverColor: parent.textHoverC; font.family: parent.fontFamily; font.pointSize: parent.fontPointSize; normalColor: parent.normalBG; }
-                CustomButtonRectangle{id: top_menu_windowButton; width: left_menu.width; height: top_menu.height; textR.text: "Window"; Layout.leftMargin: 10; textNormalColor: parent.textColor; textHoverColor: parent.textHoverC; font.family: parent.fontFamily; font.pointSize: parent.fontPointSize; normalColor: parent.normalBG;}
-                CustomButtonRectangle{id: top_menu_libraryButton; width: left_menu.width; height: top_menu.height; textR.text: "Library"; Layout.leftMargin: 10; textNormalColor: parent.textColor; textHoverColor: parent.textHoverC; font.family: parent.fontFamily; font.pointSize: parent.fontPointSize; normalColor: parent.normalBG; }
-                CustomButtonRectangle{id: top_menu_helpButton; width: left_menu.width; height: top_menu.height; textR.text: "Help"; textNormalColor: parent.textColor; textHoverColor: parent.textHoverC; font.family: parent.fontFamily; font.pointSize: parent.fontPointSize; normalColor: parent.normalBG; }
-
-             }*/
-
-            //CustomButtonRectangle{id: minimizeButton1; anchors.right: parent.right; anchors.top: parent.top; width: 18; height: parent.height; normalColor: "red"; textR.text: "—"; textNormalColor:"#b3b3b3"; font.pointSize: 13}
-
              RowLayout{
                 id: systemButtons
                 spacing: 5
@@ -273,7 +229,6 @@ ApplicationWindow {
             color: "#2d2e2e"
         }
 
-
         Rectangle{
             id: left_menu
             width: 54
@@ -285,7 +240,6 @@ ApplicationWindow {
 
             CustomBorder
             {
-                //commonBorderWidth: 1
                 commonBorder: false
                 lBorderwidth: 0
                 rBorderwidth: 1
@@ -328,7 +282,7 @@ ApplicationWindow {
                 columns: 1
                 rowSpacing: rowSpacingValue
                 anchors.horizontalCenter: parent.horizontalCenter
-                anchors.bottom: parent.bottom;//parent.bottom - ((rowCount*buttonsHeight) + (rowCount*rowSpacingValue) + 15)
+                anchors.bottom: parent.bottom;
                 anchors.bottomMargin: 15
                 CustomButtonImage{id: left_menu_button_bottom1; width: parent.buttonsWidth; height: parent.buttonsHeight; checkable: true; defaultImage: "images/left_menu_button_bottom1.png"; hoveredImage: "images/left_menu_button_bottom1.png"; clickedImage: "images/left_menu_button_bottom1.png"; colorizedImage: true}
                 CustomButtonImage{id: left_menu_button_bottom2; width: parent.buttonsWidth; height: parent.buttonsHeight; checkable: true; defaultImage: "images/left_menu_button_bottom2.png"; hoveredImage: "images/left_menu_button_bottom2.png"; clickedImage: "images/left_menu_button_bottom2.png"; colorizedImage: true}
@@ -348,7 +302,6 @@ ApplicationWindow {
             id: right_menu
             width: 54
             anchors.top: top_menu_bottom_line.bottom
-            //anchors.right: (rectangle.rightMenusArray.length == 0) ? right_menu1.left : rectangle.rightMenusArray[rightMenuStatus-1].left
             anchors.right: right_menu_main.left
 
             anchors.rightMargin: 1
@@ -363,11 +316,6 @@ ApplicationWindow {
                 tBorderwidth: 0
                 bBorderwidth: 0
                 borderColor: "#2d2e2e"
-            }
-
-            Component.onCompleted: {
-                console.log("length: " + rectangle.rightMenusArray.length)
-                console.log("state: " + rectangle.rightMenusArray[rightMenuStatus-1].state)
             }
 
             ColumnLayout{
@@ -517,8 +465,6 @@ ApplicationWindow {
                         var c = Qt.createQmlObject("import QtQuick 2.0; QtObject { function f() { return right_menu_button" + i + " } }", this, "none")
                         right_menu.rightMenuButtonsArray.push(c.f())
                         c.destroy()
-
-                        console.log("lan: " + right_menu.rightMenuButtonsArray[i-1])
                     }
 
                     right_menu.rightMenuButtonsArray[(right_menu.rightMenuStatus)-1].btnImage.state = "CLICKED"
@@ -533,15 +479,10 @@ ApplicationWindow {
         property variant guncelMenus: [1,8]
 
         function rightMenuPanelChange(hideshow_button){ //0:hiding, 1:showing
-
             var status = "";
-
-            //if (right_menu.rightMenuStatus != 1){
-            //if (!(right_menu.rightMenuStatus in rectangle.guncelMenus))
 
             var found = 0;
             for (var i=0; i<rectangle.guncelMenus.length; i++){
-                console.log("for loop: menu" + rectangle.guncelMenus[i])
                 if (right_menu.rightMenuStatus == rectangle.guncelMenus[i])
                     found = 1;
             }
@@ -563,12 +504,8 @@ ApplicationWindow {
 
             hideshow_button.state="" // butona basinca hala clicked state'sinde kalmasını engellemek icin...
 
-            console.log("right menu wird " + status)
-
             var panel = rightMenusArray[right_menu.rightMenuStatus-1]
-            console.log("right_menu.rightMenuStatus for array="+(right_menu.rightMenuStatus-1))
             right_menu_main.state = status
-
         }
 
         function menuStateChanged(newMenuStatus){
@@ -576,7 +513,6 @@ ApplicationWindow {
 
             var found = 0;
             for (var i=0; i<rectangle.guncelMenus.length; i++){
-                console.log("for loop: menu" + rectangle.guncelMenus[i])
                 if (newMenuStatus == rectangle.guncelMenus[i])
                     found = 1;
             }
@@ -601,9 +537,6 @@ ApplicationWindow {
                 rectangle.rightMenusArray[newMenuStatus-1].state = "open"
 
                 right_menu.rightMenuStatus = newMenuStatus
-                //right_menu.anchors.right = rectangle.rightMenusArray[newMenuStatus-1].left
-
-                console.log("right_menu.rightMenuStatus now = " + right_menu.rightMenuStatus)
             }
         }
 
@@ -621,9 +554,6 @@ ApplicationWindow {
                 rightMenusArray.push(c.f())
                 c.destroy()
             }
-
-            //console.log(rightMenusArray)
-            //console.log("right_menu1 width: " + rightMenusArray[0].realWidth)
         }
 
         RightMenus{
@@ -753,20 +683,8 @@ ApplicationWindow {
             property real deltaTime: generalData.deltaTime
 
             onActiveFocusChanged: {
-                console.log("qml 3d focus changed _ = " + focus)
-
                 scene3D.focusChangedSignal(focus)
             }
-
-            /*Connections{
-                target: bar22
-                Component.onCompleted: {
-                    console.log("Connection item eklenecek")
-                    bar22.addItem(yenibutton.createObject(yenibutton))
-                }
-            }*/
-
-
         }
 
         ObjectMenu{
@@ -777,34 +695,10 @@ ApplicationWindow {
             anchors.bottom: parent.bottom
 
             height: 0
-
         }
-
-        /*Component{
-            id: yenibutton
-            TabButton {
-                text: qsTr("Heyyyy")
-            }
-        }
-
-        TabBar {
-            id: bar22
-            width: parent.width
-            TabButton {
-                text: qsTr("Home")
-            }
-            TabButton {
-                text: qsTr("Discover")
-            }
-            TabButton {
-                text: qsTr("Activity")
-            }
-
-        }*/
-
     }
 
-    onActiveFocusItemChanged: print("activeFocusItem", activeFocusItem)
+    onActiveFocusItemChanged: {}
 
 }
 /*##^##

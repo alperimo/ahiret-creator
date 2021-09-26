@@ -7,8 +7,6 @@ static bool initialized = false;
 //Renderer
 QOpenGLFramebufferObject * CustomItemRenderer::createFramebufferObject(const QSize & size)
 {
-    //firstRender = true;
-    std::cout << "CustomItemRenderer::createFramebufferObject()!!!" << std::endl;
     QOpenGLFramebufferObjectFormat format;
     format.setAttachment(QOpenGLFramebufferObject::CombinedDepthStencil);
     format.setSamples(4);
@@ -16,7 +14,6 @@ QOpenGLFramebufferObject * CustomItemRenderer::createFramebufferObject(const QSi
 }
 
 CustomItemRenderer::CustomItemRenderer(){
-    std::cout << "CustomItemRenderer::CustomItemRenderer()" << std::endl;
     ogl = QOpenGLContext::currentContext()->functions();
     ogl->initializeOpenGLFunctions();
 }
@@ -83,7 +80,7 @@ void CustomItemRenderer::initialize(){
 
     shaderLight->getShaderProgram()->bind();
 
-    lightPos = QVector3D(0.0f, 0.0f, 0.0f); //QVector3D(1.2f, 1.0f, 2.0f);//QVector3D(3.0f, 0.5f, -1.0f);
+    lightPos = QVector3D(0.0f, 0.0f, 0.0f);
 
     QOpenGLVertexArrayObject* shaderLight_vao = shaderLight->getVAO();
     QOpenGLBuffer* shaderLight_vbo = shaderLight->getVBO();
@@ -105,8 +102,8 @@ void CustomItemRenderer::initialize(){
 
     shaderLight->releaseShader();
 
-    timer = new QElapsedTimer(); //qTimer = new QTimer();
-    timer->start(); //qTimer->start(1000);
+    timer = new QElapsedTimer();
+    timer->start();
 
     // Model
     shader->getShaderProgram()->bind();
@@ -138,7 +135,6 @@ void CustomItemRenderer::render()
             ogl->glEnable(GL_DEPTH_TEST);
         ogl->glDepthFunc(depthFuncs.at(currentDepthT));
     }
-
 
     ogl->glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 
@@ -198,7 +194,6 @@ void CustomItemRenderer::drawObject(){
     QMatrix4x4 m_view_forNormal;
 
     m_model.setToIdentity();
-    //m_model.rotate(timer->elapsed() * 0.1, QVector3D(0.5, 1, 0));
     m_view.setToIdentity();
     m_view = camera->getCameraViewMatrix();
 
@@ -208,10 +203,6 @@ void CustomItemRenderer::drawObject(){
     lightPos.setX(2.0f * qSin(lastFrame));
     lightPos.setY(0.0f);
     lightPos.setZ(1.5f * qCos(lastFrame));
-
-    /*qDebug() << m_model;
-    qDebug() << m_view;
-    qDebug() << m_projection;*/
 
     int m_modelLoc = shaderProgram->uniformLocation("modelMatrix");
     int m_viewLoc = shaderProgram->uniformLocation("viewMatrix");
@@ -225,7 +216,7 @@ void CustomItemRenderer::drawObject(){
 
     shaderProgram->setUniformValue(shaderProgram->uniformLocation("lightPos"), lightPos); // für VS
 
-        // Light properties
+    // Light properties
     QVector3D lightColor = QVector3D(1.0f, 1.0f, 1.0f);//QVector3D(2.0f, 0.7f, 1.3f);
 
     QColor light_ambient = light->getAmbient();//QVector3D(1.0f, 1.0f, 1.0f);//lightDiffuseColor * 0.2f;
@@ -271,7 +262,6 @@ void CustomItemRenderer::drawObject(){
         t->renderTerrain();
     }
 
-
     // lightShader
     QOpenGLShaderProgram* shaderLightProgram = shaderLight->getShaderProgram();
     shaderLightProgram->bind();
@@ -285,8 +275,6 @@ void CustomItemRenderer::drawObject(){
     shaderLight->getVAO()->bind();
     //ogl->glDrawArrays(GL_TRIANGLES, 0, 36);
     shaderLight->getVAO()->release();
-
-
 }
 
 CustomItemRenderer::~CustomItemRenderer(){
@@ -312,7 +300,7 @@ CustomItemBase::~CustomItemBase(){
 }
 
 void CustomItemBase::activeFocusChangedx(const QString &msg){
-    qDebug() << "cpp activeFocusChanged: " << msg;
+
 }
 
 void CustomItemBase::focusChangedSlot(bool focus){
@@ -337,7 +325,6 @@ void CustomItemBase::mousePressEvent(QMouseEvent *event){
     setFocus(true);
     if (event->button() == Qt::RightButton){
         mouseRightClick = true;
-        qDebug() << "x: " << event->x() << " y: " << event->y();
     }
 }
 
@@ -373,11 +360,11 @@ void CustomItemBase::mouseReleaseEvent(QMouseEvent *event){
     }
 }
 
-void CustomItemBase::_mousePressEvent(QPointF p){ // sürekli update edilir
+void CustomItemBase::_mousePressEvent(QPointF p){
 
 }
 
-void CustomItemBase::_keyPressEvent(){ // sürekli update edilir
+void CustomItemBase::_keyPressEvent(){
     if (keysPressed.contains(Qt::Key_W))
         camera.processKeyboard(FORWARD, deltaTime);
     if (keysPressed.contains(Qt::Key_S))

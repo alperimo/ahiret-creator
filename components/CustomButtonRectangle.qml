@@ -193,50 +193,19 @@ Rectangle{
                 button_rect.state = (!parent.checkable_fixed) ? "" : button_rect.state
 
             }
-
-            console.log("button_rect clicked " + button_rect.state)
-
         }
-
-        /*onPressed: {
-
-            if (button_rect.state != "PRESSED")
-                button_rect.state = "PRESSED"
-
-            console.log("button_rect pressed " + button_rect.state)
-        }*/
 
         onEntered: {
             if (!custom_onEntered){
                 if (button_rect.state != "CLICKED")
                     button_rect.state = "HOVERED"
-                /*if (button_rect.state == "CLICKED")
-                    button_rect.color = clickedColor*/
-
             }
         }
 
         onExited: {
-
-
             if (button_rect.state == "HOVERED")
                 button_rect.state = ""
-
-            /*if (button_rect.state === "CLICKED" && mouseArea.pressed == true)
-            {
-               button_rect.color = hoveredColor
-                console.log("CLICKED ve left mouse aktif")
-            }*/
-
         }
-
-        /*onPressed: { button_rect.state = "dragchange" }
-        drag.target: button_rect
-        drag.axis: Drag.XAxis | Drag.YAxis
-        drag.minimumX: 0
-        drag.maximumX: window.width - button_rect.width
-        drag.minimumY: 0
-        drag.maximumY: window.height - button_rect.height*/
     }
 
 }

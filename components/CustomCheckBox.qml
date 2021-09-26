@@ -20,19 +20,13 @@ CheckBox {
         anchors.leftMargin: control.spacing + control.buttonLeftMargin
         radius: 3
 
-        //border.color: control.down ? "#17a81a" : "#21be2b"
-
         color: (control.checked) ? indicator.checkedColor : (control.hovered) ? indicator.hoveredColor : indicator.normalColor
-
-        //visible: control.checked
-
     }
 
     contentItem: Text {
         text: control.text
         font: control.font
         opacity: enabled ? 1.0 : 0.3
-        //color: control.down ? "#17a81a" : "#21be2b"
         verticalAlignment: Text.AlignVCenter
         leftPadding: control.spacing
     }

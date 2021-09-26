@@ -33,7 +33,6 @@ SOURCES += \
         mesh.cpp \
         model.cpp \
         modeltexture.cpp \
-        mytreemodel.cpp \
         openglitem.cpp \
         qml_camera.cpp \
         qml_generalData.cpp \
@@ -168,7 +167,6 @@ HEADERS += \
     mesh.h \
     model.h \
     modeltexture.h \
-    mytreemodel.h \
     openglitem.h \
     qml_camera.h \
     qml_generalData.h \

@@ -13,22 +13,14 @@ QMatrix4x4 Camera::getCameraViewMatrix(){
 
 void Camera::updateCameraVectors(){
     QVector3D frontDirection = QVector3D(0.0f, 0.0f, -1.0f);
-    qDebug() << "old frontDirection: " << frontDirection;
     double radians = 90 * M_PI / 180;
-    qDebug() << "yaw= " << (float) yaw << " und qCos for yaw = " << qCos(qDegreesToRadians(yaw));
     frontDirection.setX(qCos(qDegreesToRadians((float)yaw)));
     frontDirection.setZ(qSin(qDegreesToRadians((float)yaw)));
     frontDirection.setY(qSin(qDegreesToRadians((float)pitch)));
 
-    //qDebug() << "new frontDirection: " << frontDirection;
-
     cameraFront = frontDirection.normalized();
     cameraRight = QVector3D::crossProduct(cameraFront, worldUp).normalized();
     cameraUp = QVector3D::crossProduct(cameraRight, cameraFront).normalized();
-
-    /*qDebug() << "cameraFront: " << cameraFront;
-    qDebug() << "cameraRight: " << cameraRight;
-    qDebug() << "cameraUp: " << cameraUp;*/
 }
 
 void Camera::processKeyboard(cameraMovement direction, float deltaTime){
@@ -44,8 +36,6 @@ void Camera::processKeyboard(cameraMovement direction, float deltaTime){
 
     if (direction == RIGHT)
         cameraPos += velocity * cameraRight;
-
-    //qDebug() << "cameraPos: " << cameraPos;
 }
 
 void Camera::processMouseMovement(float xoffset, float yoffset, bool constrainPitch) {
@@ -54,8 +44,6 @@ void Camera::processMouseMovement(float xoffset, float yoffset, bool constrainPi
 
     yaw += xoffset;
     pitch -= yoffset;
-
-    //std::cout << "yaw: " << yaw << "pitch: " << pitch << " xoffset: " << xoffset << " yoffset: " << yoffset << std::endl;
 
     if (constrainPitch) {
         if (pitch > 89.0f)
@@ -70,39 +58,24 @@ void Camera::processMouseMovement(float xoffset, float yoffset, bool constrainPi
 
 void Camera::processMouseScroll(float yoffset) {
     cameraPos += ((float)yoffset * fov_speed) * cameraFront;
-    /*fov -= (float)yoffset * fov_speed;
-    if (fov < 1.0f)
-        fov = 1.0f;
-    if (fov > 60.0f)
-        fov = 60.0f;*/
 }
 
 void Camera::setMovementSpeed(float movSpeed){
-    qDebug() << "in camera mov speed icin cagri var";
     movementSpeed = movSpeed;
-    qDebug() << "new movementSpeed: " << movementSpeed;
 }
 
 void Camera::setRotationSpeed(float rotSpeed){
-    qDebug() << "in camera rot speed icin cagri var";
     mouseSensitivity = rotSpeed;
-    qDebug() << "new mouseSensitivity: " << mouseSensitivity;
 }
 
 void Camera::setFov(float fov){
-    qDebug() << "in camera fov icin cagri var";
     this->fov = fov;
-    qDebug() << "new fov: " << fov;
 }
 
 void Camera::setNearDistance(float nearDistance){
-    qDebug() << "in camera nearDistance icin cagri var";
     this->nearDistance = nearDistance;
-    qDebug() << "new nearDistance: " << nearDistance;
 }
 
 void Camera::setFarDistance(float farDistance){
-    qDebug() << "in camera farDistance icin cagri var";
     this->farDistance = farDistance;
-    qDebug() << "new farDistance: " << farDistance;
 }

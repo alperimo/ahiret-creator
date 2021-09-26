@@ -3,7 +3,6 @@ import QtQuick.Layouts 1.15
 import QtQuick.Controls 1.4
 import QtQuick.Controls.Styles 1.4
 import QtQuick.Controls 2.15
-import MyTreeModel 1.0
 
 //SCENE-page
 Item{
@@ -17,21 +16,15 @@ Item{
 
     property alias main_page_ref: scene_page
 
-    Component.onCompleted: {
-        console.log("scene_width in main: " + scene_width)
-    }
-
     MouseArea{
         id: mouseArea
         property bool hover: false
         hoverEnabled: true
         anchors.fill: parent
         onEntered: {
-            console.log("onEntered yes")
             hover = true
         }
         onExited: {
-            console.log("onExited yes")
             hover = false
         }
     }
@@ -45,10 +38,6 @@ Item{
             height: 31 + 88 + 26
 
             property alias settings_layout: scene_settings_layout //es muss verändert werden.
-
-            Component.onCompleted: {
-                console.log("scene_width in RightMenus1_SCENE: " + scene_page.scene_width)
-            }
 
             page_title.text: "SCENE SETTINGS"
 
@@ -310,10 +299,6 @@ Item{
                 property int items_width_: parent.page_title_bg.width
                 property int items_height_: 26
 
-                Component.onCompleted: {
-                    console.log("GridLayout for scene1 items_width_: " + items_width_)
-                }
-
                 states: [
                     State {
                         name: "hide"
@@ -348,11 +333,6 @@ Item{
 
                     slider.value: main_rightmenu.currentScene.cam.movementSpeed
 
-                    Component.onCompleted: {
-                        console.log("items_width for movementspeed: " + parent.items_width_)
-                    }
-
-
                     slider.onValueChanged: {
                         //tue etwas, wenn button geklickt wird
                         // deger: slider.value
@@ -371,10 +351,6 @@ Item{
                     items_height: parent.items_height_
 
                     slider.value: main_rightmenu.currentScene.cam.rotationSpeed
-
-                    Component.onCompleted: {
-                        console.log("items_width for rotatespeed: " + parent.items_width_)
-                    }
 
                     slider.onValueChanged: {
                         //tue etwas, wenn button geklickt wird
@@ -662,7 +638,6 @@ Item{
                         setPopupMaxHeight: 120
 
                         onCurrentIndexChanged: {
-                            console.log("current index: " + currentIndex)
                             main_rightmenu.currentScene.generalData.currentDepthTest = currentIndex
                             //main_rightmenu.currentScene.depthFuncChanged(currentIndex)
                         }
@@ -718,8 +693,6 @@ Item{
 
 
         delegate: Loader{
-            //property string title: title
-            Component.onCompleted: {console.log("title: " + title)}
             sourceComponent: switch(title){
                 case "scene_settings": return sceneSettings
                 case "toggle_settings": return toggleSettings
@@ -727,7 +700,6 @@ Item{
                 case "pbr_settings": return pbrSettings
                 case "render_settings": return renderSettings
                 case "graphic_settings": return graphicSettings
-                default: console.log("hicbiri degil title: " + title)
             }
         }
 
@@ -759,68 +731,4 @@ Item{
         }
 
     }
-
-
-
-    /*
-    MyTreeModel{
-        id: theModel
-    }
-
-    TreeView {
-        id: tree
-        anchors.top: parent.top
-        anchors.topMargin: 9.5
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.bottom: parent.bottom
-        anchors.bottomMargin: 9.5
-
-
-        style : TreeViewStyle {
-            frame:  Item{}
-
-            backgroundColor: "transparent"
-
-        }
-
-        frameVisible: false
-
-        Component.onCompleted: {
-            console.log("treeview'in parent height: " + parent.height)
-        }
-
-
-
-        // START_OF_TEST
-
-        model: theModel
-        itemDelegate: Rectangle {
-           color: ( styleData.row % 2 == 0 ) ? "white" : "lightblue"
-           height: 20
-
-           Text {
-               anchors.verticalCenter: parent.verticalCenter
-               anchors.left: parent.left // by default x is set to 0 so this had no effect
-               text: styleData.value === undefined ? "" : styleData.value // The branches don't have a description_role so styleData.value will be undefined
-           }
-        }
-
-        TableViewColumn {
-            role: "name_role"
-            title: ""
-
-        }
-
-
-        // END_OF_TEST
-
-
-
-    }
-
-    */
-
-
-
 }

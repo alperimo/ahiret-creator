@@ -8,13 +8,6 @@ Item {
 
     property alias mouseAreas: mouseAreas
 
-    /*Component.onCompleted: {
-        console.log("colorSlider value: " + value)
-        console.log("colorSlider " + pickerCursor.y/height)
-        pickerCursor.y = 40
-        mouseAreas.y = 0
-    }*/
-
     Item {
         id: pickerCursor
         width: parent.width
@@ -49,11 +42,5 @@ Item {
         onPressed: handleMouse(mouse)
     }
 
-    /*onVisibleChanged: {
-        if(visible) {
-            pickerCursor.y = -cursorHeight*0.5
-            console.log("pickerCursor onVisibleChange: " + pickerCursor.y)
-        }
-    }*/
 }
 

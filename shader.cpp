@@ -35,19 +35,6 @@ Shader::Shader(QString vertexShader, QString fragmentShader, QOpenGLContext *ogl
     m_vao.bind();
 
     this->ogl_ = ogl;
-
-    /*m_program->enableAttributeArray(0);
-    //m_program->setAttributeBuffer(0, GL_FLOAT, 0, 3); //3 vertex, 2 koordinats için
-    m_program->setAttributeBuffer(0, GL_FLOAT, 0, 3, 5 * sizeof(GL_FLOAT));
-
-    m_program->enableAttributeArray(1);
-    m_program->setAttributeBuffer(1, GL_FLOAT, 3 * sizeof(GL_FLOAT), 2, 5 * sizeof(GL_FLOAT));*/
-
-
-    //vbo,ebo ve vao release
-
-
-    std::cout << "Shader() olusturuldu." << std::endl;
 }
 
 void Shader::loadToVAO(QVector<float> vertices, QVector<int> indices){

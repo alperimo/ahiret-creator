@@ -8,8 +8,8 @@ class Qml_generalData : public QObject
 {
     Q_OBJECT
 
-    Q_PROPERTY(unsigned int currentDepthTest READ currentDepthTest WRITE setCurrentDepthTest NOTIFY currentDepthTestChanged)//Q_PROPERTY(float ambient READ ambient WRITE setAmbient NOTIFY ambientChanged)
-    Q_PROPERTY(float deltaTime READ deltaTime WRITE setDeltaTime NOTIFY deltaTimeChanged)//Q_PROPERTY(float ambient READ ambient WRITE setAmbient NOTIFY ambientChanged)
+    Q_PROPERTY(unsigned int currentDepthTest READ currentDepthTest WRITE setCurrentDepthTest NOTIFY currentDepthTestChanged)
+    Q_PROPERTY(float deltaTime READ deltaTime WRITE setDeltaTime NOTIFY deltaTimeChanged)
 
 
 public:

@@ -15,6 +15,7 @@ public:
     Terrain(int gridX, int gridZ, QList<QSharedPointer<Shader>>& shaders, const Camera* camera);
 
     void appendTexture(const QList<QString>& texturePaths, FileSystem* fileSystem);
+    void loadTexture(QSharedPointer<Shader> shader, const int& lodLevel);
     void renderTerrain();
 
     decltype (auto) getTerrainPosition() { return position; }
@@ -40,7 +41,7 @@ private:
 
     QVector<float> hqVertices, mqVertices, lqVertices;
     QVector<int> hqIndices, mqIndices, lqIndices;
-    double hqIndicesPointer = 0, mqIndicesPointer = 0, lqIndicesPointer = 0; //total vertexCount = indicesPointer X indicesPointer
+    double hqIndicesPointer = 0, mqIndicesPointer = 0, lqIndicesPointer = 0;
 
     // END_OF_LOD_TERRAIN
 

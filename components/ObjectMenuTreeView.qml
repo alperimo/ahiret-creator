@@ -22,7 +22,6 @@ TreeView{
     sortIndicatorVisible: true
     headerVisible: false
 
-
     horizontalScrollBarPolicy: Qt.ScrollBarAlwaysOff
 
     //__listView.flickableDirection: Flickable.VerticalFlick
@@ -92,7 +91,7 @@ TreeView{
 
                 }
 
-                mouseAreas.onEntered: {console.log("expanded entered"); itemRect.mouseAreas.entered()}
+                mouseAreas.onEntered: {itemRect.mouseAreas.entered()}
 
                 mouseAreas.onClicked: {
                     itemRect.doubleClicked()
@@ -118,7 +117,6 @@ TreeView{
 
             Component.onCompleted: {
                 type = tree.model.getIconType(styleData.index)
-                console.log("desc: " + styleData.accessibleDescription)
             }
 
             Binding on state {when: !styleData.selected && !itemRect.expanded; value: ""; restoreMode: Binding.RestoreBinding}

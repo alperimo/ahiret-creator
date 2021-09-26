@@ -4,11 +4,6 @@
 CustomItemBase* getParent();
 
 Qml_camera::Qml_camera(QObject* parent) : QObject(parent) {
-
-    //setMovementSpeed(SPEED);
-
-    //updateRenderer();
-
 }
 
 QObject* Qml_camera::getParent(){
@@ -23,7 +18,6 @@ void Qml_camera::updateRenderer(){
 
 void Qml_camera::setMovementSpeed(const float &movSpeed){
     if (movSpeed != m_movementSpeed){
-        qDebug() << "cpp movementSpeed degisti! old: " << m_movementSpeed << " new: " << movSpeed;
         m_movementSpeed = movSpeed;
 
         CustomItemBase* parent = static_cast<CustomItemBase*>(this->parent());
@@ -38,7 +32,6 @@ void Qml_camera::setMovementSpeed(const float &movSpeed){
 
 void Qml_camera::setRotationSpeed(const float &rotSpeed){
     if (rotSpeed != m_rotationSpeed){
-        qDebug() << "cpp rotationSpeed degisti! old: " << m_rotationSpeed << " new: " << rotSpeed;
         m_rotationSpeed = rotSpeed;
 
         CustomItemBase *parent = (CustomItemBase*) getParent();
@@ -60,7 +53,6 @@ void Qml_camera::setFov(const float &fov){
         parent->update();
 
         emit fovChanged();
-
     }
 }
 

@@ -7,6 +7,7 @@
 #include <QDebug>
 #include <QOpenGLTexture>
 #include <QGLWidget>
+#include <QGLPixelBuffer>
 
 class ModelTexture : QObject
 {
@@ -15,6 +16,7 @@ public:
     ModelTexture();
     //static GLuint textureFromFile(const char* fileName_, const QString& directory, bool gamma = false);
     static GLuint textureFromFile(const QString& filePath, bool gamma = false);
+    static GLuint readDDSFile(const QString &filename);
 };
 
 #endif // MODELTEXTURE_H

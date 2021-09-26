@@ -8,7 +8,7 @@ class Qml_light : public QObject
 {
     Q_OBJECT
 
-    Q_PROPERTY(QString ambient READ ambient WRITE setAmbient NOTIFY ambientChanged)//Q_PROPERTY(float ambient READ ambient WRITE setAmbient NOTIFY ambientChanged)
+    Q_PROPERTY(QString ambient READ ambient WRITE setAmbient NOTIFY ambientChanged)
     Q_PROPERTY(QString diffuse READ diffuse WRITE setDiffuse NOTIFY diffuseChanged)
     Q_PROPERTY(QString specular READ specular WRITE setSpecular NOTIFY specularChanged)
 
@@ -25,7 +25,7 @@ public:
 
     virtual ~Qml_light() {}
 
-    void setAmbient(const QString &ambient, bool init = 0);//void setAmbient(const float &ambient);
+    void setAmbient(const QString &ambient, bool init = 0);
     void setDiffuse(const QString &diffuse);
     void setSpecular(const QString &specular);
 
@@ -37,7 +37,7 @@ public:
     void setCutOff(const float &cutOff);
     void setOutCutOff(const float &outCutOff);
 
-    QString ambient() const {//float ambient() const {
+    QString ambient() const {
         return m_ambient;
     }
 
@@ -87,7 +87,7 @@ signals:
     void outCutOffChanged();
 
 private:
-    QString m_ambient;//float m_ambient;
+    QString m_ambient;
     QString m_diffuse;
     QString m_specular;
 

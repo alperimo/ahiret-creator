@@ -22,11 +22,6 @@ Item{
     width: items_width;
     height: items_height;
 
-    Component.onCompleted: {
-        console.log("width for " + text_property_name.text + ": " + width)
-        console.log("height for " + text_property_name.text + ": " + height)
-    }
-
     Text{
         id: text_property_name
         anchors.left: parent.left; anchors.top: parent.top
@@ -41,13 +36,6 @@ Item{
         color: "#8b8d90"
     }
 
-    /*Text{
-        id: text_property_value
-        anchors.right: parent.right; anchors.rightMargin: 14; anchors.top: parent.top
-        text: parseFloat(slider.value).toFixed(2); font.family: "Gilroy"; font.pixelSize: 12; font.weight: Font.Normal; font.styleName: Font.Normal
-        color: "#ffffff"
-    }*/
-
     TextInput{id: text_property_value
         anchors.right: parent.right; anchors.rightMargin: 14; anchors.top: parent.top
         text:parseFloat(slider.value).toFixed(2); font.family: "Gilroy"; font.pixelSize: 12; font.weight: Font.Normal; font.styleName: Font.Normal
@@ -57,32 +45,17 @@ Item{
 
         Keys.onPressed: {
             if(event.key == Qt.Key_Enter || event.key == Qt.Key_Return){
-                console.log("input enter basildiiiiiiiiiiiiiii.")
                 slider.value = parseFloat(text)
             }
-
         }
 
         onActiveFocusChanged: {
             if (!activeFocus)
             {
-                console.log("focus input ------------------------------------------------------")
                 slider.value = parseFloat(text)
-            }else{
-                console.log("focus input +++++++++++++++++++++++++++++++++++++++++++++++++++++++")
             }
-
         }
-
     }
-
-    /*Rectangle{
-        x:0
-        y:0
-        width: main.width - 50
-        height: 10
-        color: "green"
-    }*/
 
     Slider {
         id: slider
@@ -102,17 +75,12 @@ Item{
 
         enabled: !main.disabled
 
-
-
         background: Rectangle {
             x: slider.leftPadding
-            //y: slider.topPadding + slider.availableHeight / 2 - height / 2
-            //x: 0
             y: 0
             implicitWidth: parent.parent.width
             implicitHeight: 4
             width: slider.availableWidth
-            //width: implicitWidth
             height: implicitHeight
             radius: 2
             color: "#212121"
@@ -121,7 +89,6 @@ Item{
                 id: full
                 anchors.left: parent.left
                 anchors.top: parent.top
-                //width: (slider.position) * (slider.availableWidth)//(slider.visualPosition) * parent.width
                 width: slider.position * slider.availableWidth
                 height: parent.height
                 color: "#8b8d90"
@@ -133,10 +100,7 @@ Item{
         }
 
         handle: Rectangle {
-
             x: slider.leftPadding + (slider.position) * (slider.availableWidth - width)
-            //x: slider.position * slider.availableWidth
-            //x: (slider.visualPosition) * slider.background.width
 
             y: -3 //slider.availableHeight / 2 - height / 2
             implicitWidth: 10
@@ -150,27 +114,22 @@ Item{
                 anchors.fill: parent
 
                 onEntered: {
-                    console.log("mouseAreax on Entered")
                     hover = true
                 }
 
                 onExited: {
-                    console.log("mouseArex on Exited")
                     hover = false
                 }
 
                 propagateComposedEvents: true
                 onClicked: mouse.accepted = false;
                 onPressed: mouse.accepted = false;
-
             }
 
             radius: 13
             color: slider.pressed ? "#a3a3a3" : (mouseAreax.hover) ? "#b7b7b7" : "#a3a3a3"
 
             opacity: !main.disabled ? 1.0 : 0.3
-
-            //border.color: "#bdbebf"
         }
     }
 }

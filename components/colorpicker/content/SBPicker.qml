@@ -17,10 +17,6 @@ Item {
 
     focus: true
 
-    Component.onCompleted: {
-        console.log("SBPicker width:"+width + " height:"+height)
-    }
-
     Rectangle {
         x : r
         y : r + parent.height - 2 * r
@@ -76,18 +72,8 @@ Item {
         }
         onPositionChanged: {
             handleMouse(mouse)
-            console.log("saturation: " + parent.saturation)
-            console.log("brightness: " + parent.brightness)
-            console.log("SBPicker pickerCursor.y = " + pickerCursor.y)
-
-            //hexToRGBA("#E4B9AACC")
-            //hexToRGBA("#FF96657E")
-
-            //console.log("test: " + hexToRGBA("fff"))
         }
         onPressed: handleMouse(mouse)
     }
-
-
 }
 

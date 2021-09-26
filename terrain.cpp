@@ -21,10 +21,11 @@ void Terrain::setTerrainGridXZ(int gridX, int gridZ){
 
 }
 
-void Terrain::appendTexture(const QList<QString>& texturePaths, FileSystem* fileSystem){
+void Terrain::appendTexture(const QList<QString>& texturePaths, FileSystem* fileSystem)
+{
     for (auto& t : texturePaths){
         Texture texture;
-        texture.id = ModelTexture::textureFromFile(QString("%1/%2").arg(fileSystem->getTerrainPath(), t));
+        texture.id = ModelTexture::textureFromFile(QString("%1%2").arg(fileSystem->getTerrainPath(), t));//ModelTexture::textureFromFile(QString("%1%2").arg(fileSystem->getTerrainPath(), t));
         textures.append(texture);
     }
 }
@@ -43,27 +44,13 @@ void Terrain::generateTerrain(){
     hqIndicesPointer = 0; mqIndicesPointer = 0; lqIndicesPointer = 0;
 
     QVector3D cameraPos = camera->getCameraPos();
-
-    /*for (int q=0; q<16; q++){
-        hqVertices.push_back(0); // startX + (x/(VERTEX_COUNT-1) * (endX-startX))
-        hqVertices.push_back(0.0f);
-        hqVertices.push_back(0); // z
-
-        //normal vertices
-        hqVertices.push_back(0.0f);
-        hqVertices.push_back(1.0f);
-        hqVertices.push_back(0.0f);
-        //texture vertices
-        hqVertices.push_back(0); // u
-        hqVertices.push_back(0); // v
-    }*/
+    QVector3D cameraDirection = camera->getCameraDirection();
 
     for (int z=1; z<NODE_COUNT+1; z++){
         for (int x=1; x<NODE_COUNT+1; x++){
             QVector3D vertexPos(x/(NODE_COUNT-1) * GRID_SIZE, 0.0f, z/(NODE_COUNT) * GRID_SIZE);
             QVector3D vertexWorldPos = vertexPos + position;
 
-            // x --> x-1 node
             float distance = cameraPos.distanceToPoint(vertexWorldPos);
             if (distance <= maxDistanceLevels.at(0)) // HIGH_QUALITY
             {
@@ -79,30 +66,19 @@ void Terrain::generateTerrain(){
         }
     }
 
-    //qDebug() << "size hqVertices, mq, lq: " << hqVertices.size() << " " << mqVertices.size() << " " << lqVertices.size();
-    //qDebug() << "size hqIndices, mq, lq: " << hqIndices.size() << " " << mqIndices.size() << " " << lqIndices.size();
-    //qDebug() << "hqIndicesPointer, mq, lq: " << hqIndicesPointer << " " << mqIndicesPointer << " " << lqIndicesPointer;
-
     shaders.at(0)->loadToVAO(hqVertices, hqIndices);
     shaders.at(1)->loadToVAO(mqVertices, mqIndices);
     shaders.at(2)->loadToVAO(lqVertices, lqIndices);
-
-    //qDebug() << "hqVertices: " << hqVertices;
-    //qDebug() << "hqIndices: " << hqIndices;
-
 }
 
 void Terrain::loadVertex(const int& nodeX, const int& nodeZ, const int& lodLevel, QVector<float>& vertices, QVector<int>& indices)
 {
-
     const float& VERTEX_COUNT = VERTEX_COUNTS[lodLevel];
     float nodeSelectedX = (float)nodeX/(NODE_COUNT) * GRID_SIZE; // x*(GRID_SIZE/NODE_COUNT);
     float nodePreviousX = (float)(nodeX-1)/(NODE_COUNT) * GRID_SIZE; //startX + (GRID_SIZE/NODE_COUNT);
 
     float nodeSelectedZ = (float)nodeZ/(NODE_COUNT) * GRID_SIZE;
     float nodePreviousZ = (float)(nodeZ-1)/(NODE_COUNT) * GRID_SIZE;
-
-    //qDebug() << nodeX << ", " << nodeZ << " = " << nodeSelectedX << ", " << nodeSelectedZ;
 
     int addedVertexCount = 0;
 
@@ -113,7 +89,6 @@ void Terrain::loadVertex(const int& nodeX, const int& nodeZ, const int& lodLevel
             float nodeCurrentX = nodePreviousX + (x/(VERTEX_COUNT-1) * (nodeSelectedX-nodePreviousX));
             float nodeCurrentZ = nodePreviousZ + (z/(VERTEX_COUNT-1) * (nodeSelectedZ-nodePreviousZ));
 
-            //qDebug() << nodeX << ", " << nodeZ << " -- " << x << ", " << z << " = " << nodeCurrentX << ", " << nodeCurrentZ;
             vertices.push_back(nodeCurrentX); // startX + (x/(VERTEX_COUNT-1) * (endX-startX))
             vertices.push_back(0.0f);
             vertices.push_back(nodeCurrentZ); // z
@@ -122,6 +97,7 @@ void Terrain::loadVertex(const int& nodeX, const int& nodeZ, const int& lodLevel
             vertices.push_back(0.0f);
             vertices.push_back(1.0f);
             vertices.push_back(0.0f);
+
             //texture vertices
             vertices.push_back(nodeCurrentX / GRID_SIZE); // u
             vertices.push_back(nodeCurrentZ / GRID_SIZE); // v
@@ -130,10 +106,7 @@ void Terrain::loadVertex(const int& nodeX, const int& nodeZ, const int& lodLevel
         }
     }
 
-    double indicesPointer = vertices.size()/8 - addedVertexCount; //(lodLevel == 0) ? hqIndices.size() : (lodLevel == 1) ? mqIndices.size() : lqIndices.size();
-    //if (indicesPointer != 0) indicesPointer++;
-
-    //qDebug() << nodeX << ", " << nodeZ << " -- indicesPointer: " << indicesPointer << " indices size: " << indices.size();
+    double indicesPointer = vertices.size()/8 - addedVertexCount;
 
     for (int iz=0; iz<VERTEX_COUNT-1; iz++){
         for (int ix=0; ix<VERTEX_COUNT-1; ix++){
@@ -142,36 +115,19 @@ void Terrain::loadVertex(const int& nodeX, const int& nodeZ, const int& lodLevel
             int bottomLeft = indicesPointer + (((iz+1)*VERTEX_COUNT) + ix);
             int bottomRight = (bottomLeft+1);
 
-            //if ((nodeX == 2 && nodeZ == 2))
-            //    qDebug() << "topLeft: " << topLeft << " bottomLeft: " << bottomLeft;
-
             indices.push_back(topLeft);
             indices.push_back(bottomLeft);
             indices.push_back(topRight);
             indices.push_back(topRight);
             indices.push_back(bottomLeft);
             indices.push_back(bottomRight);
-
-
         }
     }
-
-
 }
 
 void Terrain::renderTerrain(){
 
     QOpenGLFunctions* ogl = shaders.at(0)->ogl_->currentContext()->functions();
-
-    /*for (GLuint i = 0; i < textures.size(); i++){
-        ogl->glActiveTexture(GL_TEXTURE0 + i);
-
-        shader->getShaderProgram()->setUniformValue(shader->getShaderProgram()->uniformLocation(QString("textures[%1]").arg(i)), i);
-        ogl->glBindTexture(GL_TEXTURE_2D, textures[i].id);
-    }*/
-
-    //qDebug() << "vertices size for terrain: " << vertices.size();
-    //ogl->glDrawArrays(GL_TRIANGLES, 0, vertices.size());
 
     generateTerrain();
 
@@ -183,25 +139,39 @@ void Terrain::renderTerrain(){
     QOpenGLShaderProgram* shaderProgramMq = shaders.at(1)->getShaderProgram();
     QOpenGLShaderProgram* shaderProgramLq = shaders.at(2)->getShaderProgram();
 
+    shaderProgramHq->bind();
     shaderProgramHq->setUniformValue(shaderProgramHq->uniformLocation("modelMatrix"), m_model);
     shaders.at(0)->getVAO()->bind();
+    loadTexture(shaders.at(0), 0);
     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     ogl->glDrawElements(GL_TRIANGLES, hqIndices.size(), GL_UNSIGNED_INT, 0);
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     shaders.at(0)->getVAO()->release();
 
+    shaderProgramMq->bind();
     shaderProgramMq->setUniformValue(shaderProgramHq->uniformLocation("modelMatrix"), m_model);
     shaders.at(1)->getVAO()->bind();
+    loadTexture(shaders.at(1), 1);
     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     ogl->glDrawElements(GL_TRIANGLES, mqIndices.size(), GL_UNSIGNED_INT, 0);
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     shaders.at(1)->getVAO()->release();
 
+    shaderProgramLq->bind();
     shaderProgramLq->setUniformValue(shaderProgramHq->uniformLocation("modelMatrix"), m_model);
     shaders.at(2)->getVAO()->bind();
+    loadTexture(shaders.at(2), 2);
     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     ogl->glDrawElements(GL_TRIANGLES, lqIndices.size(), GL_UNSIGNED_INT, 0);
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     shaders.at(2)->getVAO()->release();
+}
 
+void Terrain::loadTexture(QSharedPointer<Shader> shader, const int& lodLevel){
+    QOpenGLFunctions* ogl = shaders.at(0)->ogl_->currentContext()->functions();
+    for (GLuint i = 0; i < textures.size(); i++){
+        ogl->glActiveTexture(GL_TEXTURE0 + i);
+        shader->getShaderProgram()->setUniformValue(shader->getShaderProgram()->uniformLocation(QString("textures[%1]").arg(i)), i);
+        ogl->glBindTexture(GL_TEXTURE_2D, textures[i].id);
+    }
 }

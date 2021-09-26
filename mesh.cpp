@@ -41,10 +41,6 @@ void Mesh::setupMesh(){
     m_ebo.bind();
     m_ebo.allocate(&indices[0], indices.size() * static_cast<int>(sizeof(GLuint)));
 
-    qDebug() << "vertices[0]: " << vertices[0].position;
-
-    qDebug() << "vertices[1]: " << vertices[1].position;
-
     ogl->glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);
     ogl->glEnableVertexAttribArray(0);
 
@@ -64,16 +60,14 @@ void Mesh::setupMesh(){
 
 }
 
-void Mesh::Draw(Shader &shader){
+void Mesh::Draw(Shader &shader)
+{
     GLuint diffuseNr = 0, specularNr = 0, emissionNr = 0;
 
-    //QOpenGLFunctions *ogl = QOpenGLContext::currentContext()->functions();
     QOpenGLFunctions* ogl = ogl_->currentContext()->functions();
     QOpenGLShaderProgram* shaderProgram = shader.getShaderProgram();
 
     shaderProgram->bind();
-
-    //qDebug() << "test ogl: " << ogl;
 
     for (GLuint i = 0; i < textures.size(); i++){
         ogl->glActiveTexture(GL_TEXTURE0 + i);
@@ -101,13 +95,8 @@ void Mesh::Draw(Shader &shader){
     shaderProgram->setUniformValue(shaderProgram->uniformLocation("material.texture_activ[1]"), (specularNr > 0) ? true : false);
     shaderProgram->setUniformValue(shaderProgram->uniformLocation("material.texture_activ[2]"), (emissionNr > 0) ? true : false);
 
-    //ogl->glActiveTexture(GL_TEXTURE0);
-
     m_vao.bind();
-    //ogl->glDrawArrays(GL_TRIANGLES, 0, 36);
 
-
-    //qDebug() << "m_vao : " << m_vao.objectId() << " size of vertices: " << vertices.size() << " size of indices " << indices.size();
     ogl->glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
     m_vao.release();
 }

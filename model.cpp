@@ -20,8 +20,6 @@ void Model::loadModel(const QString& path){
                                                        aiProcess_JoinIdenticalVertices |
                                                        aiProcess_SortByPType);
 
-    qDebug() << "assimp path: " << path.toStdString().c_str();
-
     if(!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
     {
         qDebug() << "ERROR::ASSIMP::" << import.GetErrorString();
@@ -79,16 +77,8 @@ Mesh* Model::processMesh(aiMesh *mesh, const aiScene *scene){
 
     for (unsigned int i = 0; i<mesh->mNumFaces; i++){
         aiFace face = mesh->mFaces[i];
-        if (vertices.size() < 40){
-            qDebug() << "face.mNumIndices: " << face.mNumIndices;
-        }
         for (unsigned int j = 0; j < face.mNumIndices; j++){
-            if (vertices.size() < 40){
-                qDebug() << "face.mIndices[ " <<  j << "] " << face.mIndices[j];
-            }
-
             indices.push_back(face.mIndices[j]);
-
         }
     }
 
@@ -116,16 +106,10 @@ Mesh* Model::processMesh(aiMesh *mesh, const aiScene *scene){
         }
 
         material_ = materials.at(mesh->mMaterialIndex);
-
     }
-
-
 
     QPointer<Mesh> mx = new Mesh(vertices, indices, textures, material_, ogl_);
     return mx;
-
-    //return xt;
-    //return Mesh(vertices, indices, textures);
 }
 
 QVector<Texture> Model::loadMaterialTextures(aiMaterial* mat, aiTextureType type, QString typeName){

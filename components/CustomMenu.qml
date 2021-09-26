@@ -20,14 +20,6 @@ Menu {
     property color menuItemArrowColor: "#b3b3b3"
     property color menuItemArrowHoveredColor: "#b3b3b3"
 
-    /*MenuSeparator {
-        contentItem: Rectangle {
-            implicitWidth: menuBar.menuItemWidth
-            implicitHeight: 1
-            color: menuBar.menuItemSeperatorColor
-        }
-    }*/
-
     topPadding: 2
     bottomPadding: 2
 

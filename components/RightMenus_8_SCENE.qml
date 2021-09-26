@@ -3,12 +3,10 @@ import QtQuick.Layouts 1.15
 import QtQuick.Controls 1.4
 import QtQuick.Controls.Styles 1.4
 import QtQuick.Controls 2.15
-import MyTreeModel 1.0
 
 import OpenGLCamera 1.0
 import OpenGLUnderQML 1.0
 
-//import QtQuick.Dialogs 1.3
 import Qt.labs.platform 1.1
 
 import "colorpicker"
@@ -28,37 +26,21 @@ Item{
 
     property alias main_page_ref: scene_page
 
-    Component.onCompleted: {
-        console.log("scene_width in main for scene8: " + scene_width)
-        //console.log("scene_height: " + height)
-    }
-
     MouseArea{
         id: mouseArea
         property bool hover: false
         hoverEnabled: true
         anchors.fill: parent
         onEntered: {
-            console.log("onEntered yes")
-            //colorDialog.open()
             hover = true
         }
         onExited: {
-            console.log("onExited yes")
             hover = false
         }
-
-
     }
 
     Component {
         id: basicLightSettings
-
-        /*Rectangle {
-            width: scene_page.scene_width
-            height: 31 + 198 + 26
-            color: "yellow"
-        }*/
 
         RightMenus_1_SCENE_Item{
             id: basicLightSettingsItem
@@ -69,11 +51,6 @@ Item{
             property alias settings_layout: basic_lighting_settings_layout //es muss verändert werden.
 
             page_title.text: "BASIC LIGHTING SETTINGS"
-
-            /*Rectangle{
-                anchors.fill: parent
-                color: "green"
-            }*/
 
             GridLayout{
                 id: basic_lighting_settings_layout
@@ -88,7 +65,7 @@ Item{
 
                 visible: true
 
-                property int items_width_: 130//parent.page_title_bg.width - 1
+                property int items_width_: 130
                 property int items_height_: 26
 
                 property int items_width_slider: parent.page_title_bg.width - 1
@@ -96,12 +73,6 @@ Item{
 
                 property int items_width_checkbox: 103
                 property int items_height_checkbox: 16
-
-                /*Rectangle{
-                    width: parent.items_width_ - 5
-                    height: 25
-                    color:"yellow"
-                }*/
 
                 states: [
                     State {
@@ -126,16 +97,8 @@ Item{
                 ]
 
                 Item{
-                    //Layout.row: 0; Layout.column: 0;
-
                     width: parent.items_width_
                     height: 17
-
-                    /*slider.value: main_rightmenu.currentScene.light.specular
-
-                    slider.onValueChanged: {
-                        main_rightmenu.currentScene.light.specular = slider.value
-                    } */
 
                     Text{
                         id: text_ambient
@@ -163,18 +126,6 @@ Item{
                             colorValueChanged()
                         }
 
-                        /*Component.onCompleted: {
-                            c = Qt.createQmlObject("import QtQuick 2.0; QtObject { function f() { return ambient_color_button } }", this, "none")
-                            var value = main_rightmenu.currentScene.light.ambient
-                            //console.log("cpp'den initialize edilen value: " + value + " r: " + (value.r*255) + " g: " + (value.g*255) + " b: " + (value.b*255) + " a: " + (value.a*255))
-                            //colorValue = Qt.rgba(value.r, value.g, value.b, value.a)
-
-                            console.log("cpp'den initialize edilen value: " + value)
-                            colorValue = value
-                            colorValueChanged()
-                            console.log("colorChanged from onCompleted")
-                        }*/
-
                         Component.onDestruction: {
                             c.destroy()
                         }
@@ -187,7 +138,6 @@ Item{
 
                         onColorValueChanged: {
                             main_rightmenu.currentScene.light.ambient = normalColor
-                            console.log("colorChanged ambient looooooooooo normalColor: " + normalColor)
                         }
 
                     }
@@ -242,7 +192,6 @@ Item{
 
                         onColorValueChanged: {
                             main_rightmenu.currentScene.light.diffuse = normalColor
-                            console.log("colorChanged looooooooooo normalColor: " + normalColor)
                         }
                     }
                 }
@@ -291,10 +240,8 @@ Item{
                             scene_page.color_popup_open(c)
                         }
 
-
                         onColorValueChanged: {
                             main_rightmenu.currentScene.light.specular = normalColor
-                            console.log("colorChanged looooooooooo normalColor: " + normalColor)
                         }
                     }
                 }
@@ -332,14 +279,7 @@ Item{
                     slider.from: 0.0; slider.to: 1.0
                     slider.value: main_rightmenu.currentScene.light.linear
 
-                    Component.onCompleted: {
-                        console.log("items_width_slider for linear: " + parent.items_width_slider)
-                    }
-
-
                     slider.onValueChanged: {
-                        //tue etwas, wenn button geklickt wird
-                        // deger: slider.value
                         main_rightmenu.currentScene.light.linear = slider.value
                     }
 
@@ -362,38 +302,23 @@ Item{
                     slider.from: 0.0; slider.to: 1.0
                     slider.value: main_rightmenu.currentScene.light.quadratic
 
-                    Component.onCompleted: {
-                        console.log("items_width_slider for quadratic: " + parent.items_width_slider)
-                    }
-
-
                     slider.onValueChanged: {
-                        //tue etwas, wenn button geklickt wird
-                        // deger: slider.value
-                        console.log("now items_width quadratic " + items_width)
                         main_rightmenu.currentScene.light.quadratic = slider.value
                     }
-
                 }
-
             }
         }
     }
 
     Component {
         id: spotLightSettings
-        /*Rectangle {
-            width: main_page_ref.scene_width
-            height: 31 + 88
-            color: "green"
-        }*/
 
         RightMenus_1_SCENE_Item{
             id: spotLightSettingsItem
             width: main_page_ref.scene_width
             height: 31 + 110
 
-            property alias settings_layout: spotLight_settings_layout //es muss verändert werden.
+            property alias settings_layout: spotLight_settings_layout
 
             page_title.text: "FLASHLIGHT SETTINGS"
 
@@ -452,7 +377,6 @@ Item{
                     checked: main_rightmenu.currentScene.light.spotLight
 
                     onCheckedChanged: {
-                        console.log("checked degisti: " + checked)
                         main_rightmenu.currentScene.light.spotLight = checked
                     }
                 }
@@ -474,19 +398,11 @@ Item{
                     slider.from: 0.0; slider.to: 120.0
                     slider.value: main_rightmenu.currentScene.light.cutOff
 
-                    Component.onCompleted: {
-                        console.log("items_width_slider for quadratic: " + parent.items_width_slider)
-                    }
-
-
                     slider.onValueChanged: {
-                        //tue etwas, wenn button geklickt wird
-                        // deger: slider.value
 
                         if (slider.value > outCutOff.slider.value)
                             outCutOff.slider.value = slider.value
 
-                        console.log("now items_width quadratic " + items_width)
                         main_rightmenu.currentScene.light.cutOff = slider.value
                     }
 
@@ -509,20 +425,10 @@ Item{
                     slider.from: 0.0; slider.to: 120.0
                     slider.value: main_rightmenu.currentScene.light.outCutOff
 
-
-                    Component.onCompleted: {
-                        console.log("items_width_slider for quadratic: " + parent.items_width_slider)
-                    }
-
-
                     slider.onValueChanged: {
-                        //tue etwas, wenn button geklickt wird
-                        // deger: slider.value
-
                         if (slider.value < cutOff.slider.value)
                             slider.value = cutOff.slider.value
 
-                        console.log("now items_width quadratic " + items_width)
                         main_rightmenu.currentScene.light.outCutOff = slider.value
                     }
 
@@ -588,23 +494,15 @@ Item{
         clip: true
 
         delegate: Loader{
-            //property string title: title
-            Component.onCompleted: {console.log("title: " + title)}
             sourceComponent: switch(title){
                 case "basic_lighting_settings": return basicLightSettings
                 case "spotLightSettings": return spotLightSettings
                 case "graphic_settings": return graphicSettings
-                default: console.log("hicbiri degil title: " + title)
             }
         }
 
         Layout.fillWidth: true
         Layout.fillHeight: true
-
-        /*HoverHandler{
-            id: hoverHandler
-
-        }*/
 
         ScrollBar.vertical: ScrollBar {
             id: scroll
@@ -614,7 +512,6 @@ Item{
             anchors.left: listView.right
             anchors.bottom: listView.bottom
             anchors.bottomMargin: 10
-            //hoverEnabled: true
 
             active: mouseArea.hover || hovered || pressed
             policy: ScrollBar.AsNeeded
@@ -633,15 +530,9 @@ Item{
 
         test_popup.open()
 
-        //test_popup.currentProperty[0].colorValue = "red"//test_popup.currentProperty[0].initColor
-
-        console.log("colorx: h: " + colorx.r + " s: " + colorx.g  + " b: " + colorx.b + " a: " + colorx.a)
-
         color_change(colorx)
 
         test_popup.currentProperty[0].colorValue = test_popup.currentProperty[0].initColor
-
-
     }
 
     function color_change(colorx){
@@ -683,98 +574,15 @@ Item{
             onPressed: {mouse.accepted=false}
         }
 
-        //closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
-
         background: ColorPicker{
             id: my_picker
-            /*anchors.horizontalCenter: parent.horizontalCenter
-            anchors.bottom: parent.bottom*/
 
             onColorChanged: {
-                // test signal handler
-                console.debug("handle signal:"+changedColor)
                 if (test_popup.currentProperty.length > 0){
 
-                    /*test_popup.currentProperty[0].colorValue = test_popup.background.input_hex.get_text()
-                    console.log("onColorChanged: before: " + test_popup.background.input_hex.text +  " after: " + test_popup.background.input_hex.get_text())
-                    */
-
                     test_popup.currentProperty[0].colorValue = changedColor
-                    //test_popup.currentProperty[0].colorValue.colorValueChanged()
                 }
-
-
-
-            }
-
-            Component.onCompleted: {
-                //changeHSBfromHEX("AA345432")
-                //hueSlider.pickerCursor.y = 40
-                console.log("colorPicker onCompleted: " + hueSlider.pickerCursor.y)
             }
         }
     }
-
-
-    /*
-    MyTreeModel{
-        id: theModel
-    }
-
-    TreeView {
-        id: tree
-        anchors.top: parent.top
-        anchors.topMargin: 9.5
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.bottom: parent.bottom
-        anchors.bottomMargin: 9.5
-
-
-        style : TreeViewStyle {
-            frame:  Item{}
-
-            backgroundColor: "transparent"
-
-        }
-
-        frameVisible: false
-
-        Component.onCompleted: {
-            console.log("treeview'in parent height: " + parent.height)
-        }
-
-
-
-        // START_OF_TEST
-
-        model: theModel
-        itemDelegate: Rectangle {
-           color: ( styleData.row % 2 == 0 ) ? "white" : "lightblue"
-           height: 20
-
-           Text {
-               anchors.verticalCenter: parent.verticalCenter
-               anchors.left: parent.left // by default x is set to 0 so this had no effect
-               text: styleData.value === undefined ? "" : styleData.value // The branches don't have a description_role so styleData.value will be undefined
-           }
-        }
-
-        TableViewColumn {
-            role: "name_role"
-            title: ""
-
-        }
-
-
-        // END_OF_TEST
-
-
-
-    }
-
-    */
-
-
-
 }

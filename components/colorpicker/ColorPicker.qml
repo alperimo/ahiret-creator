@@ -86,7 +86,6 @@ Rectangle {
 
                 hueColor: {
                     var v = 1.0-hueSlider.value
-                    console.debug("v:"+v)
 
                     if(0.0 <= v && v < 0.16) {
                         return Qt.rgba(1.0, 0.0, v/0.16, 1.0)
@@ -205,14 +204,12 @@ Rectangle {
                     focus: false
 
                     onTextEdited: {
-                        console.log("text editlendi text: " + text)
                         state = "onEdited"
                         changeHSBfromHEX(text)
 
                     }
 
                     onActiveFocusChanged: {
-                        console.log("editBox active focus degistiiii")
                         state = ""
                     }
 
@@ -285,7 +282,6 @@ Rectangle {
 
     Rectangle{
         id: test
-        //anchors.top: picker.bottom
 
         width: 40
         height: 30
@@ -293,27 +289,18 @@ Rectangle {
         x: 300
         y: 170
 
-        //visible: false
-
         property string lo: "#FF96657E"
-        //color: lo
 
         MouseArea{
             anchors.fill: parent
             onClicked: {
-                console.log("gerade hueSlider " + hueSlider.pickerCursor.y/height)
             }
         }
     }
 
-    function changeHSBfromHEX(hex){ // #FF96657E
-
-        /*if (!((hex.length == 1 + 2) || (hex.length == 1 + 4) || (hex.length == 1 + 6) || (hex.length == 1 + 8)))
-            return*/
-
+    function changeHSBfromHEX(hex){
         var hsb = hexToRGBA(hex)
         changeColorWithHSB(hsb)
-
     }
 
     function changeColorFromRGBA(r, g, b, a){
@@ -334,15 +321,10 @@ Rectangle {
         sbPicker.pickerCursor.y = -sbPicker.divided_h * hsb[2] + sbPicker.divided_h
 
         alphaSlider.pickerCursor.y = -alphaSlider.height*hsb[3] + alphaSlider.height
-
     }
 
     Rectangle{
         id: draggableArea
-        /*x: sbPicker.x + sbPicker.width
-        y: enableAlphaChannel.y + 2
-        width: parent.width - (sbPicker.x + sbPicker.width)
-        height: parent.height - (enableAlphaChannel.y + 2)*/
         x: 250 + 60
         y: 150 + 17
         width: 80
@@ -367,14 +349,11 @@ Rectangle {
 
         colorChanged(c)
 
-        console.log("_hsla a = " + a + " c = " + c)
-
         return c
     }
 
     // create rgb value
     function _rgb(rgb, a) {
-
         var c = Qt.rgba(rgb.r, rgb.g, rgb.b, a)
 
         colorChanged(c)
@@ -384,10 +363,6 @@ Rectangle {
 
     //  creates a full color string from color value and alpha[0..1], e.g. "#FF00FF00"
     function _fullColorString(clr, a) {
-        console.log("alphaslider icin test clr: " + clr.toString().substr(1, 6))
-
-        //console.log("hex donusum test hue: " + clr + " r: " + clr.r)
-
         return "#" + ((Math.ceil(a*255) + 256).toString(16).substr(1, 2) + clr.toString().substr(1, 6)).toUpperCase()
     }
 
@@ -398,8 +373,6 @@ Rectangle {
 
     function hexToRGBA(H){
         let r=0, g=0, b=0, a=1
-
-        console.log("H degeri: " + H + " H[1]+H[2]="+H[1]+H[2])
 
         if (H.length == 1 + 2){
             a = "0x" + H[1] + H[2]
@@ -418,14 +391,7 @@ Rectangle {
         }
 
         a = +(a / 255).toFixed(3);
-        /*
-        r = +(r / 255).toFixed(3);
-        g = +(g / 255).toFixed(3);
-        b = +(b / 255).toFixed(3);*/
 
-        //console.log("hex: " + H + " r: " + (+r) + " g: " + (+g) + " b: " + (+b) + " a: " + a)
-
-        //console.log("to hsb: " + rgbToHSB(+r, +g, +b))
         return rgbToHSB(+r, +g, +b, a)
     }
 
@@ -434,8 +400,6 @@ Rectangle {
       r /= 255;
       g /= 255;
       b /= 255;
-
-      console.log("in rgbToHSB r: " + r + " g: " + g + " b: " + b)
 
       // Find greatest and smallest channel values
       let cmin = Math.min(r,g,b),
@@ -463,7 +427,6 @@ Rectangle {
 
       h = Math.round(h * 60);
 
-      console.log("cmax: " + cmax)
       b_ = cmax.toFixed(2); // hepsi yukarida 255'e bölündüğü icin. tekrardan max / 255 gerek yok.
       s_ = ((cmax - cmin)/cmax).toFixed(2);
 
@@ -473,10 +436,6 @@ Rectangle {
 
       h /= 360;
       h = h.toFixed(2);
-
-      //var hslr = hslRange(h, s, l)
-      //console.log("hsb[0...1]: h: " + hslr[0] + " s: " + hslr[1] + " l: " + hslr[2] )
-      //return "hsb(" + h + "," + s_ + "," + b_ + ")";
 
       return [h,s_,b_,a];
 

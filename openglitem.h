@@ -42,7 +42,7 @@ class CustomItemRenderer : public QQuickFramebufferObject::Renderer
 
 public:
     CustomItemRenderer();
-    ~CustomItemRenderer(); //normalde virtual idi.
+    ~CustomItemRenderer();
 
 private:
     virtual void render();
@@ -96,9 +96,6 @@ private:
 
 };
 
-//Q_DECLARE_METATYPE(Qml_camera*)
-//Q_DECLARE_OPAQUE_POINTER(Qml_camera*)
-
 class CustomItemBase : public QQuickFramebufferObject
 {
     Q_OBJECT
@@ -132,8 +129,8 @@ public:
     }
 
 private:
-    QPointer<Qml_camera> m_qmlCamera;//Qml_camera *m_qmlCamera;
-    QPointer<Qml_light> m_qmlLight;//Qml_light *m_qmlLight;
+    QPointer<Qml_camera> m_qmlCamera;
+    QPointer<Qml_light> m_qmlLight;
     QPointer<Qml_generalData> m_qmlGeneralData;
     QPointer<FileSystem> m_fileSystem;
     QPointer<SandBoxItemModel> m_fileSystemNew;
@@ -166,9 +163,7 @@ public:
             qDebug() << "file couldn't open!";
 
         }else{
-            //QString m_fileName = QString::fromStdString(file.readAll().toStdString());
             QString m_fileName = m_fileSystem->getObjectPath();
-            qDebug() << "file okunan QString datax: " << m_fileName;
             m_fileSystemNew->setSandBoxDetails(m_fileName);
         }
 
@@ -191,17 +186,12 @@ public:
         light()->setOutCutOff(17.5f);
 
         generalData()->setCurrentDepthTest(1);
-
-        //setAcceptTouchEvents(true);
-        //setAcceptedMouseButtons(Qt::RightButton);
-
     }
 
     ~CustomItemBase();
 
     QQuickFramebufferObject::Renderer *createRenderer() const
     {
-        std::cout << "createRenderer()!!!" << std::endl;
         return new CustomItemRenderer();
     }
 
@@ -223,7 +213,7 @@ public:
     float lastFrame = 0.0f;
     float currentFrame = 0.0f;
 
-    Q_INVOKABLE void _keyPressEvent(); //virtual void keyPressEvent(QKeyEvent* event);
+    Q_INVOKABLE void _keyPressEvent();
 
 signals:
     void activeFocusChangedxx(const QString &msg);
@@ -257,11 +247,11 @@ private: // nur variablen
 };
 
 
-class CustomItem : public CustomItemBase
+class OpenGlScreen : public CustomItemBase
 {
 public:
-    CustomItem(QQuickItem * parent = nullptr) : CustomItemBase(parent) {}
-    virtual ~CustomItem() {}
+    OpenGlScreen(QQuickItem * parent = nullptr) : CustomItemBase(parent) {}
+    virtual ~OpenGlScreen() {}
 };
 
 #endif // OPENGLITEM_H

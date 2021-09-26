@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProject>
-<!-- Written by QtCreator 4.15.2, 2021-08-13T21:55:59. -->
+<!-- Written by QtCreator 4.15.2, 2021-09-04T21:03:30. -->
 <qtcreator>
  <data>
   <variable>EnvironmentId</variable>
@@ -595,7 +595,6 @@
     <value type="bool" key="RunConfiguration.UseLibrarySearchPath">true</value>
     <value type="bool" key="RunConfiguration.UseQmlDebugger">false</value>
     <value type="bool" key="RunConfiguration.UseQmlDebuggerAuto">true</value>
-    <value type="QString" key="RunConfiguration.WorkingDirectory.default">C:/Users/Alperen/OneDrive/PyQT5 Projects - OneDrive/ahiret_msvc2019</value>
    </valuemap>
    <value type="int" key="ProjectExplorer.Target.RunConfigurationCount">2</value>
   </valuemap>

@@ -51,15 +51,11 @@ Item {
                 image.state = "CLICKED"
             else
                 image.state = (!parent.checkable_fixed) ? "" : image.state
-
-            console.log("button_rect clicked " + image.state)
-
         }
 
         onEntered: {
             if (image.state != "CLICKED"){
                 image.state = "HOVERED"
-                console.log("onEntered")
             }
         }
 
@@ -79,8 +75,6 @@ Item {
             target: background_rect
             color: rectNormalColor
         }
-
-        //opacity: 0.0
 
         //States
         states: [

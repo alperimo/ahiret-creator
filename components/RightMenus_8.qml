@@ -3,7 +3,6 @@ import QtQuick.Layouts 1.15
 import QtQuick.Controls 1.4
 import QtQuick.Controls.Styles 1.4
 import QtQuick.Controls 2.15
-import MyTreeModel 1.0
 
 Rectangle {
 
@@ -98,7 +97,6 @@ Rectangle {
             onRunningChanged: {
                 if(!running){
                     rect.visible = false
-                    console.log("rect.borderVisible on hiding: " + rect.borderVisible)
                 }
             }
 
@@ -162,7 +160,6 @@ Rectangle {
 
         Component.onCompleted: {
             changePage("SCENE")
-            console.log("Item completed")
         }
 
         states: [

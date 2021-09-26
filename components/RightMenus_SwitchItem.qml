@@ -58,7 +58,6 @@ Item {
                 anchors.fill: parent
 
                 onClicked: {
-                    console.log("lann sikik")
                     parent.clickedFunc()
                 }
             }
@@ -80,13 +79,9 @@ Item {
                 mouseAreas.onClicked: {
                     parent.clickedFunc()
                 }
-
-
-
             }
 
             function clickedFunc(){
-                console.log("loglama oc")
                 control.checked = control.checked ^ 1
                 switchb.state = ""
                 switchb.animRun = false
@@ -102,13 +97,9 @@ Item {
 
                 running: switchb.animRun
 
-
                 duration: 100
-
             }
-
         }
-
 
         contentItem: Text {
             visible: false

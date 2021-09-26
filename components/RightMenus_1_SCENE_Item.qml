@@ -3,8 +3,6 @@
 import QtQuick 2.0
 
 Item {
-    //id: sceneSettingsItem
-
     //width: scene_page.scene_width
     height: 31 + 88 + 26
 
@@ -12,10 +10,6 @@ Item {
     property alias page_title_bg: page_title_bg
 
     clip: true
-
-    Component.onCompleted: {
-        console.log("page_title_bg " + page_title.text + " width " + scene_page.scene_width)
-    }
 
     Rectangle{id: page_title_bg; width: scene_page.scene_width; height: 31; color: "#1c1c1c"
         Text{

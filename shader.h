@@ -32,6 +32,8 @@ private:
     QOpenGLBuffer m_vbo;
     QOpenGLBuffer m_ebo; //element buffer object = indices buffer object
     QOpenGLShaderProgram *m_program;
+
+
 };
 
 #endif // SHADER_H

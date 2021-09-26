@@ -3,7 +3,6 @@ import QtQuick.Layouts 1.15
 import QtQuick.Controls 1.4
 import QtQuick.Controls.Styles 1.4
 import QtQuick.Controls 2.15
-import MyTreeModel 1.0
 
 Rectangle {
 
@@ -93,8 +92,6 @@ Rectangle {
             onRunningChanged: {
                 if(!running){
                     rect.visible = false
-
-                    console.log("rect.borderVisible on hiding: " + rect.borderVisible)
                 }
             }
 
@@ -158,7 +155,6 @@ Rectangle {
 
         Component.onCompleted: {
             changePage("SCENE")
-            console.log("Item completed")
         }
 
         states: [
@@ -204,35 +200,6 @@ Rectangle {
                 }
             }
         ]
-
-        //AREA-page
-        /*Item{
-            id: area_page
-            anchors.fill: parent
-            Rectangle{
-                width: 404
-                height: 31
-                anchors.top: parent.top
-                anchors.topMargin: 9.5
-                anchors.left: parent.left
-                anchors.leftMargin: 14
-                anchors.right: parent.right
-                anchors.rightMargin: 12
-                color: "#1c1c1c"
-                Text{
-                    id: page_title_area
-                    anchors.verticalCenter: parent.verticalCenter
-                    anchors.left: parent.left
-                    anchors.leftMargin: 6
-                    text: "MAP DETAILS"
-                    font.family: "Gilroy"
-                    font.pixelSize: 12
-                    font.weight: Font.Bold
-                    font.styleName: Font.Normal
-                    color: "#d3d3d3"
-                }
-            }
-        }*/
 
         //AREA-page
         RightMenus_1_AREA{

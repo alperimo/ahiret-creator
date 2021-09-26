@@ -3,7 +3,6 @@ import QtQuick.Layouts 1.15
 import QtQuick.Controls 1.4
 import QtQuick.Controls.Styles 1.4
 import QtQuick.Controls 2.15
-import MyTreeModel 1.0
 
 Rectangle {
 
@@ -21,8 +20,6 @@ Rectangle {
     x: windowWidth
     visible: false
 
-    //opacity: 0
-
     states: [
 
         State {
@@ -33,7 +30,6 @@ Rectangle {
 
                 opacity: 0
                 visible: true
-                //borderVisible: false
             }
 
             PropertyChanges{
@@ -49,18 +45,10 @@ Rectangle {
 
                 x: windowWidth - realWidth
 
-                //opacity: 1
                 visible: true
                 borderVisible : false
             }
-
-            /*PropertyChanges{
-                target: rectangle.rightMenusArray[right_menu.rightMenuStatus-1]
-                borderVisible: false
-            }*/
-
         }
-
     ]
 
     transitions: [
@@ -94,7 +82,6 @@ Rectangle {
                 easing.period: 1.5
 
                 duration: 120
-
             }
 
             onRunningChanged: if (!running) borderVisible = true
@@ -118,9 +105,6 @@ Rectangle {
             onRunningChanged: {
                 if(!running){
                     rect.visible = false
-
-
-                    console.log("rect.borderVisible on hiding: " + rect.borderVisible)
                 }
             }
 

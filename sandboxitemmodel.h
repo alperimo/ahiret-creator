@@ -39,7 +39,6 @@ public:
     void createDirectoryItem(QString dirName, QStandardItem *parentItem = NULL, bool forMainDirectory=false);
 
     Q_INVOKABLE QStandardItem* datax(const QModelIndex &index) const{
-        qDebug() << "from cpp: datax called!!!";
         return QStandardItemModel::itemFromIndex(index);
     }
 

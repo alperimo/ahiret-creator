@@ -61,7 +61,5 @@ Item
             checkboxButton.btnImage.state = "CLICKED"
         else
             checkboxButton.btnImage.state = ""
-
-        console.log("checked degisiyor: " + checked)
     }
 }
